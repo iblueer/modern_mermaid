@@ -97,7 +97,8 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
 
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      // 降低敏感度：从 0.1 改为 0.03，使缩放更平滑
+      const delta = e.deltaY > 0 ? -0.02 : 0.02;
       setScale(prev => Math.max(0.5, Math.min(5, prev + delta)));
     };
 
