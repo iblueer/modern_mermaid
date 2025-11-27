@@ -29,6 +29,9 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
   const [editingTextId, setEditingTextId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState('');
   const textInputRef = useRef<HTMLInputElement>(null);
+  
+  // 调整控制点类型
+  const [resizingHandle, setResizingHandle] = useState<string | null>(null);
 
   // 选中标注
   const handleSelectAnnotation = (e: React.MouseEvent, id: string) => {
@@ -39,11 +42,12 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
   };
 
   // 开始拖动
-  const handleMouseDown = (e: React.MouseEvent, id: string) => {
+  const handleMouseDown = (e: React.MouseEvent, id: string, handle?: string) => {
     e.stopPropagation();
     if (selectedTool !== 'select' && selectedTool !== null) return;
     
     setIsDragging(true);
+    setResizingHandle(handle || null);
     onSelectAnnotation(id);
     setDragStart({
       x: e.clientX,
@@ -62,38 +66,119 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
       const annotation = annotations.find(a => a.id === selectedAnnotationId);
       if (!annotation) return;
 
-      if (annotation.type === 'arrow' || annotation.type === 'line') {
-        onUpdateAnnotation(selectedAnnotationId, {
-          start: {
-            x: annotation.start.x + deltaX,
-            y: annotation.start.y + deltaY
-          },
-          end: {
-            x: annotation.end.x + deltaX,
-            y: annotation.end.y + deltaY
+      // 如果有调整控制点，则调整形状而非移动
+      if (resizingHandle) {
+        if (annotation.type === 'arrow' || annotation.type === 'line') {
+          if (resizingHandle === 'start') {
+            onUpdateAnnotation(selectedAnnotationId, {
+              start: {
+                x: annotation.start.x + deltaX,
+                y: annotation.start.y + deltaY
+              }
+            });
+          } else if (resizingHandle === 'end') {
+            onUpdateAnnotation(selectedAnnotationId, {
+              end: {
+                x: annotation.end.x + deltaX,
+                y: annotation.end.y + deltaY
+              }
+            });
           }
-        });
-      } else if (annotation.type === 'text') {
-        onUpdateAnnotation(selectedAnnotationId, {
-          position: {
-            x: annotation.position.x + deltaX,
-            y: annotation.position.y + deltaY
+        } else if (annotation.type === 'rect') {
+          // 矩形调整大小
+          if (resizingHandle === 'topLeft') {
+            const newWidth = annotation.width - deltaX;
+            const newHeight = annotation.height - deltaY;
+            if (newWidth > 10 && newHeight > 10) {
+              onUpdateAnnotation(selectedAnnotationId, {
+                position: {
+                  x: annotation.position.x + deltaX,
+                  y: annotation.position.y + deltaY
+                },
+                width: newWidth,
+                height: newHeight
+              });
+            }
+          } else if (resizingHandle === 'topRight') {
+            const newWidth = annotation.width + deltaX;
+            const newHeight = annotation.height - deltaY;
+            if (newWidth > 10 && newHeight > 10) {
+              onUpdateAnnotation(selectedAnnotationId, {
+                position: {
+                  x: annotation.position.x,
+                  y: annotation.position.y + deltaY
+                },
+                width: newWidth,
+                height: newHeight
+              });
+            }
+          } else if (resizingHandle === 'bottomLeft') {
+            const newWidth = annotation.width - deltaX;
+            const newHeight = annotation.height + deltaY;
+            if (newWidth > 10 && newHeight > 10) {
+              onUpdateAnnotation(selectedAnnotationId, {
+                position: {
+                  x: annotation.position.x + deltaX,
+                  y: annotation.position.y
+                },
+                width: newWidth,
+                height: newHeight
+              });
+            }
+          } else if (resizingHandle === 'bottomRight') {
+            const newWidth = annotation.width + deltaX;
+            const newHeight = annotation.height + deltaY;
+            if (newWidth > 10 && newHeight > 10) {
+              onUpdateAnnotation(selectedAnnotationId, {
+                width: newWidth,
+                height: newHeight
+              });
+            }
           }
-        });
-      } else if (annotation.type === 'rect') {
-        onUpdateAnnotation(selectedAnnotationId, {
-          position: {
-            x: annotation.position.x + deltaX,
-            y: annotation.position.y + deltaY
+        } else if (annotation.type === 'circle' && resizingHandle === 'radius') {
+          // 圆形调整半径
+          const newRadius = annotation.radius + deltaX;
+          if (newRadius > 10) {
+            onUpdateAnnotation(selectedAnnotationId, {
+              radius: newRadius
+            });
           }
-        });
-      } else if (annotation.type === 'circle') {
-        onUpdateAnnotation(selectedAnnotationId, {
-          center: {
-            x: annotation.center.x + deltaX,
-            y: annotation.center.y + deltaY
-          }
-        });
+        }
+      } else {
+        // 移动整个标注
+        if (annotation.type === 'arrow' || annotation.type === 'line') {
+          onUpdateAnnotation(selectedAnnotationId, {
+            start: {
+              x: annotation.start.x + deltaX,
+              y: annotation.start.y + deltaY
+            },
+            end: {
+              x: annotation.end.x + deltaX,
+              y: annotation.end.y + deltaY
+            }
+          });
+        } else if (annotation.type === 'text') {
+          onUpdateAnnotation(selectedAnnotationId, {
+            position: {
+              x: annotation.position.x + deltaX,
+              y: annotation.position.y + deltaY
+            }
+          });
+        } else if (annotation.type === 'rect') {
+          onUpdateAnnotation(selectedAnnotationId, {
+            position: {
+              x: annotation.position.x + deltaX,
+              y: annotation.position.y + deltaY
+            }
+          });
+        } else if (annotation.type === 'circle') {
+          onUpdateAnnotation(selectedAnnotationId, {
+            center: {
+              x: annotation.center.x + deltaX,
+              y: annotation.center.y + deltaY
+            }
+          });
+        }
       }
       
       setDragStart({ x: e.clientX, y: e.clientY });
@@ -101,6 +186,7 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
 
     const handleMouseUp = () => {
       setIsDragging(false);
+      setResizingHandle(null);
     };
 
     document.addEventListener('mousemove', handleMouseMove);
@@ -110,7 +196,7 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, selectedAnnotationId, dragStart, annotations, onUpdateAnnotation, scale]);
+  }, [isDragging, selectedAnnotationId, dragStart, annotations, onUpdateAnnotation, scale, resizingHandle]);
 
   // 双击编辑文字
   const handleDoubleClick = (e: React.MouseEvent, annotation: Annotation) => {
@@ -168,11 +254,31 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
           style={{ cursor: 'move' }}
         />
         
-        {/* 选中状态的控制点 */}
+        {/* 选中状态的可拖动控制点 */}
         {isSelected && (
           <>
-            <circle cx={annotation.start.x} cy={annotation.start.y} r="4" fill="#4F46E5" />
-            <circle cx={annotation.end.x} cy={annotation.end.y} r="4" fill="#4F46E5" />
+            <circle 
+              cx={annotation.start.x} 
+              cy={annotation.start.y} 
+              r="6" 
+              fill="#4F46E5" 
+              stroke="white"
+              strokeWidth="2"
+              onMouseDown={(e) => handleMouseDown(e, annotation.id, 'start')}
+              style={{ cursor: 'grab' }}
+              className="hover:fill-indigo-700"
+            />
+            <circle 
+              cx={annotation.end.x} 
+              cy={annotation.end.y} 
+              r="6" 
+              fill="#4F46E5"
+              stroke="white"
+              strokeWidth="2"
+              onMouseDown={(e) => handleMouseDown(e, annotation.id, 'end')}
+              style={{ cursor: 'grab' }}
+              className="hover:fill-indigo-700"
+            />
           </>
         )}
       </g>
@@ -263,10 +369,57 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
           className={isSelected ? 'filter drop-shadow-lg' : ''}
         />
         
+        {/* 选中状态的可拖动缩放控制点 */}
         {isSelected && (
           <>
-            <circle cx={annotation.position.x} cy={annotation.position.y} r="4" fill="#4F46E5" />
-            <circle cx={annotation.position.x + annotation.width} cy={annotation.position.y + annotation.height} r="4" fill="#4F46E5" />
+            {/* 左上角 */}
+            <circle 
+              cx={annotation.position.x} 
+              cy={annotation.position.y} 
+              r="6" 
+              fill="#4F46E5"
+              stroke="white"
+              strokeWidth="2"
+              onMouseDown={(e) => handleMouseDown(e, annotation.id, 'topLeft')}
+              style={{ cursor: 'nwse-resize' }}
+              className="hover:fill-indigo-700"
+            />
+            {/* 右上角 */}
+            <circle 
+              cx={annotation.position.x + annotation.width} 
+              cy={annotation.position.y} 
+              r="6" 
+              fill="#4F46E5"
+              stroke="white"
+              strokeWidth="2"
+              onMouseDown={(e) => handleMouseDown(e, annotation.id, 'topRight')}
+              style={{ cursor: 'nesw-resize' }}
+              className="hover:fill-indigo-700"
+            />
+            {/* 左下角 */}
+            <circle 
+              cx={annotation.position.x} 
+              cy={annotation.position.y + annotation.height} 
+              r="6" 
+              fill="#4F46E5"
+              stroke="white"
+              strokeWidth="2"
+              onMouseDown={(e) => handleMouseDown(e, annotation.id, 'bottomLeft')}
+              style={{ cursor: 'nesw-resize' }}
+              className="hover:fill-indigo-700"
+            />
+            {/* 右下角 */}
+            <circle 
+              cx={annotation.position.x + annotation.width} 
+              cy={annotation.position.y + annotation.height} 
+              r="6" 
+              fill="#4F46E5"
+              stroke="white"
+              strokeWidth="2"
+              onMouseDown={(e) => handleMouseDown(e, annotation.id, 'bottomRight')}
+              style={{ cursor: 'nwse-resize' }}
+              className="hover:fill-indigo-700"
+            />
           </>
         )}
       </g>
@@ -295,8 +448,31 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
           className={isSelected ? 'filter drop-shadow-lg' : ''}
         />
         
+        {/* 选中状态的控制点 */}
         {isSelected && (
-          <circle cx={annotation.center.x} cy={annotation.center.y} r="4" fill="#4F46E5" />
+          <>
+            {/* 中心点 */}
+            <circle 
+              cx={annotation.center.x} 
+              cy={annotation.center.y} 
+              r="4" 
+              fill="#4F46E5" 
+              stroke="white"
+              strokeWidth="1"
+            />
+            {/* 可拖动的半径控制点（右侧） */}
+            <circle 
+              cx={annotation.center.x + annotation.radius} 
+              cy={annotation.center.y} 
+              r="6" 
+              fill="#4F46E5"
+              stroke="white"
+              strokeWidth="2"
+              onMouseDown={(e) => handleMouseDown(e, annotation.id, 'radius')}
+              style={{ cursor: 'ew-resize' }}
+              className="hover:fill-indigo-700"
+            />
+          </>
         )}
       </g>
     );
@@ -324,10 +500,31 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
           className={isSelected ? 'filter drop-shadow-lg' : ''}
         />
         
+        {/* 选中状态的可拖动端点 */}
         {isSelected && (
           <>
-            <circle cx={annotation.start.x} cy={annotation.start.y} r="4" fill="#4F46E5" />
-            <circle cx={annotation.end.x} cy={annotation.end.y} r="4" fill="#4F46E5" />
+            <circle 
+              cx={annotation.start.x} 
+              cy={annotation.start.y} 
+              r="6" 
+              fill="#4F46E5"
+              stroke="white"
+              strokeWidth="2"
+              onMouseDown={(e) => handleMouseDown(e, annotation.id, 'start')}
+              style={{ cursor: 'grab' }}
+              className="hover:fill-indigo-700"
+            />
+            <circle 
+              cx={annotation.end.x} 
+              cy={annotation.end.y} 
+              r="6" 
+              fill="#4F46E5"
+              stroke="white"
+              strokeWidth="2"
+              onMouseDown={(e) => handleMouseDown(e, annotation.id, 'end')}
+              style={{ cursor: 'grab' }}
+              className="hover:fill-indigo-700"
+            />
           </>
         )}
       </g>

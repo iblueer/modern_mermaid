@@ -4,16 +4,16 @@
   
   <!-- Main Page -->
   <url>
-    <loc>https://yourdomain.com/</loc>
-    <lastmod>2024-01-01</lastmod>
+    <loc>https://modern-mermaid.live/</loc>
+    <lastmod>2025-11-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://yourdomain.com/?lang=zh-CN"/>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://yourdomain.com/?lang=zh-TW"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://yourdomain.com/?lang=ja"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://yourdomain.com/?lang=es"/>
-    <xhtml:link rel="alternate" hreflang="pt" href="https://yourdomain.com/?lang=pt"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://modern-mermaid.live/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://modern-mermaid.live/?lang=zh-CN"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://modern-mermaid.live/?lang=zh-TW"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://modern-mermaid.live/?lang=ja"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://modern-mermaid.live/?lang=es"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://modern-mermaid.live/?lang=pt"/>
   </url>
 
 </urlset>
