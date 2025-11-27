@@ -30,13 +30,13 @@ export const themes: Record<ThemeType, ThemeConfig> = {
         .edgePath .path { stroke-width: 1.5px; }
         .cluster rect { stroke-dasharray: 4 4; stroke: #d4d4d4; fill: #fafafa; }
         
-        /* XYChart styles - High contrast colors */
-        .line-plot-0 path { stroke: #3b82f6 !important; stroke-width: 3px !important; }
-        .line-plot-1 path { stroke: #10b981 !important; stroke-width: 3px !important; }
-        .line-plot-2 path { stroke: #f59e0b !important; stroke-width: 3px !important; }
-        .bar-plot-0 rect { fill: #3b82f6 !important; stroke: #2563eb !important; stroke-width: 1px !important; }
-        .bar-plot-1 rect { fill: #10b981 !important; stroke: #059669 !important; stroke-width: 1px !important; }
-        .bar-plot-2 rect { fill: #f59e0b !important; stroke: #d97706 !important; stroke-width: 1px !important; }
+        /* XYChart styles - Sophisticated muted tones */
+        .line-plot-0 path { stroke: #5B7C99 !important; stroke-width: 3px !important; } /* Muted slate blue */
+        .line-plot-1 path { stroke: #6B9080 !important; stroke-width: 3px !important; } /* Sage green */
+        .line-plot-2 path { stroke: #C17C74 !important; stroke-width: 3px !important; } /* Dusty rose */
+        .bar-plot-0 rect { fill: #A8C5DD !important; stroke: #5B7C99 !important; stroke-width: 1.5px !important; }
+        .bar-plot-1 rect { fill: #B8CEC2 !important; stroke: #6B9080 !important; stroke-width: 1.5px !important; }
+        .bar-plot-2 rect { fill: #E0BAB5 !important; stroke: #C17C74 !important; stroke-width: 1.5px !important; }
         .chart-title text { fill: #171717 !important; font-weight: 600 !important; font-size: 20px !important; }
         .left-axis .label text, .bottom-axis .label text { fill: #171717 !important; font-size: 14px !important; }
         .left-axis .title text { fill: #525252 !important; font-size: 16px !important; }
@@ -69,17 +69,17 @@ export const themes: Record<ThemeType, ThemeConfig> = {
         .node rect, .node circle, .node polygon, .node path { stroke-width: 1.5px; }
         .edgePath .path { stroke-width: 1.5px; }
         
-        /* XYChart styles - Bright colors for dark theme */
-        .line-plot-0 path { stroke: #60a5fa !important; stroke-width: 3px !important; }
-        .line-plot-1 path { stroke: #34d399 !important; stroke-width: 3px !important; }
-        .line-plot-2 path { stroke: #fbbf24 !important; stroke-width: 3px !important; }
-        .bar-plot-0 rect { fill: #3b82f6 !important; stroke: #60a5fa !important; stroke-width: 1px !important; }
-        .bar-plot-1 rect { fill: #10b981 !important; stroke: #34d399 !important; stroke-width: 1px !important; }
-        .bar-plot-2 rect { fill: #f59e0b !important; stroke: #fbbf24 !important; stroke-width: 1px !important; }
+        /* XYChart styles - Elegant dark theme palette */
+        .line-plot-0 path { stroke: #7B9BAE !important; stroke-width: 3px !important; } /* Cool steel blue */
+        .line-plot-1 path { stroke: #8EAFA8 !important; stroke-width: 3px !important; } /* Misty teal */
+        .line-plot-2 path { stroke: #D4A5A5 !important; stroke-width: 3px !important; } /* Muted mauve */
+        .bar-plot-0 rect { fill: rgba(123, 155, 174, 0.3) !important; stroke: #7B9BAE !important; stroke-width: 1.5px !important; }
+        .bar-plot-1 rect { fill: rgba(142, 175, 168, 0.3) !important; stroke: #8EAFA8 !important; stroke-width: 1.5px !important; }
+        .bar-plot-2 rect { fill: rgba(212, 165, 165, 0.3) !important; stroke: #D4A5A5 !important; stroke-width: 1.5px !important; }
         .chart-title text { fill: #f4f4f5 !important; font-weight: 600 !important; font-size: 20px !important; }
-        .left-axis .label text, .bottom-axis .label text { fill: #f4f4f5 !important; font-size: 14px !important; }
-        .left-axis .title text { fill: #d4d4d8 !important; font-size: 16px !important; }
-        .bottom-axis .title text { fill: #d4d4d8 !important; font-size: 16px !important; }
+        .left-axis .label text, .bottom-axis .label text { fill: #d4d4d8 !important; font-size: 14px !important; }
+        .left-axis .title text { fill: #a1a1aa !important; font-size: 16px !important; }
+        .bottom-axis .title text { fill: #a1a1aa !important; font-size: 16px !important; }
       `
     },
     bgClass: 'bg-[#09090b]',
@@ -169,18 +169,18 @@ export const themes: Record<ThemeType, ThemeConfig> = {
             stroke-width: 1px !important;
         }
         
-        /* XYChart styles - Notion-style colors */
-        .line-plot-0 path { stroke: #3b82f6 !important; stroke-width: 3px !important; }
-        .line-plot-1 path { stroke: #10b981 !important; stroke-width: 3px !important; }
-        .line-plot-2 path { stroke: #f59e0b !important; stroke-width: 3px !important; }
-        .bar-plot-0 rect { fill: #93c5fd !important; stroke: #3b82f6 !important; stroke-width: 1px !important; rx: 4px !important; }
-        .bar-plot-1 rect { fill: #86efac !important; stroke: #10b981 !important; stroke-width: 1px !important; rx: 4px !important; }
-        .bar-plot-2 rect { fill: #fde68a !important; stroke: #f59e0b !important; stroke-width: 1px !important; rx: 4px !important; }
+        /* XYChart styles - Notion soft professional palette */
+        .line-plot-0 path { stroke: #6B8CAE !important; stroke-width: 3px !important; }
+        .line-plot-1 path { stroke: #73A78D !important; stroke-width: 3px !important; }
+        .line-plot-2 path { stroke: #CB9B7A !important; stroke-width: 3px !important; }
+        .bar-plot-0 rect { fill: #D4E1EE !important; stroke: #6B8CAE !important; stroke-width: 1.5px !important; rx: 4px !important; }
+        .bar-plot-1 rect { fill: #D5E8DC !important; stroke: #73A78D !important; stroke-width: 1.5px !important; rx: 4px !important; }
+        .bar-plot-2 rect { fill: #F0E0D6 !important; stroke: #CB9B7A !important; stroke-width: 1.5px !important; rx: 4px !important; }
         .ticks path { stroke: #e2e8f0 !important; }
-        .left-axis .label text, .bottom-axis .label text { fill: #334155 !important; font-size: 12px !important; }
-        .chart-title text { fill: #334155 !important; font-weight: 600 !important; font-size: 16px !important; }
-        .left-axis .title text, .bottom-axis .title text { fill: #64748b !important; font-size: 13px !important; }
-        .legend text { fill: #334155 !important; font-size: 12px !important; }
+        .left-axis .label text, .bottom-axis .label text { fill: #475569 !important; font-size: 14px !important; }
+        .chart-title text { fill: #334155 !important; font-weight: 600 !important; font-size: 20px !important; }
+        .left-axis .title text, .bottom-axis .title text { fill: #64748b !important; font-size: 16px !important; }
+        .legend text { fill: #475569 !important; font-size: 14px !important; }
       `
     },
     bgClass: 'bg-white',
@@ -302,46 +302,41 @@ export const themes: Record<ThemeType, ThemeConfig> = {
             filter: drop-shadow(0 0 4px rgba(0, 242, 255, 0.5));
         }
         
-        /* XYChart styles - Neon cyberpunk aesthetic */
+        /* XYChart styles - Refined neon mystique */
         .line-plot-0 path {
-            stroke: #00f2ff !important; 
+            stroke: #6CC6CB !important;
             stroke-width: 3px !important; 
-            filter: drop-shadow(0 0 8px rgba(0, 242, 255, 0.8));
+            filter: drop-shadow(0 0 6px rgba(108, 198, 203, 0.5));
         }
         .line-plot-1 path {
-            stroke: #ff00ff !important; 
+            stroke: #C77DFF !important;
             stroke-width: 3px !important; 
-            filter: drop-shadow(0 0 8px rgba(255, 0, 255, 0.8));
+            filter: drop-shadow(0 0 6px rgba(199, 125, 255, 0.5));
         }
         .line-plot-2 path {
-            stroke: #00ff00 !important; 
+            stroke: #7CE38B !important;
             stroke-width: 3px !important; 
-            filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.8));
+            filter: drop-shadow(0 0 6px rgba(124, 227, 139, 0.5));
         }
         .bar-plot-0 rect {
-            fill: #00f2ff !important; 
-            stroke: #00f2ff !important;
+            fill: rgba(108, 198, 203, 0.2) !important;
+            stroke: #6CC6CB !important;
             stroke-width: 2px !important;
-            filter: drop-shadow(0 0 12px rgba(0, 242, 255, 0.7));
+            filter: drop-shadow(0 0 8px rgba(108, 198, 203, 0.4));
         }
         .bar-plot-1 rect {
-            fill: #ff00ff !important; 
-            stroke: #ff00ff !important;
+            fill: rgba(199, 125, 255, 0.2) !important;
+            stroke: #C77DFF !important;
             stroke-width: 2px !important;
-            filter: drop-shadow(0 0 12px rgba(255, 0, 255, 0.7));
+            filter: drop-shadow(0 0 8px rgba(199, 125, 255, 0.4));
         }
         .bar-plot-2 rect {
-            fill: #00ff00 !important; 
-            stroke: #00ff00 !important;
+            fill: rgba(124, 227, 139, 0.2) !important;
+            stroke: #7CE38B !important;
             stroke-width: 2px !important;
-            filter: drop-shadow(0 0 12px rgba(0, 255, 0, 0.7));
+            filter: drop-shadow(0 0 8px rgba(124, 227, 139, 0.4));
         }
         .ticks path { stroke: #00f2ff !important; opacity: 0.3; }
-        .left-axis .label text, .bottom-axis .label text {
-            fill: #00f2ff !important; 
-            font-size: 12px !important;
-            text-shadow: 0 0 8px rgba(0, 242, 255, 0.6);
-        }
         .chart-title text {
             fill: #00f2ff !important; 
             font-weight: 700 !important;
@@ -395,15 +390,14 @@ export const themes: Record<ThemeType, ThemeConfig> = {
         .cluster rect { stroke-width: 2px; fill: #fff; }
         .node rect, .node circle, .node ellipse, .node polygon, .node path { stroke-width: 2px !important; }
         
-        /* XYChart styles - Monochrome with different shades */
-        .line-plot-0 path { stroke: #000000 !important; stroke-width: 3px !important; }
-        .line-plot-1 path { stroke: #525252 !important; stroke-width: 3px !important; stroke-dasharray: 8 4 !important; }
-        .line-plot-2 path { stroke: #737373 !important; stroke-width: 3px !important; stroke-dasharray: 4 4 !important; }
-        .bar-plot-0 rect { fill: #000000 !important; stroke: #000000 !important; stroke-width: 2px !important; }
-        .bar-plot-1 rect { fill: #404040 !important; stroke: #000000 !important; stroke-width: 2px !important; }
-        .bar-plot-2 rect { fill: #737373 !important; stroke: #000000 !important; stroke-width: 2px !important; }
+        /* XYChart styles - Elegant grayscale hierarchy */
+        .line-plot-0 path { stroke: #2C2C2C !important; stroke-width: 3px !important; }
+        .line-plot-1 path { stroke: #606060 !important; stroke-width: 3px !important; stroke-dasharray: 8 4 !important; }
+        .line-plot-2 path { stroke: #8C8C8C !important; stroke-width: 3px !important; stroke-dasharray: 4 4 !important; }
+        .bar-plot-0 rect { fill: #2C2C2C !important; stroke: #1A1A1A !important; stroke-width: 2px !important; }
+        .bar-plot-1 rect { fill: #606060 !important; stroke: #404040 !important; stroke-width: 2px !important; }
+        .bar-plot-2 rect { fill: #8C8C8C !important; stroke: #707070 !important; stroke-width: 2px !important; }
         .ticks path { stroke: #d4d4d4 !important; }
-        .left-axis .label text, .bottom-axis .label text { fill: #000000 !important; font-size: 12px !important; }
         .chart-title text { fill: #000000 !important; font-weight: 700 !important; font-size: 16px !important; }
         .left-axis .title text, .bottom-axis .title text { fill: #525252 !important; font-size: 13px !important; }
         .legend text { fill: #000000 !important; font-size: 12px !important; }
@@ -535,42 +529,41 @@ export const themes: Record<ThemeType, ThemeConfig> = {
             opacity: 0.5;
         }
         
-        /* XYChart styles - Warm Ghibli aesthetic */
+        /* XYChart styles - Warm earth tones */
         .line-plot-0 path {
-            stroke: #C67C4E !important; 
+            stroke: #B8926A !important;
             stroke-width: 3px !important;
         }
         .line-plot-1 path {
-            stroke: #8FAE5D !important; 
+            stroke: #7FA882 !important;
             stroke-width: 3px !important;
         }
         .line-plot-2 path {
-            stroke: #D4915D !important; 
+            stroke: #D4A373 !important;
             stroke-width: 3px !important;
         }
         .bar-plot-0 rect {
-            fill: #E8C4A8 !important; 
-            stroke: #C67C4E !important;
-            stroke-width: 1px !important;
+            fill: #E6D5C3 !important;
+            stroke: #B8926A !important;
+            stroke-width: 1.5px !important;
             rx: 6px !important;
             filter: drop-shadow(0 2px 6px rgba(58, 46, 44, 0.12));
         }
         .bar-plot-1 rect {
-            fill: #C9DBA8 !important; 
-            stroke: #8FAE5D !important;
-            stroke-width: 1px !important;
+            fill: #C8DFC8 !important;
+            stroke: #7FA882 !important;
+            stroke-width: 1.5px !important;
             rx: 6px !important;
             filter: drop-shadow(0 2px 6px rgba(58, 46, 44, 0.12));
         }
         .bar-plot-2 rect {
-            fill: #F5D5B8 !important; 
-            stroke: #D4915D !important;
-            stroke-width: 1px !important;
+            fill: #F0DCC4 !important;
+            stroke: #D4A373 !important;
+            stroke-width: 1.5px !important;
             rx: 6px !important;
             filter: drop-shadow(0 2px 6px rgba(58, 46, 44, 0.12));
         }
         .ticks path { stroke: #E8D5C4 !important; }
-        .left-axis .label text, .bottom-axis .label text { fill: #6B5B4F !important; font-size: 12px !important; }
         .chart-title text {
             fill: #3A2E2C !important; 
             font-weight: 600 !important;
@@ -764,46 +757,41 @@ export const themes: Record<ThemeType, ThemeConfig> = {
             fill: #2D3748 !important;
         }
         
-        /* XYChart styles - Soft Pop colorful aesthetic */
+        /* XYChart styles - Playful pastels */
         .line-plot-0 path {
-            stroke: #4A90E2 !important; 
+            stroke: #8FA5C1 !important;
             stroke-width: 3px !important;
         }
         .line-plot-1 path {
-            stroke: #E94B8A !important; 
+            stroke: #D39BAF !important;
             stroke-width: 3px !important;
         }
         .line-plot-2 path {
-            stroke: #F5A623 !important; 
+            stroke: #C9A96E !important;
             stroke-width: 3px !important;
         }
         .bar-plot-0 rect {
-            fill: #A8D5F5 !important; 
-            stroke: #4A90E2 !important;
+            fill: #D9E4F2 !important;
+            stroke: #8FA5C1 !important;
             stroke-width: 2px !important;
             rx: 8px !important;
-            filter: drop-shadow(0 8px 12px rgba(74, 144, 226, 0.25));
+            filter: drop-shadow(0 8px 12px rgba(143, 165, 193, 0.25));
         }
         .bar-plot-1 rect {
-            fill: #F5A8C8 !important; 
-            stroke: #E94B8A !important;
+            fill: #F5DEE8 !important;
+            stroke: #D39BAF !important;
             stroke-width: 2px !important;
             rx: 8px !important;
-            filter: drop-shadow(0 8px 12px rgba(233, 75, 138, 0.25));
+            filter: drop-shadow(0 8px 12px rgba(211, 155, 175, 0.25));
         }
         .bar-plot-2 rect {
-            fill: #FCDFA6 !important; 
-            stroke: #F5A623 !important;
+            fill: #F0E7D5 !important;
+            stroke: #C9A96E !important;
             stroke-width: 2px !important;
             rx: 8px !important;
-            filter: drop-shadow(0 8px 12px rgba(245, 166, 35, 0.25));
+            filter: drop-shadow(0 8px 12px rgba(201, 169, 110, 0.25));
         }
         .ticks path { stroke: #CBD5E1 !important; }
-        .left-axis .label text, .bottom-axis .label text {
-            fill: #2D3748 !important; 
-            font-size: 12px !important;
-            font-family: "JetBrains Mono", "Noto Sans SC", monospace;
-        }
         .chart-title text {
             fill: #2D3748 !important; 
             font-weight: 700 !important;
@@ -876,38 +864,37 @@ export const themes: Record<ThemeType, ThemeConfig> = {
             font-weight: 400;
         }
         
-        /* XYChart styles - Dark minimal aesthetic */
+        /* XYChart styles - Understated elegance */
         .line-plot-0 path {
-            stroke: #ffffff !important; 
+            stroke: #9BA5B0 !important;
             stroke-width: 3px !important;
         }
         .line-plot-1 path {
-            stroke: #a3a3a3 !important; 
+            stroke: #A69D93 !important;
             stroke-width: 3px !important;
             stroke-dasharray: 8 4 !important;
         }
         .line-plot-2 path {
-            stroke: #737373 !important; 
+            stroke: #B39D9D !important;
             stroke-width: 3px !important;
             stroke-dasharray: 4 4 !important;
         }
         .bar-plot-0 rect {
-            fill: #525252 !important;
-            stroke: #ffffff !important;
+            fill: rgba(155, 165, 176, 0.25) !important;
+            stroke: #9BA5B0 !important;
             stroke-width: 2px !important;
         }
         .bar-plot-1 rect {
-            fill: #404040 !important;
-            stroke: #a3a3a3 !important;
+            fill: rgba(166, 157, 147, 0.25) !important;
+            stroke: #A69D93 !important;
             stroke-width: 2px !important;
         }
         .bar-plot-2 rect {
-            fill: #262626 !important;
-            stroke: #737373 !important;
+            fill: rgba(179, 157, 157, 0.25) !important;
+            stroke: #B39D9D !important;
             stroke-width: 2px !important;
         }
         .ticks path { stroke: #404040 !important; }
-        .left-axis .label text, .bottom-axis .label text { fill: #e5e5e5 !important; font-size: 12px !important; }
         .chart-title text {
             fill: #ffffff !important; 
             font-weight: 400 !important;
@@ -1061,41 +1048,40 @@ export const themes: Record<ThemeType, ThemeConfig> = {
             ry: 2px !important;
         }
         
-        /* XYChart styles - Wireframe/Blueprint aesthetic with multiple series */
+        /* XYChart styles - Technical blueprint */
         .line-plot-0 path {
-            stroke: #333333 !important; 
+            stroke: #4A5568 !important;
             stroke-width: 3px !important;
         }
         .line-plot-1 path {
-            stroke: #666666 !important; 
+            stroke: #718096 !important;
             stroke-width: 3px !important;
             stroke-dasharray: 8 4 !important;
         }
         .line-plot-2 path {
-            stroke: #999999 !important; 
+            stroke: #A0AEC0 !important;
             stroke-width: 3px !important;
             stroke-dasharray: 4 4 !important;
         }
         .bar-plot-0 rect {
-            fill: #ffffff !important;
-            stroke: #333333 !important;
+            fill: #EDF2F7 !important;
+            stroke: #4A5568 !important;
             stroke-width: 2px !important;
             rx: 2px !important;
         }
         .bar-plot-1 rect {
-            fill: #e8e8e8 !important;
-            stroke: #666666 !important;
+            fill: #E2E8F0 !important;
+            stroke: #718096 !important;
             stroke-width: 2px !important;
             rx: 2px !important;
         }
         .bar-plot-2 rect {
-            fill: #d4d4d4 !important;
-            stroke: #999999 !important;
+            fill: #CBD5E0 !important;
+            stroke: #A0AEC0 !important;
             stroke-width: 2px !important;
             rx: 2px !important;
         }
         .ticks path { stroke: #999999 !important; stroke-dasharray: 4 2 !important; }
-        .left-axis .label text, .bottom-axis .label text { fill: #333333 !important; font-size: 12px !important; }
         .chart-title text {
             fill: #333333 !important; 
             font-weight: 500 !important;
@@ -1335,45 +1321,45 @@ export const themes: Record<ThemeType, ThemeConfig> = {
             fill: #1a1a1a !important;
         }
         
-        /* XYChart styles - Hand-drawn sketch aesthetic */
+        /* XYChart styles - Natural ink palette */
         .line-plot-0 path {
-            stroke: #1a1a1a !important; 
+            stroke: #5D6D7E !important;
             stroke-width: 3px !important;
             stroke-linecap: round;
             stroke-linejoin: round;
             filter: url(#roughen-line) drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.1));
         }
         .line-plot-1 path {
-            stroke: #8B4513 !important; 
+            stroke: #7E6B5D !important;
             stroke-width: 3px !important;
             stroke-linecap: round;
             stroke-linejoin: round;
             filter: url(#roughen-line) drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.1));
         }
         .line-plot-2 path {
-            stroke: #2F5233 !important; 
+            stroke: #6B7E5D !important;
             stroke-width: 3px !important;
             stroke-linecap: round;
             stroke-linejoin: round;
             filter: url(#roughen-line) drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.1));
         }
         .bar-plot-0 rect {
-            fill: #ffe8cc !important;
-            stroke: #1a1a1a !important;
+            fill: #E8EBF0 !important;
+            stroke: #5D6D7E !important;
             stroke-width: 2.8px !important;
             rx: 4px !important;
             filter: url(#roughen) drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
         }
         .bar-plot-1 rect {
-            fill: #ffd9a3 !important;
-            stroke: #8B4513 !important;
+            fill: #F0EBE8 !important;
+            stroke: #7E6B5D !important;
             stroke-width: 2.8px !important;
             rx: 4px !important;
             filter: url(#roughen) drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
         }
         .bar-plot-2 rect {
-            fill: #c8e6c9 !important;
-            stroke: #2F5233 !important;
+            fill: #EBF0E8 !important;
+            stroke: #6B7E5D !important;
             stroke-width: 2.8px !important;
             rx: 4px !important;
             filter: url(#roughen) drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
@@ -1382,12 +1368,6 @@ export const themes: Record<ThemeType, ThemeConfig> = {
             stroke: #1a1a1a !important; 
             stroke-width: 1.5px !important;
             opacity: 0.4;
-        }
-        .left-axis .label text, .bottom-axis .label text {
-            fill: #1a1a1a !important; 
-            font-size: 14px !important;
-            font-family: "Caveat", "Patrick Hand", "Kalam", cursive;
-            font-weight: 600;
         }
         .chart-title text {
             fill: #1a1a1a !important; 
