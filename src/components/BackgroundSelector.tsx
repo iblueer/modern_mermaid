@@ -11,6 +11,8 @@ interface BackgroundSelectorProps {
 const BackgroundSelector: React.FC<BackgroundSelectorProps> = ({ selectedId, onSelectBackground }) => {
   const { language, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
+  
+  const selectedBg = backgrounds.find(bg => bg.id === selectedId) || backgrounds[0];
 
   return (
     <div className="relative">
@@ -20,13 +22,13 @@ const BackgroundSelector: React.FC<BackgroundSelectorProps> = ({ selectedId, onS
         title={t.selectBackground}
       >
         <Palette className="w-4 h-4" />
-        <span className="hidden sm:inline">{t.background}</span>
+        <span className="hidden sm:inline">{selectedBg.name[language]}</span>
       </button>
 
       {isOpen && (
         <>
-          <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-20 py-1 max-h-80 overflow-y-auto">
+          <div className="fixed inset-0 z-30" onClick={() => setIsOpen(false)} />
+          <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-40 py-1 max-h-80 overflow-y-auto">
             {backgrounds.map((bg) => (
               <button
                 key={bg.id}

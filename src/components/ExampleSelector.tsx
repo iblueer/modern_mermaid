@@ -44,8 +44,8 @@ const ExampleSelector: React.FC<ExampleSelectorProps> = ({ onSelectExample }) =>
 
       {isOpen && (
         <>
-          <div className="fixed inset-0 z-10" onClick={() => { setIsOpen(false); setSelectedCategory(null); }} />
-          <div className="absolute left-0 mt-2 w-80 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-20 py-1 max-h-96 overflow-y-auto">
+          <div className="fixed inset-0 z-30" onClick={() => { setIsOpen(false); setSelectedCategory(null); }} />
+          <div className="absolute left-0 mt-2 w-80 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-40 py-1 max-h-96 overflow-y-auto">
             {categories.map((category) => (
               <div key={category}>
                 <button

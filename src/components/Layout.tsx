@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Editor from './Editor';
 import Preview from './Preview';
 import type { PreviewHandle } from './Preview';
@@ -36,6 +36,12 @@ const Layout: React.FC = () => {
   const handleFontChange = (font: FontOption) => {
     setSelectedFont(font);
   };
+
+  // Reset background and font when theme changes
+  useEffect(() => {
+    setSelectedBackground(backgrounds[0]); // Reset to default
+    setSelectedFont(fonts[0]); // Reset to default
+  }, [currentTheme]);
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col font-sans">

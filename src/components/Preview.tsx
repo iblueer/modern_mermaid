@@ -209,9 +209,18 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
         // Unique ID for each render
         const id = `mermaid-${Date.now()}`;
         
+        // Apply custom font if selected
+        const configWithFont = actualFont ? {
+          ...themeConfig.mermaidConfig,
+          themeVariables: {
+            ...themeConfig.mermaidConfig.themeVariables,
+            fontFamily: actualFont,
+          }
+        } : themeConfig.mermaidConfig;
+
         mermaid.initialize({
             startOnLoad: false,
-            ...themeConfig.mermaidConfig,
+            ...configWithFont,
         });
 
         const { svg: renderedSvg } = await mermaid.render(id, code);
@@ -266,7 +275,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
     }, 600); 
 
     return () => clearTimeout(timeoutId);
-  }, [code, themeConfig]);
+  }, [code, themeConfig, actualFont]);
 
   return (
     <div 
