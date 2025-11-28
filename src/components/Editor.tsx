@@ -27,12 +27,12 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
   };
 
   // 简单的 Mermaid 语法高亮
-  const highlightCode = (code: string): JSX.Element[] => {
+  const highlightCode = (code: string): React.ReactElement[] => {
     if (!code) return [];
     
     const lines = code.split('\n');
     return lines.map((line, index) => {
-      let parts: JSX.Element[] = [];
+      let parts: React.ReactElement[] = [];
       let remaining = line;
       let key = 0;
 
@@ -83,7 +83,7 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
 
       // 解析标记并生成 JSX
       const tokens = remaining.split(/(<[^>]+>.*?<\/[^>]+>)/g);
-      tokens.forEach((token, i) => {
+      tokens.forEach((token) => {
         if (token.startsWith('<KEYWORD_CHART>')) {
           const text = token.replace(/<\/?KEYWORD_CHART>/g, '');
           parts.push(
