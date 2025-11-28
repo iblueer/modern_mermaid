@@ -266,8 +266,6 @@ const Layout: React.FC = () => {
 
   // 初始化：从 URL 参数加载示例、主题和分享内容
   useEffect(() => {
-    const url = new URL(window.location.href);
-    
     // 尝试解析分享参数（包含压缩的代码）
     const shareParams = parseShareURL();
     
