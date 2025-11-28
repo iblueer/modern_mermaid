@@ -1,6 +1,6 @@
 import type { MermaidConfig } from 'mermaid';
 
-export type ThemeType = 'linearLight' | 'linearDark' | 'notion' | 'ghibli' | 'spotless' | 'brutalist' | 'glassmorphism' | 'memphis' | 'softPop' | 'cyberpunk' | 'monochrome' | 'darkMinimal' | 'wireframe' | 'handDrawn' | 'grafana';
+export type ThemeType = 'linearLight' | 'linearDark' | 'notion' | 'ghibli' | 'spotless' | 'brutalist' | 'glassmorphism' | 'memphis' | 'softPop' | 'cyberpunk' | 'monochrome' | 'darkMinimal' | 'wireframe' | 'handDrawn' | 'grafana' | 'noir';
 
 export interface ThemeConfig {
   name: string;
@@ -99,6 +99,7 @@ export const themes: Record<ThemeType, ThemeConfig> = {
     },
     bgClass: 'bg-[#09090b]',
     bgStyle: {
+      backgroundColor: '#09090b',
         backgroundImage: 'radial-gradient(#27272a 1px, transparent 1px)',
         backgroundSize: '20px 20px'
     }
@@ -382,6 +383,7 @@ export const themes: Record<ThemeType, ThemeConfig> = {
     },
     bgClass: 'bg-[#051423]',
     bgStyle: {
+      backgroundColor: '#051423',
         backgroundImage: `
             linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
             linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px),
@@ -2050,6 +2052,9 @@ export const themes: Record<ThemeType, ThemeConfig> = {
       `
     },
     bgClass: 'bg-[#1a1a1a]',
+    bgStyle: {
+      backgroundColor: '#1a1a1a',
+    }
   },
   wireframe: {
     name: 'Wireframe',
@@ -3253,6 +3258,516 @@ export const themes: Record<ThemeType, ThemeConfig> = {
       `,
       backgroundSize: '50px 50px, 50px 50px, 25px 25px, 25px 25px, 10px 10px, 10px 10px',
       backgroundPosition: '0px 0px, 25px 25px, 25px 0px, 0px 12.5px, 0px 0px, 0px 0px',
+    }
+  },
+  noir: {
+    name: 'Noir',
+    annotationColors: {
+      primary: '#ffffff', // Pure white
+      secondary: '#cccccc', // Light gray
+      text: '#ffffff', // Pure white
+    },
+    mermaidConfig: {
+      theme: 'base',
+      themeVariables: {
+        darkMode: true,
+        background: '#0a0a0a', // Deep black
+        primaryColor: '#1a1a1a', // Dark gray for nodes
+        primaryTextColor: '#ffffff', // White text
+        primaryBorderColor: '#ffffff', // White borders
+        lineColor: '#ffffff', // White lines
+        secondaryColor: '#1a1a1a',
+        tertiaryColor: '#1a1a1a',
+        fontFamily: '"Courier New", "Consolas", "Monaco", monospace',
+        fontSize: '16px',
+      },
+      themeCSS: `
+        /* Noir Cinematic - Film noir style with spotlight effects */
+        
+        /* Flowchart nodes - High contrast with glow */
+        .node rect, .node circle, .node polygon {
+          fill: #1a1a1a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+        }
+        
+        .node .label {
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          fill: #ffffff !important;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Connection lines - Glowing white */
+        .edgePath .path {
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+        }
+        
+        .arrowheadPath {
+          fill: #ffffff !important;
+          stroke: #ffffff !important;
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+        }
+        
+        .edgeLabel {
+          background-color: #0a0a0a !important;
+          color: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Sequence Diagram - Noir style */
+        .actor rect,
+        g.actor rect,
+        rect.actor {
+          fill: #1a1a1a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3)) !important;
+        }
+        
+        .actor {
+          fill: #1a1a1a !important;
+          stroke: #ffffff !important;
+        }
+        
+        g.actor {
+          filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+        }
+        
+        .actor text {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .actor-line {
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          opacity: 0.6;
+          filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+        }
+        
+        .activation0, .activation1, .activation2,
+        rect.activation0, rect.activation1, rect.activation2 {
+          fill: #2a2a2a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.3)) !important;
+        }
+        
+        .messageLine0, .messageLine1 {
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+        }
+        
+        .messageText {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        #arrowhead path, .arrowheadPath {
+          fill: #ffffff !important;
+          stroke: #ffffff !important;
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+        }
+        
+        /* Note boxes - Spotlight effect */
+        .note,
+        rect.note,
+        g.note rect {
+          fill: #1a1a1a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4)) !important;
+        }
+        
+        .noteText,
+        text.noteText {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Loop/Alt/Opt boxes */
+        .labelBox,
+        rect.labelBox {
+          fill: #1a1a1a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3)) !important;
+        }
+        
+        .labelText, .loopText,
+        text.labelText, text.loopText {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .loopLine,
+        path.loopLine {
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          opacity: 0.7;
+        }
+        
+        /* Cluster/Subgraph styling */
+        .cluster rect {
+          fill: #1a1a1a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          stroke-dasharray: 8 4 !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+          opacity: 0.6;
+        }
+        
+        .cluster text {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 900;
+          text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Class Diagram - Film noir cards */
+        .classGroup rect,
+        g.classGroup rect,
+        g[id*="classid"] rect,
+        g[id^="classid"] rect,
+        svg[aria-roledescription="classDiagram"] g.classGroup rect {
+          fill: #1a1a1a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)) !important;
+        }
+        
+        .classLabel .label,
+        .classLabel text,
+        .class-label text {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .relationshipLine,
+        .relation {
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+        
+        .divider {
+          stroke: #ffffff !important;
+          stroke-width: 1px !important;
+          opacity: 0.4;
+        }
+        
+        /* State diagram - Cinematic states */
+        g[id*="state-"] rect,
+        g[id^="state-"] rect,
+        g.stateGroup rect,
+        .statediagram-state rect,
+        .statediagram-state .state-inner,
+        g[class*="state"] rect,
+        svg[aria-roledescription="statediagram"] g rect:not(circle):not([id*="start"]):not([id*="end"]) {
+          fill: #1a1a1a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)) !important;
+        }
+        
+        .start-state circle,
+        .end-state circle,
+        circle[id*="start"],
+        circle[id*="end"] {
+          fill: #ffffff !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.8));
+        }
+        
+        .statediagram-state circle {
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+        }
+        
+        .stateLabel text,
+        .statediagram-state text,
+        .state-note text {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .transition,
+        path.transition {
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+        
+        g.stateGroup.statediagram-cluster rect {
+          fill: #1a1a1a !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          opacity: 0.6;
+        }
+        
+        /* ER Diagram - Noir entities */
+        .er.entityBox,
+        .entityBox,
+        g[id*="entity-"] rect,
+        g[id^="entity"] rect,
+        svg[aria-roledescription="er"] .entityBox,
+        svg[aria-roledescription="er"] g rect {
+          fill: #1a1a1a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)) !important;
+        }
+        
+        .er.relationshipLabelBox,
+        .relationshipLabelBox {
+          fill: #1a1a1a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+        }
+        
+        .er.entityLabel,
+        .er.relationshipLabel,
+        .entityLabel text,
+        .relationshipLabel {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .er .relationshipLine,
+        .relationshipLine {
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+        
+        .er .attributeBoxEven,
+        .er .attributeBoxOdd {
+          fill: #1a1a1a !important;
+          stroke: #ffffff !important;
+          stroke-width: 1px !important;
+        }
+        
+        /* Gantt chart - Cinematic timeline */
+        .titleText,
+        text.titleText {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 900;
+          text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+        }
+        
+        .sectionTitle,
+        text.sectionTitle {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .taskText, 
+        .taskTextOutsideRight, 
+        .taskTextOutsideLeft,
+        text.taskText {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+        }
+        
+        .task0, .task1, .task2, .task3,
+        rect.task,
+        rect[class*="task"],
+        svg[aria-roledescription="gantt"] rect.task,
+        g.task rect {
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3)) !important;
+        }
+        
+        .taskText0, .taskText1, .taskText2, .taskText3 {
+          fill: #ffffff !important;
+        }
+        
+        .grid .tick line {
+          stroke: #ffffff !important;
+          opacity: 0.2;
+        }
+        
+        .grid path {
+          stroke: none !important;
+        }
+        
+        /* Pie chart - Noir spotlight slices */
+        .pieCircle,
+        circle.pieCircle {
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+        }
+        
+        .pieTitleText,
+        text.pieTitleText {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 900;
+          text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+        }
+        
+        .legendText,
+        text.legendText,
+        text.legend {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+        }
+        
+        .slice,
+        path.slice,
+        svg[aria-roledescription="pie"] path {
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3)) !important;
+        }
+        
+        /* Journey diagram */
+        .section0, .section1, .section2 {
+          fill: #1a1a1a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+        }
+        
+        .journey-section rect {
+          rx: 4px !important;
+        }
+        
+        /* Global text styling */
+        text {
+          fill: #ffffff !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+        }
+        
+        /* XYChart styles - High contrast data viz */
+        .line-plot-0 path {
+          stroke: #ffffff !important;
+          stroke-width: 3px !important;
+          filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+        .line-plot-1 path {
+          stroke: #cccccc !important;
+          stroke-width: 3px !important;
+          filter: drop-shadow(0 0 10px rgba(204, 204, 204, 0.5));
+        }
+        .line-plot-2 path {
+          stroke: #999999 !important;
+          stroke-width: 3px !important;
+          filter: drop-shadow(0 0 10px rgba(153, 153, 153, 0.5));
+        }
+        .bar-plot-0 rect {
+          fill: #2a2a2a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+        }
+        .bar-plot-1 rect {
+          fill: #3a3a3a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+        }
+        .bar-plot-2 rect {
+          fill: #4a4a4a !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+        }
+        .ticks path {
+          stroke: #ffffff !important;
+          opacity: 0.3;
+        }
+        .chart-title text {
+          fill: #ffffff !important;
+          font-weight: 900 !important;
+          font-size: 20px !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+        }
+        .left-axis .label text, .bottom-axis .label text {
+          fill: #ffffff !important;
+          font-size: 14px !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+        }
+        .left-axis .title text, .bottom-axis .title text {
+          fill: #ffffff !important;
+          font-size: 16px !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          font-weight: 700;
+          text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+        }
+        .legend text {
+          fill: #ffffff !important;
+          font-size: 14px !important;
+          font-family: "Courier New", "Consolas", "Monaco", monospace;
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+        }
+      `
+    },
+    bgClass: 'bg-[#0a0a0a]',
+    bgStyle: {
+      backgroundColor: '#0a0a0a',
+      backgroundImage: `
+        linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%),
+        radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%)
+      `,
     }
   },
 };
