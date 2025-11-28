@@ -1517,3 +1517,18 @@ export const getCategoryName = (category: ExampleCategory, lang: Language): stri
   return names[category][lang];
 };
 
+// Find example by ID across all categories
+export const findExampleById = (id: string): { category: ExampleCategory; example: Example; index: number } | null => {
+  for (const [category, exampleList] of Object.entries(examples)) {
+    const index = exampleList.findIndex(ex => ex.id === id);
+    if (index !== -1) {
+      return {
+        category: category as ExampleCategory,
+        example: exampleList[index],
+        index
+      };
+    }
+  }
+  return null;
+};
+

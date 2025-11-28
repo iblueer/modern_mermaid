@@ -4,7 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { examples, getCategoryName, type ExampleCategory } from '../utils/examples';
 
 interface ExampleSelectorProps {
-  onSelectExample: (code: string) => void;
+  onSelectExample: (code: string, exampleId?: string) => void;
 }
 
 const ExampleSelector: React.FC<ExampleSelectorProps> = ({ onSelectExample }) => {
@@ -34,7 +34,7 @@ const ExampleSelector: React.FC<ExampleSelectorProps> = ({ onSelectExample }) =>
     const example = examples[category][exampleIndex];
     const code = example.code[language];
     setSelectedExample({ category, index: exampleIndex });
-    onSelectExample(code);
+    onSelectExample(code, example.id);
     setIsOpen(false);
     setSelectedCategory(null);
   };
@@ -44,7 +44,7 @@ const ExampleSelector: React.FC<ExampleSelectorProps> = ({ onSelectExample }) =>
     if (selectedExample) {
       const example = examples[selectedExample.category][selectedExample.index];
       const code = example.code[language];
-      onSelectExample(code);
+      onSelectExample(code, example.id);
     }
   }, [language]);
 

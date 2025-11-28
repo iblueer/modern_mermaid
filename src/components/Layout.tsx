@@ -16,6 +16,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { X, RefreshCw } from 'lucide-react';
 import { trackEvent } from './GoogleAnalytics';
 import { AnalyticsEvents } from '../hooks/useAnalytics';
+import { findExampleById } from '../utils/examples';
 
 const Layout: React.FC = () => {
   const defaultCode = `graph TD
@@ -32,8 +33,9 @@ const Layout: React.FC = () => {
   const [leftPanelWidth, setLeftPanelWidth] = useState<number>(30); // 默认 30%
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showClearDialog, setShowClearDialog] = useState(false);
+  const [loadedFromUrl, setLoadedFromUrl] = useState<boolean>(false); // 追踪是否从 URL 加载
   const previewRef = useRef<PreviewHandle>(null);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const handleDownload = (transparent: boolean) => {
     // 追踪导出操作
@@ -99,6 +101,15 @@ const Layout: React.FC = () => {
     });
     
     setCode('');
+    
+    // 清除示例 URL 参数（但保留主题参数）
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('example')) {
+      url.searchParams.delete('example');
+      // 保留主题参数
+      window.history.replaceState({}, '', url.toString());
+    }
+    setLoadedFromUrl(false);
   };
 
   // 刷新预览（重新触发预览生成）
@@ -169,18 +180,95 @@ const Layout: React.FC = () => {
     });
     
     setCurrentTheme(theme);
+    
+    // 更新 URL 参数
+    const url = new URL(window.location.href);
+    url.searchParams.set('theme', theme);
+    window.history.pushState({}, '', url.toString());
   };
 
   // 示例选择处理
-  const handleExampleSelect = (exampleCode: string) => {
+  const handleExampleSelect = (exampleCode: string, exampleId?: string) => {
     // 追踪示例选择
     trackEvent(AnalyticsEvents.EXAMPLE_SELECT, {
       code_length: exampleCode.length,
-      theme: currentTheme
+      theme: currentTheme,
+      example_id: exampleId
     });
     
     setCode(exampleCode);
+    setLoadedFromUrl(true);
+    
+    // 更新 URL 参数（保留主题参数）
+    if (exampleId) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('example', exampleId);
+      // 确保主题参数也存在
+      url.searchParams.set('theme', currentTheme);
+      window.history.pushState({}, '', url.toString());
+    }
   };
+
+  // 自定义的 setCode 函数，用于清除示例 URL 参数（保留主题参数）
+  const handleCodeChange = (newCode: string) => {
+    setCode(newCode);
+    
+    // 如果代码被修改，且之前是从 URL 加载的，清除示例参数（但保留主题参数）
+    if (loadedFromUrl) {
+      const url = new URL(window.location.href);
+      if (url.searchParams.has('example')) {
+        url.searchParams.delete('example');
+        // 保留主题参数
+        window.history.replaceState({}, '', url.toString());
+        setLoadedFromUrl(false);
+      }
+    }
+  };
+
+  // 初始化：从 URL 参数加载示例和主题
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const exampleId = url.searchParams.get('example');
+    const themeParam = url.searchParams.get('theme');
+    
+    // 加载主题
+    if (themeParam) {
+      const validThemes: ThemeType[] = ['linearLight', 'linearDark', 'notion', 'ghibli', 'spotless', 'brutalist', 'glassmorphism', 'memphis', 'softPop', 'cyberpunk', 'monochrome', 'darkMinimal', 'wireframe', 'handDrawn', 'grafana', 'noir', 'material', 'aurora'];
+      if (validThemes.includes(themeParam as ThemeType)) {
+        setCurrentTheme(themeParam as ThemeType);
+        
+        // 追踪从 URL 加载主题
+        trackEvent('theme_loaded_from_url', {
+          theme: themeParam
+        });
+      } else {
+        // 如果主题无效，清除 URL 参数
+        url.searchParams.delete('theme');
+        window.history.replaceState({}, '', url.toString());
+      }
+    }
+    
+    // 加载示例
+    if (exampleId) {
+      const found = findExampleById(exampleId);
+      if (found) {
+        const exampleCode = found.example.code[language];
+        setCode(exampleCode);
+        setLoadedFromUrl(true);
+        
+        // 追踪从 URL 加载
+        trackEvent('example_loaded_from_url', {
+          example_id: exampleId,
+          category: found.category,
+          theme: themeParam || currentTheme
+        });
+      } else {
+        // 如果找不到示例，清除无效的 URL 参数
+        url.searchParams.delete('example');
+        window.history.replaceState({}, '', url.toString());
+      }
+    }
+  }, []); // 只在组件挂载时执行一次
 
   // ESC 键退出全屏
   useEffect(() => {
@@ -235,7 +323,7 @@ const Layout: React.FC = () => {
              </div>
              <span className="text-[10px] bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-400 dark:text-gray-500">{t.editorSubtitle}</span>
            </div>
-           <Editor code={code} onChange={setCode} />
+           <Editor code={code} onChange={handleCodeChange} />
         </div>
         )}
         
