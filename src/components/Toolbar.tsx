@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, Palette, Image, FileImage, MousePointer, ArrowRight, Type, Square, Circle, Minus, Trash2 } from 'lucide-react';
+import { Download, Palette, Image, FileImage, MousePointer, ArrowRight, Type, Square, Circle, Minus, Trash2, Copy } from 'lucide-react';
 import { themes } from '../utils/themes';
 import type { ThemeType } from '../utils/themes';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -13,6 +13,7 @@ interface ToolbarProps {
   currentTheme: ThemeType;
   onThemeChange: (theme: ThemeType) => void;
   onDownload: (transparent: boolean) => void;
+  onCopy: (transparent: boolean) => void;
   selectedBackground: string;
   onBackgroundChange: (bg: BackgroundStyle) => void;
   selectedFont: string;
@@ -27,6 +28,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   currentTheme, 
   onThemeChange, 
   onDownload,
+  onCopy,
   selectedBackground,
   onBackgroundChange,
   selectedFont,
@@ -38,6 +40,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
 }) => {
   const [isThemeOpen, setIsThemeOpen] = React.useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = React.useState(false);
+  const [isCopyOpen, setIsCopyOpen] = React.useState(false);
   const [isAnnotationOpen, setIsAnnotationOpen] = React.useState(false);
   const { t } = useLanguage();
 
@@ -161,6 +164,45 @@ const Toolbar: React.FC<ToolbarProps> = ({
               )}
             </div>
           </>
+        )}
+      </div>
+
+      {/* Copy Button */}
+      <div className="relative">
+        <button
+          onClick={() => setIsCopyOpen(!isCopyOpen)}
+          className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm transition-all cursor-pointer"
+        >
+          <Copy className="w-4 h-4" />
+          <span>{t.copy}</span>
+        </button>
+        
+        {isCopyOpen && (
+           <>
+           <div className="fixed inset-0 z-[60]" onClick={() => setIsCopyOpen(false)} />
+           <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-gray-700 z-[70] py-1 max-h-80 overflow-y-auto">
+             <button
+               onClick={() => { onCopy(false); setIsCopyOpen(false); }}
+               className="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+             >
+               <Image className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+               <div>
+                 <span className="block font-medium">{t.copyWithBackground}</span>
+                 <span className="block text-xs text-gray-500 dark:text-gray-400">{t.copyWithBackgroundDesc}</span>
+               </div>
+             </button>
+             <button
+               onClick={() => { onCopy(true); setIsCopyOpen(false); }}
+               className="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+             >
+               <FileImage className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+               <div>
+                 <span className="block font-medium">{t.copyTransparent}</span>
+                 <span className="block text-xs text-gray-500 dark:text-gray-400">{t.copyTransparentDesc}</span>
+               </div>
+             </button>
+           </div>
+         </>
         )}
       </div>
 

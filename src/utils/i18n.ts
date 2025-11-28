@@ -26,6 +26,16 @@ export interface Translation {
   theme: string;
   export: string;
   exportDesc: string;
+  copy: string;
+  copyDesc: string;
+  copying: string;
+  copyingDesc: string;
+  copySuccess: string;
+  copySuccessDesc: string;
+  copyWithBackground: string;
+  copyWithBackgroundDesc: string;
+  copyTransparent: string;
+  copyTransparentDesc: string;
   withBackground: string;
   withBackgroundDesc: string;
   transparent: string;
@@ -116,6 +126,16 @@ export const translations: Record<Language, Translation> = {
     theme: 'Theme',
     export: 'Export',
     exportDesc: 'Export the diagram as an image',
+    copy: 'Copy',
+    copyDesc: 'Copy the diagram to clipboard',
+    copying: 'Copying...',
+    copyingDesc: 'Please wait, generating image',
+    copySuccess: 'Copy successful!',
+    copySuccessDesc: 'Image copied to clipboard',
+    copyWithBackground: 'Copy with background',
+    copyWithBackgroundDesc: 'Includes current background',
+    copyTransparent: 'Copy transparent',
+    copyTransparentDesc: 'PNG format, no background',
     withBackground: 'With Background',
     withBackgroundDesc: 'JPG - Includes background color',
     transparent: 'Transparent',
@@ -204,6 +224,16 @@ export const translations: Record<Language, Translation> = {
     theme: '主题',
     export: '导出',
     exportDesc: '导出图表为图片',
+    copy: '复制',
+    copyDesc: '复制图表到剪贴板',
+    copying: '正在复制...',
+    copyingDesc: '请稍候，正在生成图片',
+    copySuccess: '复制成功！',
+    copySuccessDesc: '图片已复制到剪贴板',
+    copyWithBackground: '复制带背景图片',
+    copyWithBackgroundDesc: '包含当前选择的背景',
+    copyTransparent: '复制透明背景',
+    copyTransparentDesc: 'PNG格式，无背景',
     withBackground: '带背景',
     withBackgroundDesc: 'JPG - 包含背景色',
     transparent: '透明背景',
@@ -292,6 +322,16 @@ export const translations: Record<Language, Translation> = {
     theme: '主題',
     export: '匯出',
     exportDesc: '將圖表導出為圖片',
+    copy: '複製',
+    copyDesc: '複製圖表到剪貼板',
+    copying: '正在複製...',
+    copyingDesc: '請稍候，正在生成圖片',
+    copySuccess: '複製成功！',
+    copySuccessDesc: '圖片已複製到剪貼板',
+    copyWithBackground: '複製帶背景圖片',
+    copyWithBackgroundDesc: '包含當前選擇的背景',
+    copyTransparent: '複製透明背景',
+    copyTransparentDesc: 'PNG格式，無背景',
     withBackground: '帶背景',
     withBackgroundDesc: 'JPG - 包含背景色',
     transparent: '透明背景',
@@ -380,6 +420,16 @@ export const translations: Record<Language, Translation> = {
     theme: 'テーマ',
     export: 'エクスポート',
     exportDesc: '図表を画像としてエクスポート',
+    copy: 'コピー',
+    copyDesc: '図表をクリップボードにコピー',
+    copying: 'コピー中...',
+    copyingDesc: 'しばらくお待ちください、画像を生成中',
+    copySuccess: 'コピー成功！',
+    copySuccessDesc: '画像がクリップボードにコピーされました',
+    copyWithBackground: '背景付きでコピー',
+    copyWithBackgroundDesc: '現在選択されている背景を含む',
+    copyTransparent: '透明背景でコピー',
+    copyTransparentDesc: 'PNG形式、背景なし',
     withBackground: '背景あり',
     withBackgroundDesc: 'JPG - 背景色を含む',
     transparent: '透明背景',
@@ -468,6 +518,16 @@ export const translations: Record<Language, Translation> = {
     theme: 'Tema',
     export: 'Exportar',
     exportDesc: 'Exportar el diagrama como imagen',
+    copy: 'Copiar',
+    copyDesc: 'Copiar el diagrama al portapapeles',
+    copying: 'Copiando...',
+    copyingDesc: 'Por favor espere, generando imagen',
+    copySuccess: '¡Copia exitosa!',
+    copySuccessDesc: 'Imagen copiada al portapapeles',
+    copyWithBackground: 'Copiar con fondo',
+    copyWithBackgroundDesc: 'Incluye el fondo actual',
+    copyTransparent: 'Copiar transparente',
+    copyTransparentDesc: 'Formato PNG, sin fondo',
     withBackground: 'Con fondo',
     withBackgroundDesc: 'JPG - Incluye color de fondo',
     transparent: 'Fondo transparente',
@@ -556,6 +616,16 @@ export const translations: Record<Language, Translation> = {
     theme: 'Tema',
     export: 'Exportar',
     exportDesc: 'Exportar o diagrama como imagem',
+    copy: 'Copiar',
+    copyDesc: 'Copiar o diagrama para a área de transferência',
+    copying: 'Copiando...',
+    copyingDesc: 'Por favor aguarde, gerando imagem',
+    copySuccess: 'Cópia bem-sucedida!',
+    copySuccessDesc: 'Imagem copiada para a área de transferência',
+    copyWithBackground: 'Copiar com fundo',
+    copyWithBackgroundDesc: 'Inclui o fundo atual',
+    copyTransparent: 'Copiar transparente',
+    copyTransparentDesc: 'Formato PNG, sem fundo',
     withBackground: 'Com fundo',
     withBackgroundDesc: 'JPG - Inclui cor de fundo',
     transparent: 'Fundo transparente',

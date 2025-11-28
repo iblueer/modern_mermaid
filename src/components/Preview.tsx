@@ -28,6 +28,7 @@ interface PreviewProps {
 
 export interface PreviewHandle {
   exportImage: (transparent: boolean) => Promise<void>;
+  copyImage: (transparent: boolean) => Promise<void>;
   clearAnnotations: () => void;
   refresh: () => void;
 }
@@ -46,6 +47,8 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [exporting, setExporting] = useState(false); // 导出Loading状态
+  const [copying, setCopying] = useState(false); // 复制Loading状态
+  const [copySuccess, setCopySuccess] = useState(false); // 复制成功状态
   const [renderKey, setRenderKey] = useState(0); // 用于强制刷新渲染
   const { t } = useLanguage();
   
@@ -74,7 +77,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
   const actualFont = customFont?.id === 'default' ? '' : (customFont?.fontFamily || '');
   
   // 缩放和平移状态
-  const [scale, setScale] = useState(1.2); // 默认放大到120%
+  const [scale, setScale] = useState(1); // 默认100%
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -101,7 +104,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
     trackEvent(AnalyticsEvents.ZOOM_RESET, {
       previous_scale: scale
     });
-    setScale(1.2);
+    setScale(1);
     setPosition({ x: 0, y: 0 });
   };
 
@@ -586,6 +589,144 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
       // 强制重新渲染预览
       setRenderKey(prev => prev + 1);
     },
+    copyImage: async (transparent: boolean) => {
+      if (!contentRef.current || !svg) return;
+
+      setCopying(true); // 开始复制Loading
+      setCopySuccess(false);
+
+      try {
+        const node = contentRef.current;
+
+        // 保存当前的 transform 和 transition 状态
+        const originalTransform = node.style.transform;
+        const originalTransition = node.style.transition;
+
+        // 临时重置 transform 到居中状态
+        node.style.transform = 'translate(0px, 0px) scale(1)';
+        node.style.transition = 'none';
+
+        // 等待三帧确保样式已经完全应用
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
+        // 使用更高的导出倍率以获得更清晰的图片
+        const exportScale = 3; // 3x 分辨率
+
+        // 获取背景色
+        let bgColor = transparent ? undefined : getComputedStyle(containerRef.current!).backgroundColor;
+        if (!transparent && actualBgStyle?.backgroundColor) {
+          bgColor = actualBgStyle.backgroundColor;
+        }
+
+        // 获取SVG元素的实际尺寸
+        const svgElement = node.querySelector('svg');
+        let targetWidth = node.offsetWidth;
+        let targetHeight = node.offsetHeight;
+
+        if (svgElement) {
+          const svgWidth = svgElement.getAttribute('width');
+          const svgHeight = svgElement.getAttribute('height');
+          if (svgWidth && svgHeight) {
+            targetWidth = Math.max(parseFloat(svgWidth) + 96, node.offsetWidth);
+            targetHeight = Math.max(parseFloat(svgHeight) + 96, node.offsetHeight);
+          }
+        }
+
+        // 设置导出样式
+        const baseStyle: any = {
+          transform: 'scale(1)',
+          transformOrigin: 'center',
+          width: `${targetWidth}px`,
+          height: `${targetHeight}px`,
+        };
+
+        if (!transparent && actualBgStyle) {
+          Object.assign(baseStyle, actualBgStyle);
+        }
+
+        const param = {
+          quality: 0.98,
+          backgroundColor: bgColor,
+          pixelRatio: exportScale,
+          width: targetWidth,
+          height: targetHeight,
+          style: baseStyle,
+          cacheBust: true,
+          skipAutoScale: true,
+          fontEmbedCSS: '',
+          filter: (node: HTMLElement) => {
+            if (node.tagName === 'LINK' && node.getAttribute('rel') === 'stylesheet') {
+              const href = node.getAttribute('href');
+              if (href && (href.includes('fonts.googleapis.com') || href.startsWith('http'))) {
+                return false;
+              }
+            }
+            return true;
+          },
+        };
+
+        // 生成 PNG 图片
+        const dataUrl = await toPng(node, {
+          ...param,
+          backgroundColor: transparent ? undefined : bgColor,
+          style: transparent ? { ...baseStyle, backgroundColor: 'transparent' } : baseStyle
+        });
+
+        // 恢复原来的 transform 状态
+        node.style.transform = originalTransform;
+        node.style.transition = originalTransition;
+
+        // 将 dataUrl 转换为 Blob
+        const response = await fetch(dataUrl);
+        const blob = await response.blob();
+
+        // 复制到剪贴板
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'image/png': blob
+          })
+        ]);
+
+        // 追踪复制成功
+        trackEvent('copy_image_success', {
+          transparent: transparent,
+          width: targetWidth,
+          height: targetHeight,
+          has_annotations: annotations.length > 0
+        });
+
+        // 显示成功提示
+        setCopying(false);
+        setCopySuccess(true);
+
+        // 2秒后隐藏成功提示
+        setTimeout(() => {
+          setCopySuccess(false);
+        }, 2000);
+      } catch (err) {
+        console.error('Copy failed', err);
+
+        trackEvent('copy_image_fail', {
+          transparent: transparent,
+          error: (err as Error).message
+        });
+
+        setCopying(false);
+        setError('复制失败: ' + (err as Error).message);
+
+        // 3秒后隐藏错误提示
+        setTimeout(() => {
+          setError(null);
+        }, 3000);
+
+        if (contentRef.current) {
+          contentRef.current.style.transform = `translate(${position.x}px, ${position.y}px) scale(${scale})`;
+          contentRef.current.style.transition = isDragging ? 'none' : 'transform 0.1s ease-out';
+        }
+      }
+    },
     exportImage: async (transparent: boolean) => {
       if (!contentRef.current || !svg) return;
       
@@ -762,8 +903,22 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
 
         const { svg: renderedSvg } = await mermaid.render(id, code);
         
-        // Post-process SVG to force dash array for specific themes
+        // Post-process SVG
         let processedSvg = renderedSvg;
+
+        // 确保SVG具有合适的尺寸属性，使其能够自适应容器
+        processedSvg = processedSvg.replace(
+          /<svg([^>]*)>/,
+          (match, attrs) => {
+            // 添加 style 属性使 SVG 自适应容器，最大宽度和高度为80%
+            if (!attrs.includes('style=')) {
+              return `<svg${attrs} style="max-width: 80%; max-height: 80vh; width: auto; height: auto;">`;
+            }
+            return match;
+          }
+        );
+
+        // Post-process SVG to force dash array for specific themes
         if (themeConfig.mermaidConfig.themeVariables?.lineColor === '#ffffff' && 
             themeConfig.bgClass === 'bg-[#1a1a1a]') {
           // Dark Minimal theme - force dashed lines
@@ -912,6 +1067,32 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
            </div>
        )}
        
+      {/* 复制Loading */}
+      {copying && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm z-30">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 flex flex-col items-center gap-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-indigo-200 dark:border-indigo-900 border-t-indigo-600 dark:border-t-indigo-400"></div>
+            <div className="text-gray-700 dark:text-gray-200 font-medium">{t.copying}</div>
+            <div className="text-gray-500 dark:text-gray-400 text-sm">{t.copyingDesc}</div>
+          </div>
+        </div>
+      )}
+
+      {/* 复制成功提示 */}
+      {copySuccess && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm z-30">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 flex flex-col items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+              <svg className="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div className="text-gray-700 dark:text-gray-200 font-medium">{t.copySuccess}</div>
+            <div className="text-gray-500 dark:text-gray-400 text-sm">{t.copySuccessDesc}</div>
+          </div>
+        </div>
+      )}
+
        {/* 缩放和移动控制按钮 */}
        <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
          <button

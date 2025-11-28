@@ -29,7 +29,7 @@ const Layout: React.FC = () => {
   const [selectedFont, setSelectedFont] = useState<FontOption>(fonts[0]);
   const [selectedTool, setSelectedTool] = useState<AnnotationType | 'select' | null>('select');
   const [annotationCount, setAnnotationCount] = useState<number>(0);
-  const [leftPanelWidth, setLeftPanelWidth] = useState<number>(50); // 默认 50%
+  const [leftPanelWidth, setLeftPanelWidth] = useState<number>(30); // 默认 30%
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showClearDialog, setShowClearDialog] = useState(false);
   const previewRef = useRef<PreviewHandle>(null);
@@ -47,6 +47,20 @@ const Layout: React.FC = () => {
     
     if (previewRef.current) {
       previewRef.current.exportImage(transparent);
+    }
+  };
+
+  const handleCopy = (transparent: boolean) => {
+    // 追踪复制操作
+    trackEvent('copy_image', {
+      transparent: transparent,
+      theme: currentTheme,
+      has_annotations: annotationCount > 0,
+      annotation_count: annotationCount
+    });
+    
+    if (previewRef.current) {
+      previewRef.current.copyImage(transparent);
     }
   };
 
@@ -238,6 +252,7 @@ const Layout: React.FC = () => {
                 currentTheme={currentTheme} 
                 onThemeChange={handleThemeChange}
                 onDownload={handleDownload}
+                onCopy={handleCopy}
                 selectedBackground={selectedBackground.id}
                 onBackgroundChange={handleBackgroundChange}
                 selectedFont={selectedFont.id}
