@@ -906,17 +906,29 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
         // Post-process SVG
         let processedSvg = renderedSvg;
 
-        // 确保SVG具有合适的尺寸属性，使其能够自适应容器
+        // 移除 width/height 的百分比值，使用 viewBox 定义的固定尺寸
+        // 这样缩放计算才能准确
         processedSvg = processedSvg.replace(
-          /<svg([^>]*)>/,
-          (match, attrs) => {
-            // 添加 style 属性使 SVG 自适应容器，最大宽度和高度为80%
-            if (!attrs.includes('style=')) {
-              return `<svg${attrs} style="max-width: 80%; max-height: 80vh; width: auto; height: auto;">`;
-            }
-            return match;
-          }
+          /(<svg[^>]*)\s+width=["']100%["']/gi,
+          '$1'
+        ).replace(
+          /(<svg[^>]*)\s+height=["']100%["']/gi,
+          '$1'
         );
+
+        // 如果 SVG 有 viewBox，从 viewBox 中提取尺寸并设置为 width/height
+        const viewBoxMatch = processedSvg.match(/viewBox=["']([^"']+)["']/);
+        if (viewBoxMatch) {
+          const viewBoxParts = viewBoxMatch[1].split(/\s+/).map(Number);
+          if (viewBoxParts.length === 4) {
+            const [, , width, height] = viewBoxParts;
+            // 在 svg 标签中添加明确的 width 和 height
+            processedSvg = processedSvg.replace(
+              /<svg/,
+              `<svg width="${width}" height="${height}"`
+            );
+          }
+        }
 
         // Post-process SVG to force dash array for specific themes
         if (themeConfig.mermaidConfig.themeVariables?.lineColor === '#ffffff' && 
@@ -1031,6 +1043,80 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
 
     return () => clearTimeout(timeoutId);
   }, [code, themeConfig, actualFont, nodeColors, renderKey]);
+
+  // 自动调整缩放以适应容器
+  useEffect(() => {
+    if (!svg || !containerRef.current || !contentRef.current) return;
+
+    // 等待 DOM 更新
+    const timer = setTimeout(() => {
+      const container = containerRef.current;
+      const content = contentRef.current;
+      if (!container || !content) return;
+
+      // 获取 SVG 元素
+      const svgElement = content.querySelector('svg');
+      if (!svgElement) return;
+
+      try {
+        // 获取 SVG 的原始尺寸
+        let svgWidth = 0;
+        let svgHeight = 0;
+
+        // 从 width/height 属性获取（Mermaid 生成的原始尺寸）
+        const widthAttr = svgElement.getAttribute('width');
+        const heightAttr = svgElement.getAttribute('height');
+
+        if (widthAttr && heightAttr) {
+          svgWidth = parseFloat(widthAttr);
+          svgHeight = parseFloat(heightAttr);
+        }
+
+        // 如果没有 width/height，从 viewBox 获取
+        if ((!svgWidth || !svgHeight) && svgElement.getAttribute('viewBox')) {
+          const viewBox = svgElement.getAttribute('viewBox');
+          const parts = viewBox!.split(/\s+/).map(Number);
+          if (parts.length === 4) {
+            svgWidth = parts[2];
+            svgHeight = parts[3];
+          }
+        }
+
+        // 获取容器尺寸
+        const containerWidth = container.clientWidth;
+        const containerHeight = container.clientHeight;
+
+        if (svgWidth > 0 && svgHeight > 0 && containerWidth > 0 && containerHeight > 0) {
+          // 目标：让图表占据容器的 75-80% 空间
+          const targetWidthRatio = 0.75;
+          const targetHeightRatio = 0.75;
+
+          // 计算需要的缩放比例
+          const scaleX = (containerWidth * targetWidthRatio) / svgWidth;
+          const scaleY = (containerHeight * targetHeightRatio) / svgHeight;
+
+          // 取较小的比例，确保图表不会超出容器
+          let autoScale = Math.min(scaleX, scaleY);
+
+          // 限制缩放范围：0.5x 到 3x
+          autoScale = Math.max(0.5, Math.min(3, autoScale));
+
+          // 对于非常小的图表，确保至少放大到 1.2x
+          if (svgWidth < containerWidth * 0.3 && svgHeight < containerHeight * 0.3) {
+            autoScale = Math.max(1.2, autoScale);
+          }
+
+          // 设置缩放
+          setScale(autoScale);
+          setPosition({ x: 0, y: 0 }); // 重置位置到中心
+        }
+      } catch (err) {
+        console.error('Auto-scale calculation error:', err);
+      }
+    }, 150); // 延迟150ms等待DOM完全渲染
+
+    return () => clearTimeout(timer);
+  }, [svg]); // 只依赖 svg 变化
 
   return (
     <div 
