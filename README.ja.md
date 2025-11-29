@@ -1,3 +1,4 @@
+<a name="readme-top"></a>
 <div align="center">
 
 ![Modern Mermaid バナー](docs/images/banner.svg)
@@ -256,7 +257,7 @@ graph TD
 
 **Modern Mermaid チームが ❤️ を込めて制作**
 
-[⬆ トップに戻る](#modern-mermaid)
+[⬆ トップに戻る](#readme-top)
 
 </div>
 

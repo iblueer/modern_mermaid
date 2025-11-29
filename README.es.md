@@ -256,7 +256,7 @@ Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](L
 
 **Hecho con ❤️ por el Equipo de Modern Mermaid**
 
-[⬆ Volver Arriba](#modern-mermaid)
+[⬆ Volver Arriba](#readme-top)
 
 </div>
 

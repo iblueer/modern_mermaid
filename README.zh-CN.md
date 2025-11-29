@@ -1,3 +1,4 @@
+<a name="readme-top"></a>
 <div align="center">
 
 ![Modern Mermaid 横幅](docs/images/banner.svg)
@@ -256,7 +257,7 @@ graph TD
 
 **由 Modern Mermaid 团队用 ❤️ 打造**
 
-[⬆ 返回顶部](#modern-mermaid)
+[⬆ 返回顶部](#readme-top)
 
 </div>
 
