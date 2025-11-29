@@ -1543,13 +1543,10 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
             height="100%"
             fill="transparent"
             style={{
-              pointerEvents: selectedTool !== null ? 'auto' : 'none',
+              pointerEvents: selectedTool !== null && selectedTool !== 'select' ? 'auto' : 'none',
             }}
             onMouseDown={(e) => {
-              if (selectedTool === 'select') {
-                // 在选择模式下，点击背景取消选择
-                setSelectedAnnotationId(null);
-              } else if (selectedTool) {
+              if (selectedTool) {
                 // 在绘制模式下，处理绘制
                 handleAnnotationMouseDown(e);
               }
