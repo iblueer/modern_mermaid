@@ -1398,20 +1398,20 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
            </div>
        )}
        
-       {/* 导出Loading */}
-       {exporting && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm z-30">
+      {/* 导出Loading - 全局居中 */}
+      {exporting && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm z-[9999]">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 flex flex-col items-center gap-4">
             <div className="animate-spin rounded-full h-12 w-12 border-4 border-indigo-200 dark:border-indigo-900 border-t-indigo-600 dark:border-t-indigo-400"></div>
             <div className="text-gray-700 dark:text-gray-200 font-medium">{t.export}...</div>
             <div className="text-gray-500 dark:text-gray-400 text-sm">{t.exportDesc}</div>
-               </div>
-           </div>
-       )}
-       
-      {/* 复制Loading */}
-      {copying && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm z-30">
+              </div>
+          </div>
+      )}
+      
+     {/* 复制Loading - 全局居中 */}
+     {copying && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm z-[9999]">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 flex flex-col items-center gap-4">
             <div className="animate-spin rounded-full h-12 w-12 border-4 border-indigo-200 dark:border-indigo-900 border-t-indigo-600 dark:border-t-indigo-400"></div>
             <div className="text-gray-700 dark:text-gray-200 font-medium">{t.copying}</div>
@@ -1420,9 +1420,9 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
         </div>
       )}
 
-      {/* 复制成功提示 */}
+      {/* 复制成功提示 - 全局居中 */}
       {copySuccess && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm z-30">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm z-[9999]">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 flex flex-col items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
               <svg className="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,6 +1,6 @@
 import type { MermaidConfig } from 'mermaid';
 
-export type ThemeType = 'linearLight' | 'linearDark' | 'notion' | 'ghibli' | 'spotless' | 'brutalist' | 'glassmorphism' | 'memphis' | 'softPop' | 'cyberpunk' | 'monochrome' | 'darkMinimal' | 'wireframe' | 'handDrawn' | 'grafana' | 'noir' | 'material' | 'aurora' | 'win95' | 'doodle' | 'organic' | 'hightech' | 'kawaii';
+export type ThemeType = 'linearLight' | 'linearDark' | 'notion' | 'ghibli' | 'spotless' | 'brutalist' | 'glassmorphism' | 'memphis' | 'softPop' | 'cyberpunk' | 'monochrome' | 'darkMinimal' | 'wireframe' | 'handDrawn' | 'grafana' | 'noir' | 'material' | 'aurora' | 'win95' | 'doodle' | 'organic' | 'hightech' | 'kawaii' | 'geometricCollage';
 
 export interface ThemeConfig {
   name: string;
@@ -7843,6 +7843,631 @@ export const themes: Record<ThemeType, ThemeConfig> = {
     bgClass: 'bg-gradient-to-br from-[#ffe4f1] via-[#ffd4e5] to-[#ffe9f5]',
     bgStyle: {
       background: 'linear-gradient(135deg, #ffe4f1 0%, #ffd4e5 50%, #ffe9f5 100%)',
+      position: 'relative' as const,
+    }
+  },
+  geometricCollage: {
+    name: 'Geometric Collage',
+    annotationColors: {
+      primary: '#4a90e2',
+      secondary: '#2e5f8f',
+      text: '#1e3a5f',
+    },
+    mermaidConfig: {
+      theme: 'base',
+      themeVariables: {
+        background: '#f5f5f0',
+        primaryColor: '#4a90e2',
+        primaryTextColor: '#1e3a5f',
+        primaryBorderColor: '#2e5f8f',
+        lineColor: '#5f7b8f',
+        secondaryColor: '#7db3e8',
+        tertiaryColor: '#5fb389',
+        fontFamily: '"Helvetica Neue", "Arial", "Noto Sans SC", sans-serif',
+        fontSize: '14px',
+      },
+      themeCSS: `
+        /* Geometric Collage - 几何拼贴风格 */
+        
+        /* 流程图节点 - 使用不同的颜色和带纹理的背景 */
+        .node rect {
+          fill: #4a90e2 !important;
+          stroke: #2e5f8f !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          filter: drop-shadow(2px 2px 3px rgba(30, 58, 95, 0.15));
+        }
+        
+        .node circle {
+          fill: #7db3e8 !important;
+          stroke: #2e5f8f !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(2px 2px 3px rgba(30, 58, 95, 0.15));
+        }
+        
+        .node polygon {
+          fill: #5fb389 !important;
+          stroke: #3d8b6a !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(2px 2px 3px rgba(30, 58, 95, 0.15));
+        }
+        
+        .node .label {
+          font-family: "Helvetica Neue", "Arial", "Noto Sans SC", sans-serif;
+          font-weight: 600;
+          fill: #ffffff !important;
+          font-size: 14px;
+        }
+        
+        /* 为不同节点添加不同颜色 - 实现拼贴效果 */
+        .node:nth-child(2n) rect {
+          fill: #f4c542 !important;
+          stroke: #d4a532 !important;
+        }
+        
+        .node:nth-child(2n) .label {
+          fill: #1e3a5f !important;
+        }
+        
+        .node:nth-child(3n) rect {
+          fill: #e89fb5 !important;
+          stroke: #c87f95 !important;
+        }
+        
+        .node:nth-child(3n) .label {
+          fill: #1e3a5f !important;
+        }
+        
+        .node:nth-child(4n) rect {
+          fill: #5fb389 !important;
+          stroke: #3d8b6a !important;
+        }
+        
+        .node:nth-child(5n) rect {
+          fill: #b57b5f !important;
+          stroke: #956353 !important;
+        }
+        
+        .node:nth-child(6n) rect {
+          fill: #d4634f !important;
+          stroke: #b44f3f !important;
+        }
+        
+        /* 连接线 */
+        .edgePath .path {
+          stroke: #5f7b8f !important;
+          stroke-width: 2.5px !important;
+          stroke-linecap: round;
+        }
+        
+        .arrowheadPath {
+          fill: #5f7b8f !important;
+          stroke: #5f7b8f !important;
+        }
+        
+        .edgeLabel {
+          background-color: #f5f5f0 !important;
+          color: #1e3a5f !important;
+          font-family: "Helvetica Neue", "Arial", "Noto Sans SC", sans-serif;
+          font-size: 13px;
+          font-weight: 600;
+        }
+        
+        .edgeLabel rect {
+          fill: #ffffff !important;
+          stroke: #4a90e2 !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          filter: drop-shadow(2px 2px 3px rgba(30, 58, 95, 0.1));
+        }
+        
+        /* 聚类/子图样式 */
+        .cluster rect {
+          fill: rgba(125, 179, 232, 0.08) !important;
+          stroke: #4a90e2 !important;
+          stroke-width: 2px !important;
+          stroke-dasharray: 6 3 !important;
+          rx: 4px !important;
+        }
+        
+        .cluster .label {
+          fill: #2e5f8f !important;
+          font-weight: 700;
+          font-size: 14px;
+        }
+        
+        /* 序列图样式 */
+        .actor {
+          fill: #4a90e2 !important;
+          stroke: #2e5f8f !important;
+          stroke-width: 2.5px !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          filter: drop-shadow(2px 2px 3px rgba(30, 58, 95, 0.15));
+        }
+        
+        .actor:nth-child(2n) {
+          fill: #f4c542 !important;
+          stroke: #d4a532 !important;
+        }
+        
+        .actor:nth-child(3n) {
+          fill: #5fb389 !important;
+          stroke: #3d8b6a !important;
+        }
+        
+        .actor:nth-child(4n) {
+          fill: #e89fb5 !important;
+          stroke: #c87f95 !important;
+        }
+        
+        .actor text {
+          fill: #ffffff !important;
+          font-family: "Helvetica Neue", "Arial", "Noto Sans SC", sans-serif;
+          font-weight: 600;
+        }
+        
+        .actor:nth-child(2n) text,
+        .actor:nth-child(3n) text,
+        .actor:nth-child(4n) text {
+          fill: #1e3a5f !important;
+        }
+        
+        .actor-line {
+          stroke: #4a90e2 !important;
+          stroke-width: 2px !important;
+          stroke-dasharray: 5 5 !important;
+        }
+        
+        .activation0, .activation1, .activation2 {
+          fill: rgba(125, 179, 232, 0.3) !important;
+          stroke: #4a90e2 !important;
+          stroke-width: 2px !important;
+        }
+        
+        .messageLine0, .messageLine1 {
+          stroke: #5f7b8f !important;
+          stroke-width: 2px !important;
+        }
+        
+        .messageText {
+          fill: #1e3a5f !important;
+          font-family: "Helvetica Neue", "Arial", "Noto Sans SC", sans-serif;
+          font-weight: 500;
+          font-size: 13px;
+        }
+        
+        #arrowhead path, .arrowheadPath {
+          fill: #5f7b8f !important;
+          stroke: #5f7b8f !important;
+        }
+        
+        /* 注释框 */
+        .note {
+          fill: #fff9e6 !important;
+          stroke: #f4c542 !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          ry: 4px !important;
+          filter: drop-shadow(2px 2px 3px rgba(30, 58, 95, 0.1));
+        }
+        
+        .noteText {
+          fill: #1e3a5f !important;
+          font-family: "Helvetica Neue", "Arial", "Noto Sans SC", sans-serif;
+          font-weight: 500;
+        }
+        
+        /* Loop/Alt/Opt 框 */
+        .labelBox {
+          fill: rgba(95, 179, 137, 0.15) !important;
+          stroke: #5fb389 !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          ry: 4px !important;
+        }
+        
+        .labelText, .loopText {
+          fill: #1e3a5f !important;
+          font-family: "Helvetica Neue", "Arial", "Noto Sans SC", sans-serif;
+          font-weight: 600;
+        }
+        
+        .loopLine {
+          stroke: #5fb389 !important;
+          stroke-width: 2px !important;
+          stroke-dasharray: 4 4 !important;
+        }
+        
+        /* 状态图样式 */
+        .statediagram-state rect {
+          fill: #4a90e2 !important;
+          stroke: #2e5f8f !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          filter: drop-shadow(2px 2px 3px rgba(30, 58, 95, 0.15));
+        }
+        
+        .statediagram-state:nth-child(2n) rect {
+          fill: #5fb389 !important;
+          stroke: #3d8b6a !important;
+        }
+        
+        .statediagram-state:nth-child(3n) rect {
+          fill: #f4c542 !important;
+          stroke: #d4a532 !important;
+        }
+        
+        .statediagram-state text {
+          fill: #ffffff !important;
+          font-weight: 600;
+        }
+        
+        .statediagram-state:nth-child(2n) text,
+        .statediagram-state:nth-child(3n) text {
+          fill: #1e3a5f !important;
+        }
+        
+        .transition {
+          stroke: #5f7b8f !important;
+          stroke-width: 2px !important;
+        }
+        
+        /* 类图样式 */
+        .classGroup rect {
+          fill: #4a90e2 !important;
+          stroke: #2e5f8f !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+        }
+        
+        .classGroup:nth-child(2n) rect {
+          fill: #e89fb5 !important;
+          stroke: #c87f95 !important;
+        }
+        
+        .classGroup:nth-child(3n) rect {
+          fill: #5fb389 !important;
+          stroke: #3d8b6a !important;
+        }
+        
+        .classGroup:nth-child(4n) rect {
+          fill: #f4c542 !important;
+          stroke: #d4a532 !important;
+        }
+        
+        .classGroup line {
+          stroke: #2e5f8f !important;
+          stroke-width: 1.5px !important;
+        }
+        
+        .classGroup text {
+          fill: #ffffff !important;
+          font-family: "Helvetica Neue", "Arial", "Noto Sans SC", sans-serif;
+          font-weight: 500;
+        }
+        
+        .classGroup:nth-child(2n) text,
+        .classGroup:nth-child(3n) text,
+        .classGroup:nth-child(4n) text {
+          fill: #1e3a5f !important;
+        }
+        
+        .classLabel .nodeLabel {
+          fill: #1e3a5f !important;
+          font-weight: 600;
+        }
+        
+        .relation {
+          stroke: #5f7b8f !important;
+          stroke-width: 2px !important;
+        }
+        
+        /* ER图样式 */
+        .er.entityBox {
+          fill: #4a90e2 !important;
+          stroke: #2e5f8f !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+        }
+        
+        .er.entityBox:nth-child(2n) {
+          fill: #5fb389 !important;
+          stroke: #3d8b6a !important;
+        }
+        
+        .er.entityBox:nth-child(3n) {
+          fill: #e89fb5 !important;
+          stroke: #c87f95 !important;
+        }
+        
+        .er.entityLabel {
+          fill: #ffffff !important;
+          font-weight: 600;
+        }
+        
+        .er.relationshipLabel {
+          fill: #1e3a5f !important;
+          font-weight: 500;
+        }
+        
+        .er.relationshipLine {
+          stroke: #5f7b8f !important;
+          stroke-width: 2px !important;
+        }
+        
+        /* 甘特图样式 */
+        .grid .tick line {
+          stroke: #d4d4d0 !important;
+          stroke-width: 1px !important;
+        }
+        
+        .grid path {
+          stroke: none !important;
+        }
+        
+        .task {
+          fill: #4a90e2 !important;
+          stroke: #2e5f8f !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+        }
+        
+        .task:nth-child(2n) {
+          fill: #5fb389 !important;
+          stroke: #3d8b6a !important;
+        }
+        
+        .task:nth-child(3n) {
+          fill: #f4c542 !important;
+          stroke: #d4a532 !important;
+        }
+        
+        .task:nth-child(4n) {
+          fill: #e89fb5 !important;
+          stroke: #c87f95 !important;
+        }
+        
+        .taskText {
+          fill: #ffffff !important;
+          font-weight: 600;
+          font-size: 12px;
+        }
+        
+        .task:nth-child(2n) .taskText,
+        .task:nth-child(3n) .taskText,
+        .task:nth-child(4n) .taskText {
+          fill: #1e3a5f !important;
+        }
+        
+        .sectionTitle {
+          fill: #1e3a5f !important;
+          font-weight: 700;
+        }
+        
+        .taskTextOutsideRight, .taskTextOutsideLeft {
+          fill: #1e3a5f !important;
+          font-weight: 500;
+        }
+        
+        .today {
+          fill: none !important;
+          stroke: #d4634f !important;
+          stroke-width: 3px !important;
+        }
+        
+        /* 饼图样式 */
+        .pieCircle {
+          stroke: #ffffff !important;
+          stroke-width: 3px !important;
+        }
+        
+        .pieTitleText {
+          fill: #1e3a5f !important;
+          font-weight: 700;
+          font-size: 18px;
+        }
+        
+        .slice {
+          filter: drop-shadow(1px 1px 2px rgba(30, 58, 95, 0.15));
+        }
+        
+        .slice:nth-child(1) {
+          fill: #4a90e2 !important;
+        }
+        
+        .slice:nth-child(2) {
+          fill: #5fb389 !important;
+        }
+        
+        .slice:nth-child(3) {
+          fill: #f4c542 !important;
+        }
+        
+        .slice:nth-child(4) {
+          fill: #e89fb5 !important;
+        }
+        
+        .slice:nth-child(5) {
+          fill: #b57b5f !important;
+        }
+        
+        .slice:nth-child(6) {
+          fill: #d4634f !important;
+        }
+        
+        .slice:nth-child(7) {
+          fill: #7db3e8 !important;
+        }
+        
+        .slice:nth-child(8) {
+          fill: #9b6b4f !important;
+        }
+        
+        .legendText {
+          fill: #1e3a5f !important;
+          font-weight: 500;
+        }
+        
+        /* Git图样式 */
+        .commit-id, .commit-msg, .branch-label {
+          fill: #1e3a5f !important;
+          font-weight: 600;
+          font-size: 12px;
+        }
+        
+        .commit {
+          fill: #4a90e2 !important;
+          stroke: #2e5f8f !important;
+          stroke-width: 2.5px !important;
+          r: 7px !important;
+          filter: drop-shadow(1px 1px 2px rgba(30, 58, 95, 0.15));
+        }
+        
+        .commit:nth-child(2n) {
+          fill: #5fb389 !important;
+          stroke: #3d8b6a !important;
+        }
+        
+        .commit:nth-child(3n) {
+          fill: #f4c542 !important;
+          stroke: #d4a532 !important;
+        }
+        
+        .branch {
+          stroke: #5f7b8f !important;
+          stroke-width: 2.5px !important;
+          stroke-linecap: round !important;
+        }
+        
+        /* XYChart 样式 - 几何拼贴配色 */
+        .line-plot-0 path {
+          stroke: #4a90e2 !important;
+          stroke-width: 3px !important;
+        }
+        
+        .line-plot-1 path {
+          stroke: #5fb389 !important;
+          stroke-width: 3px !important;
+        }
+        
+        .line-plot-2 path {
+          stroke: #f4c542 !important;
+          stroke-width: 3px !important;
+        }
+        
+        .line-plot-3 path {
+          stroke: #e89fb5 !important;
+          stroke-width: 3px !important;
+        }
+        
+        .bar-plot-0 rect {
+          fill: rgba(74, 144, 226, 0.7) !important;
+          stroke: #2e5f8f !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          filter: drop-shadow(2px 2px 3px rgba(30, 58, 95, 0.12));
+        }
+        
+        .bar-plot-1 rect {
+          fill: rgba(95, 179, 137, 0.7) !important;
+          stroke: #3d8b6a !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          filter: drop-shadow(2px 2px 3px rgba(30, 58, 95, 0.12));
+        }
+        
+        .bar-plot-2 rect {
+          fill: rgba(244, 197, 66, 0.7) !important;
+          stroke: #d4a532 !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          filter: drop-shadow(2px 2px 3px rgba(30, 58, 95, 0.12));
+        }
+        
+        .bar-plot-3 rect {
+          fill: rgba(232, 159, 181, 0.7) !important;
+          stroke: #c87f95 !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          filter: drop-shadow(2px 2px 3px rgba(30, 58, 95, 0.12));
+        }
+        
+        .ticks path {
+          stroke: #d4d4d0 !important;
+        }
+        
+        .chart-title text {
+          fill: #1e3a5f !important;
+          font-weight: 700 !important;
+          font-size: 18px !important;
+          font-family: "Helvetica Neue", "Arial", "Noto Sans SC", sans-serif;
+        }
+        
+        .left-axis .title text, .bottom-axis .title text {
+          fill: #2e5f8f !important;
+          font-size: 14px !important;
+          font-weight: 600 !important;
+        }
+        
+        .left-axis .label text, .bottom-axis .label text {
+          fill: #1e3a5f !important;
+          font-size: 12px !important;
+        }
+        
+        .legend text {
+          fill: #1e3a5f !important;
+          font-size: 12px !important;
+          font-weight: 500;
+        }
+        
+        /* 时间线样式 */
+        .timeline-event {
+          fill: #4a90e2 !important;
+          stroke: #2e5f8f !important;
+          stroke-width: 2px !important;
+          rx: 4px !important;
+          filter: drop-shadow(2px 2px 3px rgba(30, 58, 95, 0.15));
+        }
+        
+        .timeline-event:nth-child(2n) {
+          fill: #5fb389 !important;
+          stroke: #3d8b6a !important;
+        }
+        
+        .timeline-event:nth-child(3n) {
+          fill: #f4c542 !important;
+          stroke: #d4a532 !important;
+        }
+        
+        .timeline-marker {
+          fill: #4a90e2 !important;
+          stroke: #2e5f8f !important;
+          stroke-width: 2px !important;
+        }
+      `
+    },
+    bgClass: 'bg-[#f5f5f0]',
+    bgStyle: {
+      backgroundColor: '#f5f5f0',
+      backgroundImage: `
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 10px,
+          rgba(74, 144, 226, 0.03) 10px,
+          rgba(74, 144, 226, 0.03) 20px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 10px,
+          rgba(95, 179, 137, 0.02) 10px,
+          rgba(95, 179, 137, 0.02) 20px
+        )
+      `,
+      backgroundSize: '40px 40px, 40px 40px',
       position: 'relative' as const,
     }
   },  

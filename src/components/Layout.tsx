@@ -35,6 +35,7 @@ const Layout: React.FC = () => {
   const [leftPanelWidth, setLeftPanelWidth] = useState<number>(30); // 默认 30%
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showClearDialog, setShowClearDialog] = useState(false);
+  const [showClearAnnotationsDialog, setShowClearAnnotationsDialog] = useState(false);
   const [loadedFromUrl, setLoadedFromUrl] = useState<boolean>(false); // 追踪是否从 URL 加载
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true); // 追踪是否是初始加载
   const [customStylesLoaded, setCustomStylesLoaded] = useState<boolean>(false); // 追踪是否加载了自定义背景/字体
@@ -176,18 +177,23 @@ const Layout: React.FC = () => {
   };
 
   const handleClearAnnotations = () => {
-    if (annotationCount > 0 && confirm(t.confirmClearAnnotations || '确定要清空所有标注吗？')) {
-      // 追踪清空标注操作
-      trackEvent(AnalyticsEvents.ANNOTATION_CLEAR_ALL, {
-        annotation_count: annotationCount,
-        theme: currentTheme
-      });
-      
-      // 这个会通过 Preview 的 ref 来处理
-      if (previewRef.current && 'clearAnnotations' in previewRef.current) {
-        (previewRef.current as any).clearAnnotations();
-      }
+    if (annotationCount > 0) {
+      setShowClearAnnotationsDialog(true);
     }
+  };
+
+  const confirmClearAnnotations = () => {
+    // 追踪清空标注操作
+    trackEvent(AnalyticsEvents.ANNOTATION_CLEAR_ALL, {
+      annotation_count: annotationCount,
+      theme: currentTheme
+    });
+    
+    // 这个会通过 Preview 的 ref 来处理
+    if (previewRef.current && 'clearAnnotations' in previewRef.current) {
+      (previewRef.current as any).clearAnnotations();
+    }
+    setShowClearAnnotationsDialog(false);
   };
 
   const handleAnnotationCountChange = (count: number) => {
@@ -443,13 +449,23 @@ const Layout: React.FC = () => {
         </div>
       </main>
 
-      {/* 清空确认对话框 */}
+      {/* 清空编辑器确认对话框 */}
       <ConfirmDialog
         isOpen={showClearDialog}
         title={t.clearEditor}
         message={t.confirmClear}
         onConfirm={confirmClearEditor}
         onCancel={() => setShowClearDialog(false)}
+        variant="danger"
+      />
+
+      {/* 清空标注确认对话框 */}
+      <ConfirmDialog
+        isOpen={showClearAnnotationsDialog}
+        title={t.clearAnnotations}
+        message={t.confirmClearAnnotations}
+        onConfirm={confirmClearAnnotations}
+        onCancel={() => setShowClearAnnotationsDialog(false)}
         variant="danger"
       />
 
