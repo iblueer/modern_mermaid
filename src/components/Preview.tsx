@@ -763,6 +763,68 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
         await new Promise(resolve => requestAnimationFrame(resolve));
         await new Promise(resolve => requestAnimationFrame(resolve));
 
+        // 强制应用文字样式到 SVG 内联属性，确保复制时正确显示
+        const svgElement = node.querySelector('svg');
+        if (svgElement) {
+          // 获取所有可能的文本元素（更全面的选择器）
+          const textSelectors = [
+            'text',
+            'tspan',
+            '.label',
+            '.nodeLabel',
+            '.edgeLabel',
+            '.labelText',
+            'foreignObject div',
+            'foreignObject span',
+            'foreignObject p'
+          ];
+          
+          textSelectors.forEach(selector => {
+            const elements = svgElement.querySelectorAll(selector);
+            
+            elements.forEach((textEl: any) => {
+              const computedStyle = window.getComputedStyle(textEl);
+              const fillColor = computedStyle.fill;
+              const color = computedStyle.color;
+              
+              // 应用样式
+              if (textEl.tagName === 'text' || textEl.tagName === 'tspan') {
+                const colorToUse = fillColor !== 'none' ? fillColor : color;
+                if (colorToUse && colorToUse !== 'none') {
+                  textEl.setAttribute('fill', colorToUse);
+                }
+              } else if (textEl.tagName === 'DIV' || textEl.tagName === 'SPAN' || textEl.tagName === 'P') {
+                // HTML 元素使用 style.color，并添加 !important
+                if (color && color !== 'none') {
+                  textEl.style.setProperty('color', color, 'important');
+                  textEl.style.setProperty('-webkit-text-fill-color', color, 'important');
+                }
+              }
+              
+              // 也设置到所有子文本元素
+              const childTexts = textEl.querySelectorAll('text, tspan');
+              if (childTexts.length > 0) {
+                childTexts.forEach((child: any) => {
+                  const childColor = fillColor !== 'none' ? fillColor : color;
+                  if (childColor && childColor !== 'none') {
+                    child.setAttribute('fill', childColor);
+                  }
+                });
+              }
+            });
+          });
+          
+          // 额外处理：对所有 foreignObject 设置默认文字颜色
+          const foreignObjects = svgElement.querySelectorAll('foreignObject');
+          foreignObjects.forEach((fo: any) => {
+            const foComputedStyle = window.getComputedStyle(fo);
+            const foColor = foComputedStyle.color;
+            if (foColor && foColor !== 'none') {
+              fo.style.setProperty('color', foColor, 'important');
+            }
+          });
+        }
+
         // 使用更高的导出倍率以获得更清晰的图片
         const exportScale = 3; // 3x 分辨率
 
@@ -772,8 +834,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
           bgColor = actualBgStyle.backgroundColor;
         }
 
-        // 获取SVG元素的实际尺寸
-        const svgElement = node.querySelector('svg');
+        // 获取SVG元素的实际尺寸（已在上面获取）
         let targetWidth = node.offsetWidth;
         let targetHeight = node.offsetHeight;
 
@@ -900,6 +961,68 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
         await new Promise(resolve => requestAnimationFrame(resolve));
         await new Promise(resolve => requestAnimationFrame(resolve));
         
+        // 强制应用文字样式到 SVG 内联属性，确保导出时正确显示
+        const svgElement = node.querySelector('svg');
+        if (svgElement) {
+          // 获取所有可能的文本元素（更全面的选择器）
+          const textSelectors = [
+            'text',
+            'tspan',
+            '.label',
+            '.nodeLabel',
+            '.edgeLabel',
+            '.labelText',
+            'foreignObject div',
+            'foreignObject span',
+            'foreignObject p'
+          ];
+          
+          textSelectors.forEach(selector => {
+            const elements = svgElement.querySelectorAll(selector);
+            
+            elements.forEach((textEl: any) => {
+              const computedStyle = window.getComputedStyle(textEl);
+              const fillColor = computedStyle.fill;
+              const color = computedStyle.color;
+              
+              // 应用样式
+              if (textEl.tagName === 'text' || textEl.tagName === 'tspan') {
+                const colorToUse = fillColor !== 'none' ? fillColor : color;
+                if (colorToUse && colorToUse !== 'none') {
+                  textEl.setAttribute('fill', colorToUse);
+                }
+              } else if (textEl.tagName === 'DIV' || textEl.tagName === 'SPAN' || textEl.tagName === 'P') {
+                // HTML 元素使用 style.color，并添加 !important
+                if (color && color !== 'none') {
+                  textEl.style.setProperty('color', color, 'important');
+                  textEl.style.setProperty('-webkit-text-fill-color', color, 'important');
+                }
+              }
+              
+              // 也设置到所有子文本元素
+              const childTexts = textEl.querySelectorAll('text, tspan');
+              if (childTexts.length > 0) {
+                childTexts.forEach((child: any) => {
+                  const childColor = fillColor !== 'none' ? fillColor : color;
+                  if (childColor && childColor !== 'none') {
+                    child.setAttribute('fill', childColor);
+                  }
+                });
+              }
+            });
+          });
+          
+          // 额外处理：对所有 foreignObject 设置默认文字颜色
+          const foreignObjects = svgElement.querySelectorAll('foreignObject');
+          foreignObjects.forEach((fo: any) => {
+            const foComputedStyle = window.getComputedStyle(fo);
+            const foColor = foComputedStyle.color;
+            if (foColor && foColor !== 'none') {
+              fo.style.setProperty('color', foColor, 'important');
+            }
+          });
+        }
+        
         // 使用更高的导出倍率以获得更清晰的图片
         const exportScale = 3; // 3x 分辨率，更清晰
         
@@ -909,8 +1032,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
           bgColor = actualBgStyle.backgroundColor;
         }
         
-        // 获取SVG元素的实际尺寸
-        const svgElement = node.querySelector('svg');
+        // 获取SVG元素的实际尺寸（使用已获取的 svgElement）
         let targetWidth = node.offsetWidth;
         let targetHeight = node.offsetHeight;
         
@@ -1119,6 +1241,12 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
         
         // Apply custom font via style injection
         let customStyles = '';
+        
+        // IMPORTANT: Inject complete theme CSS first to ensure proper styling in exports
+        if (themeConfig.mermaidConfig.themeCSS) {
+          customStyles += `\n${themeConfig.mermaidConfig.themeCSS}\n`;
+        }
+        
         if (actualFont) {
           customStyles += `
   text, .label, .messageText, .noteText, .labelText, .loopText, .taskText, 
@@ -1141,30 +1269,6 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
     stroke: ${colors.stroke} !important;
     stroke-width: 2px !important;
   }`;
-          }
-        }
-        
-        // Apply theme-specific xychart styles
-        if (themeConfig.mermaidConfig.themeCSS) {
-          const themeCSS = themeConfig.mermaidConfig.themeCSS;
-
-          // Extract all xychart-related styles
-          const xychartStartIndex = themeCSS.indexOf('/* XYChart');
-          if (xychartStartIndex !== -1) {
-            // Find the end of xychart styles (next comment or end of string)
-            let xychartEndIndex = themeCSS.indexOf('/*', xychartStartIndex + 5);
-            if (xychartEndIndex === -1) {
-              xychartEndIndex = themeCSS.length;
-            }
-
-            let xychartStyles = themeCSS.substring(xychartStartIndex, xychartEndIndex).trim();
-
-            // Remove the svg[aria-roledescription="xychart"] prefix since we're injecting inside the SVG
-            xychartStyles = xychartStyles.replace(/svg\[aria-roledescription="xychart"\]\s+/g, '');
-
-            if (xychartStyles) {
-              customStyles += `\n${xychartStyles}\n`;
-            }
           }
         }
 
