@@ -75,6 +75,7 @@ export interface Translation {
   copyAnnotation: string;
   fontSize: string;
   fontWeight: string;
+  fontFamily: string;
   normal: string;
   bold: string;
   strokeWidth: string;
@@ -198,6 +199,7 @@ export const translations: Record<Language, Translation> = {
     copyAnnotation: 'Copy annotation',
     fontSize: 'Font Size',
     fontWeight: 'Font Weight',
+    fontFamily: 'Font Family',
     normal: 'Normal',
     bold: 'Bold',
     strokeWidth: 'Stroke Width',
@@ -305,6 +307,7 @@ export const translations: Record<Language, Translation> = {
     copyAnnotation: '复制标注',
     fontSize: '字体大小',
     fontWeight: '字体粗细',
+    fontFamily: '字体',
     normal: '正常',
     bold: '粗体',
     strokeWidth: '线条宽度',
@@ -412,6 +415,7 @@ export const translations: Record<Language, Translation> = {
     copyAnnotation: '複製標註',
     fontSize: '字體大小',
     fontWeight: '字體粗細',
+    fontFamily: '字體',
     normal: '正常',
     bold: '粗體',
     strokeWidth: '線條寬度',
@@ -519,6 +523,7 @@ export const translations: Record<Language, Translation> = {
     copyAnnotation: '注釈をコピー',
     fontSize: 'フォントサイズ',
     fontWeight: 'フォントの太さ',
+    fontFamily: 'フォント',
     normal: '標準',
     bold: '太字',
     strokeWidth: '線の太さ',
@@ -626,6 +631,7 @@ export const translations: Record<Language, Translation> = {
     copyAnnotation: 'Copiar anotación',
     fontSize: 'Tamaño de fuente',
     fontWeight: 'Grosor de fuente',
+    fontFamily: 'Fuente',
     normal: 'Normal',
     bold: 'Negrita',
     strokeWidth: 'Grosor de línea',
@@ -733,6 +739,7 @@ export const translations: Record<Language, Translation> = {
     copyAnnotation: 'Copiar anotação',
     fontSize: 'Tamanho da fonte',
     fontWeight: 'Espessura da fonte',
+    fontFamily: 'Fonte',
     normal: 'Normal',
     bold: 'Negrito',
     strokeWidth: 'Espessura da linha',

@@ -39,6 +39,7 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
   
   // 下拉菜单状态
   const [showFontSizeMenu, setShowFontSizeMenu] = useState(false);
+  const [showFontFamilyMenu, setShowFontFamilyMenu] = useState(false);
   const [showStrokeWidthMenu, setShowStrokeWidthMenu] = useState(false);
 
   // 选中标注
@@ -307,14 +308,15 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
   useEffect(() => {
     const handleClickOutside = () => {
       if (showFontSizeMenu) setShowFontSizeMenu(false);
+      if (showFontFamilyMenu) setShowFontFamilyMenu(false);
       if (showStrokeWidthMenu) setShowStrokeWidthMenu(false);
     };
 
-    if (showFontSizeMenu || showStrokeWidthMenu) {
+    if (showFontSizeMenu || showFontFamilyMenu || showStrokeWidthMenu) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
-  }, [showFontSizeMenu, showStrokeWidthMenu]);
+  }, [showFontSizeMenu, showFontFamilyMenu, showStrokeWidthMenu]);
 
   // 渲染箭头
   const renderArrow = (annotation: Annotation) => {
@@ -413,7 +415,11 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
               if (e.key === 'Escape') setEditingTextId(null);
             }}
             className="w-full px-2 py-1 text-sm bg-white dark:bg-gray-800 border-2 border-indigo-500 rounded focus:outline-none"
-            style={{ fontSize: `${annotation.fontSize}px`, fontWeight: annotation.fontWeight }}
+            style={{ 
+              fontSize: `${annotation.fontSize}px`, 
+              fontWeight: annotation.fontWeight,
+              fontFamily: annotation.fontFamily || 'Arial, sans-serif'
+            }}
           />
         </foreignObject>
       );
@@ -427,6 +433,7 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
           fill={annotation.color}
           fontSize={annotation.fontSize}
           fontWeight={annotation.fontWeight}
+          fontFamily={annotation.fontFamily || 'Arial, sans-serif'}
           textAnchor="middle"
           dominantBaseline="middle"
           onMouseDown={(e) => handleMouseDown(e, annotation.id)}
@@ -657,7 +664,7 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
     // 计算按钮数量和宽度
     let buttonCount = 3; // 基础：颜色、复制、删除
     if (annotation.type === 'text') {
-      buttonCount += 3; // 编辑、字体大小、字体粗细
+      buttonCount += 4; // 编辑、字体、字体大小、字体粗细
     } else {
       buttonCount += 1; // 线条宽度
     }
@@ -665,6 +672,17 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
 
     // 字体大小选项
     const fontSizes = [12, 14, 16, 20, 24, 28, 32];
+    // 字体选项
+    const fontFamilies = [
+      { name: 'Arial', value: 'Arial, sans-serif' },
+      { name: 'Times New Roman', value: 'Times New Roman, serif' },
+      { name: 'Courier New', value: 'Courier New, monospace' },
+      { name: 'Georgia', value: 'Georgia, serif' },
+      { name: 'Verdana', value: 'Verdana, sans-serif' },
+      { name: 'Comic Sans MS', value: 'Comic Sans MS, cursive' },
+      { name: '微软雅黑', value: 'Microsoft YaHei, sans-serif' },
+      { name: '宋体', value: 'SimSun, serif' },
+    ];
     // 线条宽度选项
     const strokeWidths = [1, 2, 3, 4, 6, 8, 10];
 
@@ -674,7 +692,7 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
           x={buttonX - toolbarWidth / 2}
           y={buttonY - 15}
           width={toolbarWidth}
-          height={showFontSizeMenu || showStrokeWidthMenu ? "250" : "30"}
+          height={showFontSizeMenu || showFontFamilyMenu || showStrokeWidthMenu ? "280" : "30"}
           style={{ pointerEvents: 'auto', overflow: 'visible' }}
         >
           <div className="flex gap-1 justify-center">
@@ -709,12 +727,63 @@ const AnnotationLayer: React.FC<AnnotationLayerProps> = ({
                   <Edit2 size={12} />
                 </button>
                 
+                {/* 字体选择按钮 */}
+                <div className="relative" style={{ zIndex: 10000 }}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowFontFamilyMenu(!showFontFamilyMenu);
+                      setShowFontSizeMenu(false);
+                      setShowStrokeWidthMenu(false);
+                    }}
+                    className="px-2 py-1 bg-white hover:text-indigo-600 hover:bg-indigo-50 text-black rounded text-xs flex items-center gap-1 shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer"
+                    title={t.fontFamily}
+                  >
+                    <Type size={12} strokeWidth={2.5} />
+                  </button>
+                  {showFontFamilyMenu && (
+                    <div 
+                      className="absolute top-full mt-1 left-0 bg-white dark:bg-gray-800 rounded shadow-xl border border-gray-200 dark:border-gray-700 py-1 min-w-[140px] max-h-[220px] overflow-y-auto"
+                      style={{ 
+                        zIndex: 10001,
+                        pointerEvents: 'auto',
+                        cursor: 'pointer'
+                      }}
+                      onMouseDown={(e) => e.stopPropagation()}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {fontFamilies.map(font => (
+                        <button
+                          key={font.value}
+                          onMouseDown={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            onUpdateAnnotation(annotation.id, { fontFamily: font.value });
+                            setShowFontFamilyMenu(false);
+                          }}
+                          className={`w-full px-3 py-1 text-xs hover:bg-indigo-50 dark:hover:bg-gray-700 text-left flex items-center justify-between cursor-pointer ${
+                            annotation.fontFamily === font.value ? 'text-indigo-600 font-semibold' : 'text-gray-700 dark:text-gray-300'
+                          }`}
+                          style={{ 
+                            pointerEvents: 'auto',
+                            fontFamily: font.value
+                          }}
+                        >
+                          <span>{font.name}</span>
+                          {annotation.fontFamily === font.value && <span>✓</span>}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                
                 {/* 字体大小按钮 */}
                 <div className="relative" style={{ zIndex: 10000 }}>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowFontSizeMenu(!showFontSizeMenu);
+                      setShowFontFamilyMenu(false);
                       setShowStrokeWidthMenu(false);
                     }}
                     className="px-2 py-1 bg-white hover:text-indigo-600 hover:bg-indigo-50 text-black rounded text-xs flex items-center gap-1 shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer"

@@ -240,6 +240,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ code, themeConfig, cu
         text: t.doubleClickToEdit,
         fontSize: 16,
         fontWeight: 'normal',
+        fontFamily: 'Arial, sans-serif',
         color: themeConfig.annotationColors.text,
         strokeWidth: 2
       };

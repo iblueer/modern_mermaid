@@ -25,6 +25,7 @@ export interface TextAnnotation extends BaseAnnotation {
   text: string;
   fontSize: number;
   fontWeight: 'normal' | 'bold';
+  fontFamily?: string;
 }
 
 export interface RectAnnotation extends BaseAnnotation {
