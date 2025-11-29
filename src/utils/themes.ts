@@ -1,6 +1,6 @@
 import type { MermaidConfig } from 'mermaid';
 
-export type ThemeType = 'linearLight' | 'linearDark' | 'notion' | 'ghibli' | 'spotless' | 'brutalist' | 'glassmorphism' | 'memphis' | 'softPop' | 'cyberpunk' | 'monochrome' | 'darkMinimal' | 'wireframe' | 'handDrawn' | 'grafana' | 'noir' | 'material' | 'aurora' | 'win95' | 'doodle';
+export type ThemeType = 'linearLight' | 'linearDark' | 'notion' | 'ghibli' | 'spotless' | 'brutalist' | 'glassmorphism' | 'memphis' | 'softPop' | 'cyberpunk' | 'monochrome' | 'darkMinimal' | 'wireframe' | 'handDrawn' | 'grafana' | 'noir' | 'material' | 'aurora' | 'win95' | 'doodle' | 'organic';
 
 export interface ThemeConfig {
   name: string;
@@ -6091,6 +6091,662 @@ export const themes: Record<ThemeType, ThemeConfig> = {
     bgClass: 'bg-gradient-to-br from-[#ffeef8] to-[#e0f7ff]',
     bgStyle: {
       background: 'linear-gradient(135deg, #ffeef8 0%, #e0f7ff 100%)',
+    }
+  },
+  organic: {
+    name: 'Organic Natural',
+    annotationColors: {
+      primary: '#6a9c89', // Sage green
+      secondary: '#8ba888', // Light sage
+      text: '#2d5016', // Dark green
+    },
+    mermaidConfig: {
+      theme: 'base',
+      themeVariables: {
+        background: '#f5f9f3',
+        primaryColor: '#d4e7d0', // Light green
+        primaryTextColor: '#2d5016', // Dark green for good contrast
+        primaryBorderColor: '#8ba888',
+        lineColor: '#6a9c89',
+        secondaryColor: '#e8f4e5', // Very light green
+        tertiaryColor: '#c8d5b9', // Soft sage
+        fontFamily: '"Inter", "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        fontSize: '14px',
+      },
+      themeCSS: `
+        /* Organic Natural Style - Soft, flowing, nature-inspired design */
+        
+        /* Flowchart nodes - Organic shapes with soft colors */
+        .node rect, .node polygon {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 16px !important;
+          ry: 16px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .node circle {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .node .label {
+          fill: #2d5016 !important;
+          font-weight: 500;
+          font-size: 14px;
+        }
+        
+        /* Alternate node colors - Natural palette */
+        .node:nth-child(2n) rect,
+        .node:nth-child(2n) circle,
+        .node:nth-child(2n) polygon {
+          fill: #e8f4e5 !important;
+          stroke: #8ba888 !important;
+        }
+        
+        .node:nth-child(3n) rect,
+        .node:nth-child(3n) circle,
+        .node:nth-child(3n) polygon {
+          fill: #c8d5b9 !important;
+          stroke: #6a9c89 !important;
+        }
+        
+        .node:nth-child(5n) rect,
+        .node:nth-child(5n) circle,
+        .node:nth-child(5n) polygon {
+          fill: #b8cdb1 !important;
+          stroke: #5a7c3e !important;
+        }
+        
+        /* Connection lines - Smooth organic flow */
+        .edgePath .path {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        
+        .arrowheadPath {
+          fill: #6a9c89 !important;
+          stroke: #6a9c89 !important;
+        }
+        
+        .edgeLabel {
+          color: #2d5016 !important;
+          font-size: 13px;
+          font-weight: 500;
+        }
+        
+        .edgeLabel rect {
+          fill: #f5f9f3 !important;
+          stroke: #8ba888 !important;
+          stroke-width: 1.5px !important;
+          rx: 8px !important;
+          filter: drop-shadow(1px 1px 2px rgba(45,80,22,0.1));
+        }
+        
+        /* Sequence Diagram - Natural organic style */
+        .actor {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 16px !important;
+          ry: 16px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .actor:nth-child(2n) {
+          fill: #e8f4e5 !important;
+        }
+        
+        .actor:nth-child(3n) {
+          fill: #c8d5b9 !important;
+        }
+        
+        .actor:nth-child(4n) {
+          fill: #b8cdb1 !important;
+        }
+        
+        .actor text {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        .actor-line, g line.actor-line, g path.actor-line {
+          stroke: #8ba888 !important;
+          stroke-width: 1.5px !important;
+          stroke-dasharray: 4 2 !important;
+        }
+        
+        .activation0, .activation1, .activation2 {
+          fill: #b8cdb1 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 8px !important;
+          filter: drop-shadow(2px 2px 3px rgba(45,80,22,0.12));
+        }
+        
+        .messageLine0, .messageLine1 {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          stroke-linecap: round;
+        }
+        
+        .messageText {
+          fill: #2d5016 !important;
+          font-weight: 500;
+          font-size: 13px;
+        }
+        
+        #arrowhead path, .arrowheadPath {
+          fill: #6a9c89 !important;
+          stroke: #6a9c89 !important;
+        }
+        
+        /* Note boxes - Soft yellow-green */
+        .note {
+          fill: #f5f9dc !important;
+          stroke: #8ba888 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+          ry: 12px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .noteText {
+          fill: #2d5016 !important;
+          font-weight: 500;
+        }
+        
+        /* Loop/Alt/Opt boxes */
+        .labelBox {
+          fill: #c8d5b9 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+          ry: 12px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .labelText, .loopText {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        .loopLine {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+        }
+        
+        /* Cluster/Subgraph styling */
+        .cluster rect {
+          fill: rgba(200,213,185,0.3) !important;
+          stroke: #8ba888 !important;
+          stroke-width: 2px !important;
+          rx: 20px !important;
+          ry: 20px !important;
+          stroke-dasharray: 5 3;
+          filter: drop-shadow(1px 1px 2px rgba(45,80,22,0.1));
+        }
+        
+        .cluster text {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        /* State diagram */
+        .statediagram-state rect,
+        .statediagram-state .state-inner {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 16px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .statediagram-state:nth-child(2n) rect,
+        .statediagram-state:nth-child(2n) .state-inner {
+          fill: #e8f4e5 !important;
+        }
+        
+        .statediagram-state:nth-child(3n) rect,
+        .statediagram-state:nth-child(3n) .state-inner {
+          fill: #c8d5b9 !important;
+        }
+        
+        .statediagram-state:nth-child(5n) rect,
+        .statediagram-state:nth-child(5n) .state-inner {
+          fill: #b8cdb1 !important;
+        }
+        
+        .stateLabel text {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        .transition {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+        }
+        
+        /* Class Diagram */
+        .classGroup rect {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .classGroup:nth-child(2n) rect {
+          fill: #e8f4e5 !important;
+        }
+        
+        .classGroup:nth-child(3n) rect {
+          fill: #c8d5b9 !important;
+        }
+        
+        .classGroup line {
+          stroke: #6a9c89 !important;
+          stroke-width: 1.5px !important;
+        }
+        
+        .classLabel .label {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        .classLabel .box {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+        }
+        
+        .relationshipLine {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+        }
+        
+        .relationshipLabelBox {
+          fill: #f5f9f3 !important;
+          stroke: #8ba888 !important;
+          stroke-width: 1.5px !important;
+          rx: 8px !important;
+        }
+        
+        /* ER Diagram */
+        .er.entityBox {
+          fill: #e8f4e5 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .er.entityBox:nth-child(2n) {
+          fill: #d4e7d0 !important;
+        }
+        
+        .er.entityBox:nth-child(3n) {
+          fill: #c8d5b9 !important;
+        }
+        
+        .er.entityLabel,
+        .er.relationshipLabel {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        .er .relationshipLine {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+        }
+        
+        .er .relationshipLabelBox {
+          fill: #f5f9f3 !important;
+          stroke: #8ba888 !important;
+          stroke-width: 1.5px !important;
+          rx: 8px !important;
+        }
+        
+        /* Gantt Chart */
+        .titleText {
+          fill: #2d5016 !important;
+          font-weight: 700;
+          font-size: 20px;
+        }
+        
+        .grid .tick text {
+          fill: #2d5016 !important;
+          font-size: 12px;
+        }
+        
+        .grid line {
+          stroke: #c8d5b9 !important;
+          stroke-width: 1px !important;
+          opacity: 0.6;
+        }
+        
+        .taskText {
+          fill: #2d5016 !important;
+          font-weight: 500;
+        }
+        
+        .taskTextOutsideRight,
+        .taskTextOutsideLeft {
+          fill: #2d5016 !important;
+          font-weight: 500;
+        }
+        
+        .task0, .task1, .task2, .task3 {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 10px !important;
+        }
+        
+        .task0 {
+          fill: #d4e7d0 !important;
+        }
+        
+        .task1 {
+          fill: #e8f4e5 !important;
+        }
+        
+        .task2 {
+          fill: #c8d5b9 !important;
+        }
+        
+        .task3 {
+          fill: #b8cdb1 !important;
+        }
+        
+        .section0, .section1, .section2, .section3 {
+          fill: #2d5016 !important;
+          font-weight: 700;
+          font-size: 14px;
+        }
+        
+        .sectionTitle0, .sectionTitle1, .sectionTitle2, .sectionTitle3 {
+          fill: #f5f9f3 !important;
+        }
+        
+        .done0, .done1, .done2, .done3 {
+          stroke: #4d7c0f !important;
+          stroke-width: 2px !important;
+          fill: #a3e635 !important;
+          opacity: 0.8;
+        }
+        
+        .active0, .active1, .active2, .active3 {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          fill: #8ba888 !important;
+        }
+        
+        .crit0, .crit1, .crit2, .crit3 {
+          stroke: #b45309 !important;
+          stroke-width: 2px !important;
+          fill: #fbbf24 !important;
+          opacity: 0.8;
+        }
+        
+        .activeCrit0, .activeCrit1, .activeCrit2, .activeCrit3 {
+          stroke: #854d0e !important;
+          stroke-width: 2px !important;
+          fill: #fde047 !important;
+        }
+        
+        /* Pie Chart */
+        .pieCircle {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+        }
+        
+        .pieTitleText {
+          fill: #2d5016 !important;
+          font-weight: 700;
+          font-size: 20px;
+        }
+        
+        .slice {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(1px 1px 2px rgba(45,80,22,0.1));
+        }
+        
+        .slice:nth-child(1) {
+          fill: #d4e7d0 !important;
+        }
+        
+        .slice:nth-child(2) {
+          fill: #e8f4e5 !important;
+        }
+        
+        .slice:nth-child(3) {
+          fill: #c8d5b9 !important;
+        }
+        
+        .slice:nth-child(4) {
+          fill: #b8cdb1 !important;
+        }
+        
+        .slice:nth-child(5) {
+          fill: #a8c5a1 !important;
+        }
+        
+        .slice:nth-child(6) {
+          fill: #8ba888 !important;
+        }
+        
+        .pieOuterCircle {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          fill: none;
+        }
+        
+        .legend text {
+          fill: #2d5016 !important;
+          font-weight: 500;
+          font-size: 13px;
+        }
+        
+        .legend rect {
+          stroke: #6a9c89 !important;
+          stroke-width: 1.5px !important;
+          rx: 4px !important;
+        }
+        
+        /* Journey Diagram */
+        .journey-section {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          fill: #c8d5b9 !important;
+          rx: 12px !important;
+        }
+        
+        .task-section {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 10px !important;
+        }
+        
+        .task-section:nth-child(2n) {
+          fill: #e8f4e5 !important;
+        }
+        
+        .task-section:nth-child(3n) {
+          fill: #b8cdb1 !important;
+        }
+        
+        /* XYChart styles - Natural organic colors */
+        .line-plot-0 path {
+          stroke: #6a9c89 !important;
+          stroke-width: 3px !important;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        
+        .line-plot-1 path {
+          stroke: #5a7c3e !important;
+          stroke-width: 3px !important;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        
+        .line-plot-2 path {
+          stroke: #7ba05b !important;
+          stroke-width: 3px !important;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        
+        .bar-plot-0 rect {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 6px !important;
+        }
+        
+        .bar-plot-1 rect {
+          fill: #c8d5b9 !important;
+          stroke: #5a7c3e !important;
+          stroke-width: 2px !important;
+          rx: 6px !important;
+        }
+        
+        .bar-plot-2 rect {
+          fill: #b8cdb1 !important;
+          stroke: #7ba05b !important;
+          stroke-width: 2px !important;
+          rx: 6px !important;
+        }
+        
+        .ticks path {
+          stroke: #6a9c89 !important;
+          stroke-width: 1.5px !important;
+        }
+        
+        .chart-title text {
+          fill: #2d5016 !important;
+          font-weight: 700 !important;
+          font-size: 20px !important;
+        }
+        
+        .left-axis .label text, .bottom-axis .label text {
+          fill: #2d5016 !important;
+          font-size: 13px !important;
+          font-weight: 500;
+        }
+        
+        .left-axis .title text, .bottom-axis .title text {
+          fill: #2d5016 !important;
+          font-size: 15px !important;
+          font-weight: 600;
+        }
+        
+        .legend text {
+          fill: #2d5016 !important;
+          font-size: 13px !important;
+          font-weight: 500;
+        }
+        
+        .legend rect {
+          stroke: #6a9c89 !important;
+          stroke-width: 1.5px !important;
+          rx: 4px !important;
+        }
+        
+        /* Git Graph */
+        .commit-id, .commit-msg, .branch-label {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        .commit {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+        }
+        
+        .commit0 {
+          fill: #d4e7d0 !important;
+        }
+        
+        .commit1 {
+          fill: #e8f4e5 !important;
+        }
+        
+        .commit2 {
+          fill: #c8d5b9 !important;
+        }
+        
+        .commit3 {
+          fill: #b8cdb1 !important;
+        }
+        
+        .commit-highlight-outer {
+          fill: #fbbf24;
+          opacity: 0.3;
+        }
+        
+        .commit-highlight-inner {
+          fill: #fbbf24;
+          opacity: 0.5;
+          stroke: #f59e0b;
+        }
+        
+        .branch path {
+          stroke-width: 2.5px !important;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        
+        .branch.branch0 {
+          stroke: #6a9c89 !important;
+        }
+        
+        .branch.branch1 {
+          stroke: #5a7c3e !important;
+        }
+        
+        .branch.branch2 {
+          stroke: #7ba05b !important;
+        }
+        
+        .branch.branch3 {
+          stroke: #8ba888 !important;
+        }
+        
+        /* Timeline */
+        .timeline-event {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .timeline-event:nth-child(2n) {
+          fill: #e8f4e5 !important;
+        }
+        
+        .timeline-event:nth-child(3n) {
+          fill: #c8d5b9 !important;
+        }
+        
+        .timeline-event-text {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+      `
+    },
+    bgClass: 'bg-gradient-to-br from-[#c8d5b9] to-[#8ba888]',
+    bgStyle: {
+      background: 'linear-gradient(135deg, #c8d5b9 0%, #8ba888 100%)',
     }
   },  
 };
