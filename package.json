@@ -2,6 +2,8 @@
   "name": "modern-mermaid-desktop",
   "productName": "Modern Mermaid",
   "private": true,
+  "description": "A modern, beautiful Mermaid.js diagram editor",
+  "author": "Maemo Lee",
   "version": "1.0.0",
   "type": "module",
   "main": "dist-electron/main.js",
@@ -60,6 +62,7 @@
       "dist-electron/**/*"
     ],
     "mac": {
+      "executableName": "ModernMermaid",
       "category": "public.app-category.developer-tools",
       "icon": "public/icon-512.png",
       "target": [

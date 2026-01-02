@@ -21,9 +21,9 @@ echo ""
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
-# Use mirror for faster downloads in China
-export ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/"
-export ELECTRON_BUILDER_BINARIES_MIRROR="https://npmmirror.com/mirrors/electron-builder-binaries/"
+# Use Xget accelerator
+export ELECTRON_MIRROR="https://xget.xi-xu.me/gh/electron/electron/releases/download/"
+export ELECTRON_BUILDER_BINARIES_MIRROR="https://xget.xi-xu.me/gh/electron-userland/electron-builder-binaries/releases/download/"
 
 # Check if pnpm is installed
 if ! command -v pnpm &> /dev/null; then
@@ -33,15 +33,45 @@ if ! command -v pnpm &> /dev/null; then
 fi
 
 # Step 1: Install dependencies
-echo -e "${YELLOW}[1/4] Installing dependencies...${NC}"
+echo -e "${YELLOW}[1/5] Installing dependencies...${NC}"
 pnpm install
 
 # Step 2: Clean previous builds
-echo -e "${YELLOW}[2/4] Cleaning previous builds...${NC}"
+echo -e "${YELLOW}[2/5] Cleaning previous builds...${NC}"
 rm -rf dist dist-electron release
 
-# Step 3: Build the app
-echo -e "${YELLOW}[3/4] Building the application...${NC}"
+# Step 3: Pre-download Electron binary (Workaround for Xget 429 on multi-thread)
+echo -e "${YELLOW}[3/5] Pre-downloading Electron binary...${NC}"
+CACHE_DIR="${HOME}/Library/Caches/electron"
+mkdir -p "$CACHE_DIR"
+
+# Dynamically get installed Electron version (e.g., v39.2.7)
+# Note: pnpm install must run before this
+if [ -f "./node_modules/.bin/electron" ]; then
+    E_VER=$(./node_modules/.bin/electron --version)
+else
+    # Fallback if binary not found directly (should not happen after install)
+    E_VER="v39.2.7" 
+fi
+
+echo "Detected Electron version: ${E_VER}"
+
+E_FILE="electron-${E_VER}-darwin-arm64.zip"
+E_URL="${ELECTRON_MIRROR}${E_VER}/${E_FILE}"
+
+if [ ! -f "${CACHE_DIR}/${E_FILE}" ]; then
+    echo "Downloading ${E_FILE} via curl (single-thread)..."
+    curl -L "$E_URL" -o "${CACHE_DIR}/${E_FILE}" || {
+        echo -e "${RED}Download failed. Please check your network.${NC}"
+        rm -f "${CACHE_DIR}/${E_FILE}" # Clean up partial
+        exit 1
+    }
+else
+    echo "Electron binary already cached."
+fi
+
+# Step 4: Build the app
+echo -e "${YELLOW}[4/5] Building the application...${NC}"
 ELECTRON=true pnpm vite build
 pnpm electron-builder --mac --dir
 
