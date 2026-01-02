@@ -410,16 +410,6 @@ const Layout: React.FC = () => {
     }
   }, [currentTheme, isInitialLoad, customStylesLoaded]);
 
-  // Window title for Electron
-  useEffect(() => {
-    if (isElectron) {
-      const title = currentFile
-        ? `${currentFile.name}${hasUnsavedChanges ? ' •' : ''} - Modern Mermaid`
-        : 'Modern Mermaid';
-      document.title = title;
-    }
-  }, [isElectron, currentFile, hasUnsavedChanges]);
-
   return (
     <div className="h-screen overflow-hidden bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col font-sans transition-colors duration-200">
       {!isFullscreen && <Header />}

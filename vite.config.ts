@@ -27,7 +27,7 @@ export default defineConfig({
           },
         },
         {
-          // This config worked before - preload with lib format cjs
+          // Preload with .cjs extension for CommonJS
           entry: 'electron/preload.ts',
           vite: {
             build: {
@@ -35,7 +35,7 @@ export default defineConfig({
               lib: {
                 entry: 'electron/preload.ts',
                 formats: ['cjs'],
-                fileName: () => 'preload.js',
+                fileName: () => 'preload.cjs',
               },
               rollupOptions: {
                 external: ['electron'],

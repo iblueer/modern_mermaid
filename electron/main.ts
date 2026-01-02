@@ -51,13 +51,12 @@ function createWindow(): void {
     height: 900,
     minWidth: 900,
     minHeight: 600,
+    title: 'Modern Mermaid',
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'preload.cjs'),
       contextIsolation: true,
       nodeIntegration: false,
     },
-    titleBarStyle: 'hiddenInset', // macOS native look
-    trafficLightPosition: { x: 15, y: 15 },
     show: false, // Don't show until ready
   });
 
