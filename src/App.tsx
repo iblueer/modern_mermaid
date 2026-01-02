@@ -1,6 +1,7 @@
 import Layout from './components/Layout';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { DarkModeProvider } from './contexts/DarkModeContext';
+import { FileProvider } from './contexts/FileContext';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import UserNotice from './components/UserNotice';
 
@@ -8,9 +9,11 @@ function App() {
   return (
     <DarkModeProvider>
       <LanguageProvider>
-        <GoogleAnalytics />
-        <UserNotice />
-        <Layout />
+        <FileProvider>
+          <GoogleAnalytics />
+          <UserNotice />
+          <Layout />
+        </FileProvider>
       </LanguageProvider>
     </DarkModeProvider>
   );
