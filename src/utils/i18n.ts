@@ -27,6 +27,20 @@ export interface Translation {
   // Toolbar
   theme: string;
   themeSettings: string;
+
+  // AI
+  aiSettings: string;
+  aiBaseUrl: string;
+  aiApiKey: string;
+  aiModel: string;
+  aiTest: string;
+  aiTestPassed: string;
+  aiTestFailed: string;
+  aiGenerate: string;
+  aiGeneration: string;
+  aiPromptPlaceholder: string;
+  aiReplaceConfirm: string;
+  aiProcessing: string;
   export: string;
   exportDesc: string;
   copy: string;
@@ -167,6 +181,20 @@ export const translations: Record<Language, Translation> = {
     // Toolbar
     theme: 'Theme',
     themeSettings: 'Theme Settings',
+
+    // AI
+    aiSettings: 'AI Settings',
+    aiBaseUrl: 'Base URL',
+    aiApiKey: 'API Key',
+    aiModel: 'Model Name',
+    aiTest: 'Test Connection',
+    aiTestPassed: 'Connection Successful',
+    aiTestFailed: 'Connection Failed',
+    aiGenerate: 'Generate',
+    aiGeneration: 'AI Generation',
+    aiPromptPlaceholder: 'Describe the diagram you want to generate...',
+    aiReplaceConfirm: 'Do you want to replace the current content with the generated code?',
+    aiProcessing: 'Processing...',
     export: 'Export',
     exportDesc: 'Export the diagram as an image',
     copy: 'Copy',
@@ -305,6 +333,20 @@ export const translations: Record<Language, Translation> = {
     // Toolbar
     theme: '主题',
     themeSettings: '主题设置',
+
+    // AI
+    aiSettings: 'AI 设置',
+    aiBaseUrl: 'Base URL',
+    aiApiKey: 'API Key',
+    aiModel: '模型名称',
+    aiTest: '测试连接',
+    aiTestPassed: '测试通过',
+    aiTestFailed: '测试失败',
+    aiGenerate: '生成',
+    aiGeneration: 'AI 生成',
+    aiPromptPlaceholder: '描述你想要生成的图表...',
+    aiReplaceConfirm: '是否替换当前文件内容？',
+    aiProcessing: '正在生成...',
     export: '导出',
     exportDesc: '导出图表为图片',
     copy: '复制',
@@ -443,6 +485,20 @@ export const translations: Record<Language, Translation> = {
     // Toolbar
     theme: '主題',
     themeSettings: '主題設定',
+
+    // AI
+    aiSettings: 'AI 設定',
+    aiBaseUrl: 'Base URL',
+    aiApiKey: 'API Key',
+    aiModel: '模型名稱',
+    aiTest: '測試連接',
+    aiTestPassed: '測試通過',
+    aiTestFailed: '測試失敗',
+    aiGenerate: '生成',
+    aiGeneration: 'AI 生成',
+    aiPromptPlaceholder: '描述你想要生成的圖表...',
+    aiReplaceConfirm: '是否替換當前檔案內容？',
+    aiProcessing: '正在生成...',
     export: '匯出',
     exportDesc: '將圖表導出為圖片',
     copy: '複製',
@@ -581,6 +637,20 @@ export const translations: Record<Language, Translation> = {
     // Toolbar
     theme: 'テーマ',
     themeSettings: 'テーマ設定',
+
+    // AI
+    aiSettings: 'AI設定',
+    aiBaseUrl: 'Base URL',
+    aiApiKey: 'APIキー',
+    aiModel: 'モデル名',
+    aiTest: '接続テスト',
+    aiTestPassed: '接続成功',
+    aiTestFailed: '接続失敗',
+    aiGenerate: '生成',
+    aiGeneration: 'AI生成',
+    aiPromptPlaceholder: '生成したい図表を説明してください...',
+    aiReplaceConfirm: '現在の内容を置き換えますか？',
+    aiProcessing: '処理中...',
     export: 'エクスポート',
     exportDesc: '図表を画像としてエクスポート',
     copy: 'コピー',
@@ -719,6 +789,20 @@ export const translations: Record<Language, Translation> = {
     // Toolbar
     theme: 'Tema',
     themeSettings: 'Configuración del tema',
+
+    // AI
+    aiSettings: 'Configuración de IA',
+    aiBaseUrl: 'Base URL',
+    aiApiKey: 'Clave API',
+    aiModel: 'Nombre del modelo',
+    aiTest: 'Prueba de conexión',
+    aiTestPassed: 'Conexión exitosa',
+    aiTestFailed: 'Conexión fallida',
+    aiGenerate: 'Generar',
+    aiGeneration: 'Generación de IA',
+    aiPromptPlaceholder: 'Describa el diagrama que desea generar...',
+    aiReplaceConfirm: '¿Desea reemplazar el contenido actual?',
+    aiProcessing: 'Procesando...',
     export: 'Exportar',
     exportDesc: 'Exportar el diagrama como imagen',
     copy: 'Copiar',
@@ -857,6 +941,20 @@ export const translations: Record<Language, Translation> = {
     // Toolbar
     theme: 'Tema',
     themeSettings: 'Configurações de tema',
+
+    // AI
+    aiSettings: 'Configurações de IA',
+    aiBaseUrl: 'Base URL',
+    aiApiKey: 'Chave API',
+    aiModel: 'Nome do modelo',
+    aiTest: 'Teste de conexão',
+    aiTestPassed: 'Conexão bem-sucedida',
+    aiTestFailed: 'Falha na conexão',
+    aiGenerate: 'Gerar',
+    aiGeneration: 'Geração de IA',
+    aiPromptPlaceholder: 'Descreva o diagrama que você deseja gerar...',
+    aiReplaceConfirm: 'Deseja substituir o conteúdo atual?',
+    aiProcessing: 'Processando...',
     export: 'Exportar',
     exportDesc: 'Exportar o diagrama como imagem',
     copy: 'Copiar',

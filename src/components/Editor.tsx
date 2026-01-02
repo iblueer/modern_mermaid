@@ -10,6 +10,52 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
   const highlightRef = useRef<HTMLDivElement>(null);
   const lineNumberRef = useRef<HTMLDivElement>(null);
   const [lineNumbers, setLineNumbers] = useState<number[]>([]);
+  const [suggestion, setSuggestion] = useState('');
+  const [cursorPosition, setCursorPosition] = useState<{ line: number; col: number } | null>(null);
+  const [selectionStart, setSelectionStart] = useState(0);
+
+  const KEYWORDS = [
+    'graph', 'flowchart', 'sequenceDiagram', 'classDiagram', 'stateDiagram',
+    'erDiagram', 'journey', 'gantt', 'pie', 'participant', 'subgraph',
+    'end', 'style', 'click', 'linkStyle', 'rect', 'opt', 'alt', 'loop', 'else'
+  ];
+
+  const updateCursorPosition = (e: React.SyntheticEvent<HTMLTextAreaElement>) => {
+    const textarea = e.currentTarget;
+    const { selectionStart, value } = textarea;
+    setSelectionStart(selectionStart);
+
+    const lines = value.substring(0, selectionStart).split('\n');
+    const line = lines.length - 1;
+    const col = lines[lines.length - 1].length;
+    setCursorPosition({ line, col });
+
+    // Simple prediction logic (Local AI)
+    const textBefore = value.substring(0, selectionStart);
+    const match = textBefore.match(/(\w+)$/);
+    if (match) {
+      const word = match[1];
+      const found = KEYWORDS.find(k => k.startsWith(word) && k !== word);
+      setSuggestion(found ? found.substring(word.length) : '');
+    } else {
+      setSuggestion('');
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Tab' && suggestion) {
+      e.preventDefault();
+      const newValue = code.substring(0, selectionStart) + suggestion + code.substring(selectionStart);
+      onChange(newValue);
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.selectionStart = textareaRef.current.selectionEnd = selectionStart + suggestion.length;
+          setSelectionStart(selectionStart + suggestion.length);
+          setSuggestion('');
+        }
+      }, 0);
+    }
+  };
 
   // 更新行号
   useEffect(() => {
@@ -29,7 +75,7 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
   // 简单的 Mermaid 语法高亮
   const highlightCode = (code: string): React.ReactElement[] => {
     if (!code) return [];
-    
+
     const lines = code.split('\n');
     return lines.map((line, lineIndex) => {
       const parts: React.ReactElement[] = [];
@@ -53,6 +99,17 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
 
       // 处理整行
       parts.push(...highlightLineSegment(line, lineIndex, key));
+      // Add ghost text if applicable
+      if (suggestion && lineIndex === cursorPosition?.line) {
+        if (cursorPosition.col === line.length) {
+          parts.push(
+            <span key="ghost" className="text-gray-400 opacity-50 select-none pointer-events-none">
+              {suggestion}
+            </span>
+          );
+        }
+      }
+
       return <div key={lineIndex}>{parts.length > 0 ? parts : '\u00A0'}</div>;
     });
   };
@@ -60,39 +117,39 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
   // 辅助函数：处理一行中的高亮
   const highlightLineSegment = (text: string, lineIndex: number, startKey: number): React.ReactElement[] => {
     if (!text) return [];
-    
+
     const parts: React.ReactElement[] = [];
     let key = startKey;
-    
+
     // 定义所有匹配模式及其样式类
     const patterns = [
       // 字符串（方括号、圆括号、花括号、引号内的内容）- 先匹配以避免内部关键字被高亮
-      { 
+      {
         regex: /(\[([^\[\]]*)\]|\(([^()]*)\)|\{([^{}]*)\}|"([^"]*)"|'([^']*)')/g,
         className: 'text-orange-600 dark:text-orange-400'
       },
       // 图表类型关键字
-      { 
+      {
         regex: /\b(graph|flowchart|sequenceDiagram|classDiagram|stateDiagram|stateDiagram-v2|erDiagram|journey|gantt|pie|gitGraph|mindmap|timeline|quadrantChart|xyChart)\b/gi,
         className: 'text-purple-600 dark:text-purple-400 font-semibold'
       },
       // 方向关键字
-      { 
+      {
         regex: /\b(TD|TB|BT|RL|LR)\b/g,
         className: 'text-blue-600 dark:text-blue-400 font-semibold'
       },
       // style 和其他关键字
-      { 
+      {
         regex: /\b(style|class|classDef|click|subgraph|end|participant|activate|deactivate|Note|loop|alt|opt|par)\b/gi,
         className: 'text-pink-600 dark:text-pink-400 font-semibold'
       },
       // 箭头
-      { 
+      {
         regex: /(-->|---|-\.->|\.-|===>|==>|->|<--|<->)/g,
         className: 'text-green-600 dark:text-green-400 font-bold'
       },
     ];
-    
+
     // 收集所有匹配项及其位置
     interface Match {
       start: number;
@@ -101,9 +158,9 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
       className: string;
       priority: number; // 用于处理重叠，优先级高的优先
     }
-    
+
     const matches: Match[] = [];
-    
+
     patterns.forEach((pattern, priority) => {
       let match;
       const regex = new RegExp(pattern.regex);
@@ -117,14 +174,14 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
         });
       }
     });
-    
+
     // 按位置排序，并移除重叠的匹配（优先级高的保留）
     matches.sort((a, b) => {
       if (a.start !== b.start) return a.start - b.start;
       if (a.end !== b.end) return b.end - a.end; // 更长的匹配优先
       return a.priority - b.priority;
     });
-    
+
     // 移除重叠项
     const filteredMatches: Match[] = [];
     for (const match of matches) {
@@ -135,10 +192,10 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
         filteredMatches.push(match);
       }
     }
-    
+
     // 重新按位置排序
     filteredMatches.sort((a, b) => a.start - b.start);
-    
+
     // 生成 JSX 元素
     let lastIndex = 0;
     for (const match of filteredMatches) {
@@ -147,23 +204,23 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
         const plainText = text.substring(lastIndex, match.start);
         parts.push(<span key={`${lineIndex}-${key++}`}>{plainText}</span>);
       }
-      
+
       // 添加高亮的匹配文本
       parts.push(
         <span key={`${lineIndex}-${key++}`} className={match.className}>
           {match.text}
         </span>
       );
-      
+
       lastIndex = match.end;
     }
-    
+
     // 添加剩余的普通文本
     if (lastIndex < text.length) {
       const plainText = text.substring(lastIndex);
       parts.push(<span key={`${lineIndex}-${key++}`}>{plainText}</span>);
     }
-    
+
     return parts;
   };
 
@@ -171,13 +228,13 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
     <div className="h-full relative flex overflow-hidden">
       {/* 行号区域 */}
       <div className="flex-shrink-0 w-12 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 overflow-hidden">
-        <div 
+        <div
           ref={lineNumberRef}
           className="h-full py-6 px-2 text-right text-sm leading-relaxed font-mono overflow-hidden"
         >
           {lineNumbers.map((lineNum) => (
-            <div 
-              key={lineNum} 
+            <div
+              key={lineNum}
               className="text-gray-400 dark:text-gray-600 select-none"
             >
               {lineNum}
@@ -192,7 +249,7 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
         <div
           ref={highlightRef}
           className="absolute inset-0 p-6 font-mono text-sm leading-relaxed overflow-auto pointer-events-none select-none text-gray-800 dark:text-gray-200"
-          style={{ 
+          style={{
             wordWrap: 'break-word',
             overflowWrap: 'break-word',
             tabSize: 2,
@@ -206,7 +263,12 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
         <textarea
           ref={textareaRef}
           value={code}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {
+            onChange(e.target.value);
+            updateCursorPosition(e);
+          }}
+          onSelect={updateCursorPosition}
+          onKeyDown={handleKeyDown}
           onScroll={handleScroll}
           className="absolute inset-0 w-full h-full p-6 m-0 resize-none focus:outline-none font-mono text-sm leading-relaxed bg-transparent transition-colors duration-200 overflow-auto"
           style={{

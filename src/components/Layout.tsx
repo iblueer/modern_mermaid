@@ -16,7 +16,8 @@ import { fonts, type FontOption } from '../utils/fonts';
 import type { AnnotationType } from '../types/annotation';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFiles } from '../contexts/FileContext';
-import { Save, Code2 } from 'lucide-react';
+import { Save, Code2, Sparkles } from 'lucide-react';
+import AIPanel from './AIPanel';
 import { trackEvent } from './GoogleAnalytics';
 import { AnalyticsEvents } from '../hooks/useAnalytics';
 import { findExampleById } from '../utils/examples';
@@ -43,6 +44,7 @@ const Layout: React.FC = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [showSaveAsDialog, setShowSaveAsDialog] = useState(false);
   const [saveAsFileName, setSaveAsFileName] = useState('');
   const previewRef = useRef<PreviewHandle>(null);
@@ -461,6 +463,16 @@ const Layout: React.FC = () => {
 
                   {/* 清空、刷新和保存按钮 */}
                   <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setIsAIPanelOpen(!isAIPanelOpen)}
+                      className={`p-1.5 rounded transition-colors cursor-pointer ${isAIPanelOpen
+                          ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400'
+                          : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        }`}
+                      title={t.aiGeneration || "AI Generation"}
+                    >
+                      <Sparkles className="w-4 h-4" />
+                    </button>
                     {/* Save button (Electron only - show when unsaved OR when no file selected) */}
                     {isElectron && (hasUnsavedChanges || (!currentFile && code)) && (
                       <button
@@ -474,7 +486,17 @@ const Layout: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex-1 overflow-hidden min-h-0">
+
+              <AIPanel
+                isOpen={isAIPanelOpen}
+                onClose={() => setIsAIPanelOpen(false)}
+                onReplace={(newCode) => {
+                  handleCodeChange(newCode);
+                }}
+              />
+
+              {/* Editor area */}
+              <div className="flex-1 relative min-h-0">
                 <Editor code={code} onChange={handleCodeChange} />
               </div>
             </div>

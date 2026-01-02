@@ -4,15 +4,18 @@ import { DarkModeProvider } from './contexts/DarkModeContext';
 import { FileProvider } from './contexts/FileContext';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import UserNotice from './components/UserNotice';
+import { LLMProvider } from './contexts/LLMContext';
 
 function App() {
   return (
     <DarkModeProvider>
       <LanguageProvider>
         <FileProvider>
-          <GoogleAnalytics />
-          <UserNotice />
-          <Layout />
+          <LLMProvider>
+            <GoogleAnalytics />
+            <UserNotice />
+            <Layout />
+          </LLMProvider>
         </FileProvider>
       </LanguageProvider>
     </DarkModeProvider>

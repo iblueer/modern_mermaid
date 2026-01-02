@@ -51,6 +51,7 @@ export interface ElectronAPI {
         get: () => Promise<Settings>;
         setFolder: (folderPath?: string) => Promise<SettingsResult>;
     };
+    llmRequest: (config: { url: string, method: string, headers: any, body: any }) => Promise<{ success: boolean; data?: any; error?: string }>;
     on: (channel: string, callback: (...args: any[]) => void) => () => void;
 }
 

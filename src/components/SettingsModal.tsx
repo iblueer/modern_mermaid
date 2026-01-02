@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
-import { X, Moon, Sun, Globe, FolderOpen, Github, Info } from 'lucide-react';
+import { X, Moon, Sun, Globe, FolderOpen, Github, Info, Sparkles, Check, AlertCircle, Loader2 } from 'lucide-react';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFiles } from '../contexts/FileContext';
+import { useLLM } from '../contexts/LLMContext';
 import DiscordIcon from './DiscordIcon';
 import type { Language } from '../utils/i18n';
 
@@ -15,7 +17,9 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
     const { isDarkMode, toggleDarkMode } = useDarkMode();
     const { language, setLanguage, t } = useLanguage();
     const { folderPath, refreshFiles, isElectron } = useFiles();
-    const [activeTab, setActiveTab] = useState<'general' | 'about'>('general');
+    const { config, updateConfig, testConnection } = useLLM();
+    const [activeTab, setActiveTab] = useState<'general' | 'ai' | 'about'>('general');
+    const [testStatus, setTestStatus] = useState<'none' | 'testing' | 'success' | 'failure'>('none');
 
     if (!isOpen) return null;
 
@@ -26,6 +30,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
                 refreshFiles();
             }
         }
+    };
+
+    const handleTestConnection = async () => {
+        setTestStatus('testing');
+        const success = await testConnection();
+        setTestStatus(success ? 'success' : 'failure');
     };
 
     // Language options
@@ -42,6 +52,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
 
     const tabs = [
         { id: 'general' as const, label: t.settings, icon: FolderOpen },
+        { id: 'ai' as const, label: t.aiSettings || 'AI Settings', icon: Sparkles },
         { id: 'about' as const, label: t.about, icon: Info },
     ];
 
@@ -56,11 +67,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
             {/* Modal */}
             <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 pointer-events-none">
                 <div
-                    className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md pointer-events-auto overflow-hidden"
+                    className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md pointer-events-auto overflow-hidden flex flex-col max-h-[90vh]"
                     onClick={(e) => e.stopPropagation()}
                 >
                     {/* Header */}
-                    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
                         <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                             {t.settingsModalTitle}
                         </h2>
@@ -73,7 +84,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
                     </div>
 
                     {/* Tabs */}
-                    <div className="flex border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
                         {tabs.map((tab) => {
                             const Icon = tab.icon;
                             return (
@@ -93,7 +104,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
                     </div>
 
                     {/* Content */}
-                    <div className="p-5">
+                    <div className="p-5 overflow-y-auto">
                         {activeTab === 'general' && (
                             <div className="space-y-5">
                                 {/* Dark Mode */}
@@ -161,7 +172,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
                                                 <FolderOpen className="w-5 h-5 text-emerald-500" />
                                                 <div>
                                                     <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                                        {language.startsWith('zh') ? '文件位置' : 'File Location'}
+                                                        {t.currentFolder || (language.startsWith('zh') ? '文件位置' : 'File Location')}
                                                     </div>
                                                     <div className="text-xs text-gray-500 dark:text-gray-400 max-w-[200px] truncate" title={folderPath}>
                                                         {folderPath || 'Not set'}
@@ -177,6 +188,72 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
                                         </div>
                                     </div>
                                 )}
+                            </div>
+                        )}
+
+                        {activeTab === 'ai' && (
+                            <div className="space-y-4">
+                                <div className="space-y-1.5">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        {t.aiBaseUrl || 'Base URL'}
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={config.baseUrl}
+                                        onChange={(e) => updateConfig({ baseUrl: e.target.value })}
+                                        placeholder="https://api.openai.com/v1"
+                                        className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:text-gray-200"
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        {t.aiApiKey || 'API Key'}
+                                    </label>
+                                    <input
+                                        type="password"
+                                        value={config.apiKey}
+                                        onChange={(e) => updateConfig({ apiKey: e.target.value })}
+                                        placeholder="sk-..."
+                                        className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:text-gray-200"
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        {t.aiModel || 'Model Name'}
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={config.model}
+                                        onChange={(e) => updateConfig({ model: e.target.value })}
+                                        placeholder="gpt-3.5-turbo"
+                                        className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:text-gray-200"
+                                    />
+                                </div>
+
+                                <div className="pt-2 flex items-center justify-between">
+                                    <button
+                                        onClick={handleTestConnection}
+                                        disabled={testStatus === 'testing' || !config.apiKey}
+                                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                    >
+                                        {testStatus === 'testing' && <Loader2 className="w-4 h-4 animate-spin" />}
+                                        {t.aiTest || 'Test Connection'}
+                                    </button>
+
+                                    {testStatus === 'success' && (
+                                        <div className="flex items-center gap-2 text-green-600 dark:text-green-400 text-sm font-medium">
+                                            <Check className="w-4 h-4" />
+                                            <span>{t.aiTestPassed || 'Connection Successful'}</span>
+                                        </div>
+                                    )}
+
+                                    {testStatus === 'failure' && (
+                                        <div className="flex items-center gap-2 text-red-600 dark:text-red-400 text-sm font-medium">
+                                            <AlertCircle className="w-4 h-4" />
+                                            <span>{t.aiTestFailed || 'Connection Failed'}</span>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
 

@@ -16,6 +16,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
         get: () => ipcRenderer.invoke('settings:get'),
         setFolder: (folderPath) => ipcRenderer.invoke('settings:setFolder', folderPath),
     },
+    llmRequest: (config) => ipcRenderer.invoke('llm:request', config),
     on: (channel, callback) => {
         const validChannels = [
             'file:added',

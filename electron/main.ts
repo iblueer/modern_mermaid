@@ -413,6 +413,37 @@ ipcMain.handle('files:rename', async (_event, oldPath: string, newName: string) 
   }
 });
 
+// LLM Request Proxy to avoid CORS
+ipcMain.handle('llm:request', async (_event, config: { url: string, method: string, headers: any, body: any }) => {
+  try {
+    const { url, method, headers, body } = config;
+    // @ts-ignore - fetch is available in Node 18+ (Electron)
+    const response = await fetch(url, {
+      method,
+      headers,
+      body: JSON.stringify(body)
+    });
+
+    // Read text first to handle both JSON and non-JSON error bodies
+    const text = await response.text();
+
+    if (!response.ok) {
+      return { success: false, error: `HTTP ${response.status}: ${text.substring(0, 500)}` };
+    }
+
+    try {
+      const data = JSON.parse(text);
+      return { success: true, data };
+    } catch (e) {
+      return { success: false, error: 'Invalid JSON response from API' };
+    }
+
+  } catch (error) {
+    console.error('LLM Request Error:', error);
+    return { success: false, error: String(error) };
+  }
+});
+
 // App lifecycle
 app.whenReady().then(() => {
   const folder = getMermaidFolder();
