@@ -44,6 +44,8 @@ const Layout: React.FC = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [showSaveAsDialog, setShowSaveAsDialog] = useState(false);
+  const [saveAsFileName, setSaveAsFileName] = useState('');
   const previewRef = useRef<PreviewHandle>(null);
   const { t, language } = useLanguage();
 
@@ -54,15 +56,22 @@ const Layout: React.FC = () => {
     currentContent,
     hasUnsavedChanges,
     updateContent,
-    saveCurrentFile
+    saveCurrentFile,
+    createFile
   } = useFiles();
 
   // Sync code with file context in Electron mode
   useEffect(() => {
-    if (isElectron && currentContent !== undefined) {
-      setCode(currentContent);
+    if (isElectron) {
+      // If we have content from file, use it
+      if (currentContent) {
+        setCode(currentContent);
+      } else if (!currentFile) {
+        // No file selected and no content - show default code
+        setCode(defaultCode);
+      }
     }
-  }, [isElectron, currentContent]);
+  }, [isElectron, currentContent, currentFile, defaultCode]);
 
   const handleDownload = (transparent: boolean) => {
     // 追踪导出操作
@@ -297,14 +306,35 @@ const Layout: React.FC = () => {
 
   // Save file handler for Electron
   const handleSaveFile = useCallback(async () => {
-    if (!isElectron || !hasUnsavedChanges) return;
+    if (!isElectron) return;
 
+    // If no current file, prompt for filename (Save As)
+    if (!currentFile) {
+      setShowSaveAsDialog(true);
+      return;
+    }
+
+    // Save existing file
     const success = await saveCurrentFile();
     if (success) {
-      setToastMessage('File saved!');
+      setToastMessage(language.startsWith('zh') ? '文件已保存！' : 'File saved!');
       setShowToast(true);
     }
-  }, [isElectron, hasUnsavedChanges, saveCurrentFile]);
+  }, [isElectron, currentFile, saveCurrentFile, language]);
+
+  // Handle save as (create new file)
+  const handleSaveAs = async () => {
+    if (!saveAsFileName.trim()) return;
+
+    // Create the file with current code content
+    const success = await createFile(saveAsFileName.trim(), code);
+    if (success) {
+      setShowSaveAsDialog(false);
+      setSaveAsFileName('');
+      setToastMessage(language.startsWith('zh') ? '文件已创建！' : 'File created!');
+      setShowToast(true);
+    }
+  };
 
   // 初始化：从 URL 参数加载示例、主题和分享内容
   useEffect(() => {
@@ -412,7 +442,8 @@ const Layout: React.FC = () => {
 
   return (
     <div className="h-screen overflow-hidden bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col font-sans transition-colors duration-200">
-      {!isFullscreen && <Header />}
+      {/* Header only shown in web mode, not in Electron */}
+      {!isFullscreen && !isElectron && <Header />}
       <main
         className={`flex-1 flex flex-col md:flex-row overflow-hidden ${isFullscreen ? '' : ''}`}
       >
@@ -439,16 +470,22 @@ const Layout: React.FC = () => {
                     {hasUnsavedChanges && <span className="text-orange-500 ml-1">•</span>}
                   </span>
                 )}
+                {isElectron && !currentFile && (
+                  <span className="text-gray-500 dark:text-gray-400 font-medium normal-case italic">
+                    Untitled
+                    <span className="text-orange-500 ml-1">•</span>
+                  </span>
+                )}
                 {!isElectron && <ExampleSelector onSelectExample={handleExampleSelect} />}
 
                 {/* 清空、刷新和保存按钮 */}
                 <div className="flex items-center gap-2">
-                  {/* Save button (Electron only) */}
-                  {isElectron && hasUnsavedChanges && (
+                  {/* Save button (Electron only - show when unsaved OR when no file selected) */}
+                  {isElectron && (hasUnsavedChanges || !currentFile) && code && (
                     <button
                       onClick={handleSaveFile}
                       className="p-1.5 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 rounded transition-colors cursor-pointer"
-                      title="Save (⌘S)"
+                      title={currentFile ? "Save (⌘S)" : "Save As (⌘S)"}
                     >
                       <Save className="w-4 h-4" />
                     </button>
@@ -469,7 +506,6 @@ const Layout: React.FC = () => {
                   </button>
                 </div>
               </div>
-              <span className="text-[10px] bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-400 dark:text-gray-500">{t.editorSubtitle}</span>
             </div>
             <div className="flex-1 overflow-hidden min-h-0">
               <Editor code={code} onChange={handleCodeChange} />
@@ -546,6 +582,55 @@ const Layout: React.FC = () => {
           duration={3000}
           type="success"
         />
+      )}
+
+      {/* Save As 对话框 */}
+      {showSaveAsDialog && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/40" onClick={() => setShowSaveAsDialog(false)} />
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-sm z-10 overflow-hidden">
+            <div className="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {language.startsWith('zh') ? '保存文件' : 'Save File'}
+              </h2>
+            </div>
+            <div className="p-5">
+              <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">
+                {language.startsWith('zh') ? '文件名' : 'File Name'}
+              </label>
+              <input
+                type="text"
+                value={saveAsFileName}
+                onChange={(e) => setSaveAsFileName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSaveAs();
+                  if (e.key === 'Escape') setShowSaveAsDialog(false);
+                }}
+                placeholder="diagram.mmd"
+                className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                autoFocus
+              />
+              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                {language.startsWith('zh') ? '将自动添加 .mmd 扩展名' : '.mmd extension will be added automatically'}
+              </p>
+            </div>
+            <div className="px-5 py-3 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-2">
+              <button
+                onClick={() => setShowSaveAsDialog(false)}
+                className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                {t.cancel}
+              </button>
+              <button
+                onClick={handleSaveAs}
+                disabled={!saveAsFileName.trim()}
+                className="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {language.startsWith('zh') ? '保存' : 'Save'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

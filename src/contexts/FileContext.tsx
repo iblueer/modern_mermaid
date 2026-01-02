@@ -18,7 +18,7 @@ interface FileContextType {
     // Actions
     refreshFiles: () => Promise<void>;
     selectFile: (file: MermaidFile) => Promise<void>;
-    createFile: (name: string) => Promise<boolean>;
+    createFile: (name: string, content: string) => Promise<boolean>;
     saveCurrentFile: () => Promise<boolean>;
     deleteFile: (file: MermaidFile) => Promise<boolean>;
     renameFile: (file: MermaidFile, newName: string) => Promise<boolean>;
@@ -179,24 +179,28 @@ export const FileProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }, [runningInElectron, hasUnsavedChanges]);
 
-    // Create a new file
-    const createFile = useCallback(async (name: string): Promise<boolean> => {
+    // Create a new file (saves provided content to the new file)
+    const createFile = useCallback(async (name: string, content: string): Promise<boolean> => {
         if (!runningInElectron) return false;
 
         try {
             const result = await window.electronAPI!.files.create(name);
-            if (result.success && result.path && result.content !== undefined) {
+            if (result.success && result.path) {
+                // Write provided content to the new file
+                const contentToSave = content || '';
+                await window.electronAPI!.files.write(result.path, contentToSave);
+
                 await refreshFiles();
                 // Select the new file
                 const newFile: MermaidFile = {
                     name,
                     path: result.path,
                     modifiedAt: new Date().toISOString(),
-                    size: result.content.length,
+                    size: contentToSave.length,
                 };
                 setCurrentFile(newFile);
-                setCurrentContent(result.content);
-                setOriginalContent(result.content);
+                setCurrentContent(contentToSave);
+                setOriginalContent(contentToSave);
                 return true;
             } else {
                 setError(result.error || 'Failed to create file');

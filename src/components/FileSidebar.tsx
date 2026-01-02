@@ -15,6 +15,7 @@ import {
     Settings
 } from 'lucide-react';
 import type { MermaidFile } from '../types/electron';
+import SettingsModal from './SettingsModal';
 
 interface FileSidebarProps {
     isCollapsed: boolean;
@@ -42,6 +43,7 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
     const [editingFile, setEditingFile] = useState<MermaidFile | null>(null);
     const [editingName, setEditingName] = useState('');
     const [localError, setLocalError] = useState<string | null>(null);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     const newFileInputRef = useRef<HTMLInputElement>(null);
     const editInputRef = useRef<HTMLInputElement>(null);
@@ -75,7 +77,14 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
             return;
         }
 
-        const success = await createFile(newFileName.trim());
+        // Default content for new files created from sidebar
+        const defaultContent = `graph TD
+    A[Start] --> B{Is it working?}
+    B -- Yes --> C[Great!]
+    B -- No --> D[Debug]
+    D --> A`;
+
+        const success = await createFile(newFileName.trim(), defaultContent);
         if (success) {
             setNewFileName('');
             setIsCreating(false);
@@ -360,41 +369,35 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
                 )}
             </div>
 
-            {/* Footer with file count and folder path */}
+            {/* Footer with file count and settings */}
             <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-500 dark:text-gray-400">
                         {files.length} {files.length === 1 ? 'file' : 'files'}
                     </span>
                     <button
-                        onClick={async () => {
-                            if (window.electronAPI) {
-                                const result = await window.electronAPI.settings.setFolder();
-                                if (result.success) {
-                                    refreshFiles();
-                                }
-                            }
-                        }}
+                        onClick={() => setIsSettingsOpen(true)}
                         className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors"
-                        title="Change folder"
+                        title="Settings"
                     >
                         <Settings className="w-3.5 h-3.5" />
                     </button>
                 </div>
                 {folderPath && (
                     <div
-                        className="text-[10px] text-gray-400 dark:text-gray-500 truncate mt-1 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300"
+                        className="text-[10px] text-gray-400 dark:text-gray-500 truncate mt-1"
                         title={folderPath}
-                        onClick={() => {
-                            if (window.electronAPI) {
-                                // This will be handled by the menu 'Open Folder in Finder'
-                            }
-                        }}
                     >
                         {folderPath.replace(/^.*[\/]/, '...')}
                     </div>
                 )}
             </div>
+
+            {/* Settings Modal */}
+            <SettingsModal
+                isOpen={isSettingsOpen}
+                onClose={() => setIsSettingsOpen(false)}
+            />
         </div>
     );
 };

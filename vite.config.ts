@@ -4,9 +4,28 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import electron from 'vite-plugin-electron'
 import renderer from 'vite-plugin-electron-renderer'
+import { copyFileSync, mkdirSync, existsSync } from 'fs'
+import { resolve } from 'path'
 
 // Check if we're building for Electron
 const isElectron = process.env.ELECTRON === 'true'
+
+// Custom plugin to copy preload.cjs
+const copyPreloadPlugin = () => ({
+  name: 'copy-preload',
+  buildStart() {
+    if (isElectron) {
+      const outDir = 'dist-electron'
+      if (!existsSync(outDir)) {
+        mkdirSync(outDir, { recursive: true })
+      }
+      copyFileSync(
+        resolve(__dirname, 'electron/preload.cjs'),
+        resolve(__dirname, outDir, 'preload.cjs')
+      )
+    }
+  }
+})
 
 export default defineConfig({
   plugins: [
@@ -14,6 +33,7 @@ export default defineConfig({
     tailwindcss(),
     // Only include Electron plugins when building for Electron
     ...(isElectron ? [
+      copyPreloadPlugin(),
       electron([
         {
           entry: 'electron/main.ts',
@@ -25,28 +45,8 @@ export default defineConfig({
               },
             },
           },
-        },
-        {
-          // Preload with .cjs extension for CommonJS
-          entry: 'electron/preload.ts',
-          vite: {
-            build: {
-              outDir: 'dist-electron',
-              lib: {
-                entry: 'electron/preload.ts',
-                formats: ['cjs'],
-                fileName: () => 'preload.cjs',
-              },
-              rollupOptions: {
-                external: ['electron'],
-                output: {
-                  format: 'cjs',
-                },
-              },
-            },
-          },
           onstart(options) {
-            options.reload()
+            options.startup()
           },
         },
       ]),
