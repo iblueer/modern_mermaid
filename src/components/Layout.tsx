@@ -47,6 +47,7 @@ const Layout: React.FC = () => {
   const [showSaveAsDialog, setShowSaveAsDialog] = useState(false);
   const [saveAsFileName, setSaveAsFileName] = useState('');
   const previewRef = useRef<PreviewHandle>(null);
+  const editorContainerRef = useRef<HTMLDivElement>(null);
   const { t, language } = useLanguage();
 
   // File management (Electron mode)
@@ -454,103 +455,107 @@ const Layout: React.FC = () => {
             onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
           />
         )}
-        {/* Left Pane: Editor */}
-        {!isFullscreen && (
-          <div
-            className="border-r border-gray-200 dark:border-gray-700 flex flex-col bg-white dark:bg-gray-800 shadow-sm z-10"
-            style={{ width: `${leftPanelWidth}%` }}
-          >
-            <div className="flex-shrink-0 p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 font-semibold text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span>{t.editor}</span>
-                {/* Show current file name in Electron mode */}
-                {isElectron && currentFile && (
-                  <span className="text-indigo-600 dark:text-indigo-400 font-medium normal-case">
-                    {currentFile.name}
-                    {hasUnsavedChanges && <span className="text-orange-500 ml-1">•</span>}
-                  </span>
-                )}
-                {isElectron && !currentFile && (
-                  <span className="text-gray-500 dark:text-gray-400 font-medium normal-case italic">
-                    Untitled
-                    <span className="text-orange-500 ml-1">•</span>
-                  </span>
-                )}
-                {!isElectron && <ExampleSelector onSelectExample={handleExampleSelect} />}
 
-                {/* 清空、刷新和保存按钮 */}
-                <div className="flex items-center gap-2">
-                  {/* Save button (Electron only - show when unsaved OR when no file selected) */}
-                  {isElectron && (hasUnsavedChanges || !currentFile) && code && (
-                    <button
-                      onClick={handleSaveFile}
-                      className="p-1.5 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 rounded transition-colors cursor-pointer"
-                      title={currentFile ? "Save (⌘S)" : "Save As (⌘S)"}
-                    >
-                      <Save className="w-4 h-4" />
-                    </button>
+        {/* Editor and Preview Container - ref used for resize divider calculation */}
+        <div ref={editorContainerRef} className="flex-1 flex flex-row overflow-hidden">
+          {/* Left Pane: Editor */}
+          {!isFullscreen && (
+            <div
+              className="border-r border-gray-200 dark:border-gray-700 flex flex-col bg-white dark:bg-gray-800 shadow-sm z-10"
+              style={{ width: `${leftPanelWidth}%` }}
+            >
+              <div className="flex-shrink-0 p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 font-semibold text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span>{t.editor}</span>
+                  {/* Show current file name in Electron mode */}
+                  {isElectron && currentFile && (
+                    <span className="text-indigo-600 dark:text-indigo-400 font-medium normal-case">
+                      {currentFile.name}
+                      {hasUnsavedChanges && <span className="text-orange-500 ml-1">•</span>}
+                    </span>
                   )}
-                  <button
-                    onClick={handleRefreshEditor}
-                    className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded transition-colors cursor-pointer"
-                    title={t.refreshEditor}
-                  >
-                    <RefreshCw className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={handleClearEditor}
-                    className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors cursor-pointer"
-                    title={t.clearEditor}
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
+                  {isElectron && !currentFile && (
+                    <span className="text-gray-500 dark:text-gray-400 font-medium normal-case italic">
+                      Untitled
+                      <span className="text-orange-500 ml-1">•</span>
+                    </span>
+                  )}
+                  {!isElectron && <ExampleSelector onSelectExample={handleExampleSelect} />}
+
+                  {/* 清空、刷新和保存按钮 */}
+                  <div className="flex items-center gap-2">
+                    {/* Save button (Electron only - show when unsaved OR when no file selected) */}
+                    {isElectron && (hasUnsavedChanges || !currentFile) && code && (
+                      <button
+                        onClick={handleSaveFile}
+                        className="p-1.5 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 rounded transition-colors cursor-pointer"
+                        title={currentFile ? "Save (⌘S)" : "Save As (⌘S)"}
+                      >
+                        <Save className="w-4 h-4" />
+                      </button>
+                    )}
+                    <button
+                      onClick={handleRefreshEditor}
+                      className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded transition-colors cursor-pointer"
+                      title={t.refreshEditor}
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={handleClearEditor}
+                      className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors cursor-pointer"
+                      title={t.clearEditor}
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
+              <div className="flex-1 overflow-hidden min-h-0">
+                <Editor code={code} onChange={handleCodeChange} />
+              </div>
             </div>
-            <div className="flex-1 overflow-hidden min-h-0">
-              <Editor code={code} onChange={handleCodeChange} />
+          )}
+
+          {/* 可拖动分割线 */}
+          {!isFullscreen && <ResizableDivider onResize={handleResize} containerRef={editorContainerRef} />}
+
+          {/* Right Pane: Preview */}
+          <div
+            className="bg-gray-50 dark:bg-gray-900 flex flex-col relative flex-1"
+            style={{ width: isFullscreen ? '100%' : `${100 - leftPanelWidth}%` }}
+          >
+            <div className="absolute top-4 right-4 z-10 flex items-start gap-2">
+              <Toolbar
+                currentTheme={currentTheme}
+                onThemeChange={handleThemeChange}
+                onDownload={handleDownload}
+                onCopy={handleCopy}
+                onShare={handleShare}
+                selectedBackground={selectedBackground.id}
+                onBackgroundChange={handleBackgroundChange}
+                selectedFont={selectedFont.id}
+                onFontChange={handleFontChange}
+                selectedTool={selectedTool}
+                onSelectTool={handleSelectTool}
+                onClearAnnotations={handleClearAnnotations}
+                annotationCount={annotationCount}
+              />
             </div>
-          </div>
-        )}
-
-        {/* 可拖动分割线 */}
-        {!isFullscreen && <ResizableDivider onResize={handleResize} />}
-
-        {/* Right Pane: Preview */}
-        <div
-          className="bg-gray-50 dark:bg-gray-900 flex flex-col relative flex-1"
-          style={{ width: isFullscreen ? '100%' : `${100 - leftPanelWidth}%` }}
-        >
-          <div className="absolute top-4 right-4 z-10 flex items-start gap-2">
-            <Toolbar
-              currentTheme={currentTheme}
-              onThemeChange={handleThemeChange}
-              onDownload={handleDownload}
-              onCopy={handleCopy}
-              onShare={handleShare}
-              selectedBackground={selectedBackground.id}
-              onBackgroundChange={handleBackgroundChange}
-              selectedFont={selectedFont.id}
-              onFontChange={handleFontChange}
+            <Preview
+              ref={previewRef}
+              code={code}
+              themeConfig={themes[currentTheme]}
+              customBackground={selectedBackground}
+              customFont={selectedFont}
+              onCodeChange={setCode}
               selectedTool={selectedTool}
               onSelectTool={handleSelectTool}
-              onClearAnnotations={handleClearAnnotations}
-              annotationCount={annotationCount}
+              onAnnotationCountChange={handleAnnotationCountChange}
+              isFullscreen={isFullscreen}
+              onToggleFullscreen={handleToggleFullscreen}
             />
           </div>
-          <Preview
-            ref={previewRef}
-            code={code}
-            themeConfig={themes[currentTheme]}
-            customBackground={selectedBackground}
-            customFont={selectedFont}
-            onCodeChange={setCode}
-            selectedTool={selectedTool}
-            onSelectTool={handleSelectTool}
-            onAnnotationCountChange={handleAnnotationCountChange}
-            isFullscreen={isFullscreen}
-            onToggleFullscreen={handleToggleFullscreen}
-          />
         </div>
       </main>
 

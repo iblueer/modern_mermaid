@@ -1,24 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GripVertical } from 'lucide-react';
 
 interface ResizableDividerProps {
   onResize: (leftWidth: number) => void;
+  containerRef?: React.RefObject<HTMLElement | null>;
 }
 
-const ResizableDivider: React.FC<ResizableDividerProps> = ({ onResize }) => {
+const ResizableDivider: React.FC<ResizableDividerProps> = ({ onResize, containerRef }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const dividerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isDragging) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      // 计算左侧面板的宽度百分比
-      const windowWidth = window.innerWidth;
-      const leftWidth = (e.clientX / windowWidth) * 100;
-      
-      // 限制在 20% 到 80% 之间
-      const clampedWidth = Math.max(20, Math.min(80, leftWidth));
-      onResize(clampedWidth);
+      // Get the container element (main content area, excluding file sidebar)
+      const container = containerRef?.current || dividerRef.current?.parentElement;
+
+      if (container) {
+        // Calculate position relative to the container
+        const containerRect = container.getBoundingClientRect();
+        const relativeX = e.clientX - containerRect.left;
+        const containerWidth = containerRect.width;
+
+        // Calculate left panel width as percentage of container
+        const leftWidth = (relativeX / containerWidth) * 100;
+
+        // Clamp between 20% and 80%
+        const clampedWidth = Math.max(20, Math.min(80, leftWidth));
+        onResize(clampedWidth);
+      } else {
+        // Fallback to window-based calculation
+        const windowWidth = window.innerWidth;
+        const leftWidth = (e.clientX / windowWidth) * 100;
+        const clampedWidth = Math.max(20, Math.min(80, leftWidth));
+        onResize(clampedWidth);
+      }
     };
 
     const handleMouseUp = () => {
@@ -39,10 +56,11 @@ const ResizableDivider: React.FC<ResizableDividerProps> = ({ onResize }) => {
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
     };
-  }, [isDragging, onResize]);
+  }, [isDragging, onResize, containerRef]);
 
   return (
     <div
+      ref={dividerRef}
       className="relative w-1 bg-gray-200 dark:bg-gray-700 hover:bg-indigo-400 dark:hover:bg-indigo-500 cursor-ew-resize transition-colors group z-20"
       onMouseDown={() => setIsDragging(true)}
     >
@@ -52,7 +70,7 @@ const ResizableDivider: React.FC<ResizableDividerProps> = ({ onResize }) => {
           <GripVertical size={16} className="text-white" />
         </div>
       </div>
-      
+
       {/* 扩展拖动区域 */}
       <div className="absolute inset-y-0 -left-2 -right-2" />
     </div>
@@ -60,4 +78,3 @@ const ResizableDivider: React.FC<ResizableDividerProps> = ({ onResize }) => {
 };
 
 export default ResizableDivider;
-
