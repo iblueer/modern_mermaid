@@ -75,18 +75,30 @@ echo -e "${YELLOW}[4/5] Building the application...${NC}"
 ELECTRON=true pnpm vite build
 pnpm electron-builder --mac --dir
 
-# Step 4: Install to ~/Applications
-echo -e "${YELLOW}[4/4] Installing to ~/Applications/...${NC}"
+# Step 5: Install to ~/Applications
+echo -e "${YELLOW}[5/5] Installing to ~/Applications/...${NC}"
 
-APP_NAME="Modern Mermaid.app"
+# Match the executableName set in package.json
+APP_NAME="ModernMermaid.app" 
+
 # Check for arm64 or x64 build
 if [ -d "release/mac-arm64/${APP_NAME}" ]; then
     SOURCE_APP="release/mac-arm64/${APP_NAME}"
 elif [ -d "release/mac/${APP_NAME}" ]; then
     SOURCE_APP="release/mac/${APP_NAME}"
 else
-    echo -e "${RED}Error: Build failed. App not found.${NC}"
-    exit 1
+    # Fallback: try finding any .app if specific name fails
+    FOUND_APP=$(find release -name "*.app" | head -n 1)
+    if [ -n "$FOUND_APP" ]; then
+        SOURCE_APP="$FOUND_APP"
+        APP_NAME=$(basename "$FOUND_APP")
+        echo -e "${YELLOW}Found app: ${APP_NAME}${NC}"
+    else
+        echo -e "${RED}Error: Build failed. App not found in release folder.${NC}"
+        # debug: list release content
+        ls -R release
+        exit 1
+    fi
 fi
 
 DEST_DIR="${HOME}/Applications"
