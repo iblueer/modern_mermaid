@@ -16,7 +16,7 @@ import { fonts, type FontOption } from '../utils/fonts';
 import type { AnnotationType } from '../types/annotation';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFiles } from '../contexts/FileContext';
-import { X, RefreshCw, Save } from 'lucide-react';
+import { Save } from 'lucide-react';
 import { trackEvent } from './GoogleAnalytics';
 import { AnalyticsEvents } from '../hooks/useAnalytics';
 import { findExampleById } from '../utils/examples';
@@ -36,7 +36,6 @@ const Layout: React.FC = () => {
   const [annotationCount, setAnnotationCount] = useState<number>(0);
   const [leftPanelWidth, setLeftPanelWidth] = useState<number>(30); // 默认 30%
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showClearDialog, setShowClearDialog] = useState(false);
   const [showClearAnnotationsDialog, setShowClearAnnotationsDialog] = useState(false);
   const [loadedFromUrl, setLoadedFromUrl] = useState<boolean>(false); // 追踪是否从 URL 加载
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true); // 追踪是否是初始加载
@@ -62,13 +61,19 @@ const Layout: React.FC = () => {
   } = useFiles();
 
   // Sync code with file context in Electron mode
+  // Sync code with file context in Electron mode
   useEffect(() => {
     if (isElectron) {
-      // If we have content from file, use it
-      if (currentContent) {
+      // If we have a file selected, always use its content even if empty
+      if (currentFile) {
         setCode(currentContent);
-      } else if (!currentFile) {
-        // No file selected and no content - show default code
+      }
+      // If no file selected (Untitled)
+      else if (currentContent) {
+        setCode(currentContent);
+      }
+      // If no file and no content (initial state), show default code
+      else {
         setCode(defaultCode);
       }
     }
@@ -158,41 +163,7 @@ const Layout: React.FC = () => {
     setCustomStylesLoaded(false);
   };
 
-  // 清空编辑器
-  const handleClearEditor = () => {
-    setShowClearDialog(true);
-  };
 
-  const confirmClearEditor = () => {
-    // 追踪清空编辑器操作
-    trackEvent(AnalyticsEvents.EDITOR_CLEAR, {
-      theme: currentTheme,
-      code_length: code.length
-    });
-
-    setCode('');
-
-    // 清除示例 URL 参数（但保留主题参数）
-    const url = new URL(window.location.href);
-    if (url.searchParams.has('example')) {
-      url.searchParams.delete('example');
-      // 保留主题参数
-      window.history.replaceState({}, '', url.toString());
-    }
-    setLoadedFromUrl(false);
-  };
-
-  // 刷新预览（重新触发预览生成）
-  const handleRefreshEditor = () => {
-    // 追踪刷新操作
-    trackEvent(AnalyticsEvents.EDITOR_REFRESH, {
-      theme: currentTheme
-    });
-
-    if (previewRef.current) {
-      previewRef.current.refresh();
-    }
-  };
 
   // 标注工具处理
   const handleSelectTool = (tool: AnnotationType | 'select') => {
@@ -494,20 +465,6 @@ const Layout: React.FC = () => {
                         <Save className="w-4 h-4" />
                       </button>
                     )}
-                    <button
-                      onClick={handleRefreshEditor}
-                      className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded transition-colors cursor-pointer"
-                      title={t.refreshEditor}
-                    >
-                      <RefreshCw className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={handleClearEditor}
-                      className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors cursor-pointer"
-                      title={t.clearEditor}
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
                   </div>
                 </div>
               </div>
@@ -559,15 +516,7 @@ const Layout: React.FC = () => {
         </div>
       </main>
 
-      {/* 清空编辑器确认对话框 */}
-      <ConfirmDialog
-        isOpen={showClearDialog}
-        title={t.clearEditor}
-        message={t.confirmClear}
-        onConfirm={confirmClearEditor}
-        onCancel={() => setShowClearDialog(false)}
-        variant="danger"
-      />
+
 
       {/* 清空标注确认对话框 */}
       <ConfirmDialog
