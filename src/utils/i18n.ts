@@ -6,14 +6,14 @@ export interface Translation {
   share: string;
   shareSuccess: string;
   shareCopied: string;
-  
+
   // Editor
   editor: string;
   editorSubtitle: string;
   clearEditor: string;
   refreshEditor: string;
   confirmClear: string;
-  
+
   // Preview
   preview: string;
   zoomIn: string;
@@ -23,9 +23,10 @@ export interface Translation {
   wheelToZoom: string;
   scrollZoom: string;
   dragMove: string;
-  
+
   // Toolbar
   theme: string;
+  themeSettings: string;
   export: string;
   exportDesc: string;
   copy: string;
@@ -42,24 +43,24 @@ export interface Translation {
   withBackgroundDesc: string;
   transparent: string;
   transparentDesc: string;
-  
+
   // Language
   language: string;
   languageName: string;
-  
+
   // Examples
   examples: string;
   selectExample: string;
   loadExample: string;
-  
+
   // Background
   background: string;
   selectBackground: string;
-  
+
   // Font
   font: string;
   selectFont: string;
-  
+
   // Annotations
   annotations: string;
   select: string;
@@ -79,7 +80,7 @@ export interface Translation {
   normal: string;
   bold: string;
   strokeWidth: string;
-  
+
   // Color Picker
   changeNodeColor: string;
   presetColors: string;
@@ -93,20 +94,49 @@ export interface Translation {
   purple: string;
   pink: string;
   gray: string;
-  
+
   // Fullscreen
   enterFullscreen: string;
   exitFullscreen: string;
-  
+
   // Cookie Consent
   cookieTitle: string;
   cookieMessage: string;
   cookieAccept: string;
   cookieDecline: string;
-  
+
   // Dialog
   confirm: string;
   cancel: string;
+
+  // File Management
+  files: string;
+  newFile: string;
+  delete: string;
+  rename: string;
+  save: string;
+  saveAs: string;
+  untitled: string;
+
+  // Settings
+  settings: string;
+  settingsModalTitle: string;
+  about: string;
+  version: string;
+  githubRepo: string;
+  reportIssue: string;
+  discordCommunity: string;
+  appearance: string;
+  light: string;
+  dark: string;
+  system: string;
+  languageSetting: string;
+  storage: string;
+  currentFolder: string;
+  changeFolder: string;
+  revealInFinder: string;
+  selectFolder: string;
+  clickToSelectFolder: string;
 }
 
 export const translations: Record<Language, Translation> = {
@@ -116,14 +146,14 @@ export const translations: Record<Language, Translation> = {
     share: 'Share',
     shareSuccess: 'Share link copied!',
     shareCopied: 'Link copied to clipboard successfully',
-    
+
     // Editor
     editor: 'Editor',
     editorSubtitle: 'Mermaid Syntax',
     clearEditor: 'Clear',
     refreshEditor: 'Refresh',
     confirmClear: 'Are you sure you want to clear the editor?',
-    
+
     // Preview
     preview: 'Preview',
     zoomIn: 'Zoom In',
@@ -133,9 +163,10 @@ export const translations: Record<Language, Translation> = {
     wheelToZoom: 'Wheel to Zoom',
     scrollZoom: 'Scroll to zoom',
     dragMove: 'Drag to move',
-    
+
     // Toolbar
     theme: 'Theme',
+    themeSettings: 'Theme Settings',
     export: 'Export',
     exportDesc: 'Export the diagram as an image',
     copy: 'Copy',
@@ -152,24 +183,24 @@ export const translations: Record<Language, Translation> = {
     withBackgroundDesc: 'JPG - Includes background color',
     transparent: 'Transparent',
     transparentDesc: 'PNG - Transparent background',
-    
+
     // Language
     language: 'Language',
     languageName: 'English',
-    
+
     // Examples
     examples: 'Examples',
     selectExample: 'Select Example',
     loadExample: 'Load Example',
-    
+
     // Background
     background: 'Background',
     selectBackground: 'Select Background',
-    
+
     // Font
     font: 'Font',
     selectFont: 'Select Font',
-    
+
     // Color Picker
     changeNodeColor: 'Change Node Color',
     presetColors: 'Preset Colors',
@@ -183,7 +214,7 @@ export const translations: Record<Language, Translation> = {
     purple: 'Purple',
     pink: 'Pink',
     gray: 'Gray',
-    
+
     // Annotations
     annotations: 'Annotations',
     select: 'Select',
@@ -203,20 +234,49 @@ export const translations: Record<Language, Translation> = {
     normal: 'Normal',
     bold: 'Bold',
     strokeWidth: 'Stroke Width',
-    
+
     // Fullscreen
     enterFullscreen: 'Enter Fullscreen',
     exitFullscreen: 'Exit Fullscreen',
-    
+
     // Cookie Consent
     cookieTitle: 'We use cookies',
     cookieMessage: 'We use cookies and similar technologies to improve your experience, analyze site traffic, and personalize content. By clicking "Accept", you consent to our use of cookies.',
     cookieAccept: 'Accept',
     cookieDecline: 'Decline',
-    
+
     // Dialog
     confirm: 'Confirm',
     cancel: 'Cancel',
+
+    // File Management
+    files: 'Files',
+    newFile: 'New File',
+    delete: 'Delete',
+    rename: 'Rename',
+    save: 'Save',
+    saveAs: 'Save As',
+    untitled: 'Untitled',
+
+    // Settings
+    settings: 'Settings',
+    settingsModalTitle: 'Settings',
+    about: 'About',
+    version: 'Version',
+    githubRepo: 'GitHub Repository',
+    reportIssue: 'Report an Issue',
+    discordCommunity: 'Discord Community',
+    appearance: 'Appearance',
+    light: 'Light',
+    dark: 'Dark',
+    system: 'System',
+    languageSetting: 'Language',
+    storage: 'Storage',
+    currentFolder: 'Current Folder',
+    changeFolder: 'Change Folder',
+    revealInFinder: 'Reveal in Finder',
+    selectFolder: 'Select Folder',
+    clickToSelectFolder: 'Click "Change Folder" to select a folder',
   },
   'zh-CN': {
     // Header
@@ -224,14 +284,14 @@ export const translations: Record<Language, Translation> = {
     share: '分享',
     shareSuccess: '分享链接已复制！',
     shareCopied: '链接已成功复制到剪贴板',
-    
+
     // Editor
     editor: '编辑器',
     editorSubtitle: 'Mermaid 语法',
     clearEditor: '清空',
     refreshEditor: '刷新',
     confirmClear: '确定要清空编辑器吗？',
-    
+
     // Preview
     preview: '预览',
     zoomIn: '放大',
@@ -241,9 +301,10 @@ export const translations: Record<Language, Translation> = {
     wheelToZoom: '滚轮缩放',
     scrollZoom: '滚轮缩放',
     dragMove: '拖动移动',
-    
+
     // Toolbar
     theme: '主题',
+    themeSettings: '主题设置',
     export: '导出',
     exportDesc: '导出图表为图片',
     copy: '复制',
@@ -260,24 +321,24 @@ export const translations: Record<Language, Translation> = {
     withBackgroundDesc: 'JPG - 包含背景色',
     transparent: '透明背景',
     transparentDesc: 'PNG - 透明背景',
-    
+
     // Language
     language: '语言',
     languageName: '简体中文',
-    
+
     // Examples
     examples: '示例',
     selectExample: '选择示例',
     loadExample: '加载示例',
-    
+
     // Background
     background: '背景',
     selectBackground: '选择背景',
-    
+
     // Font
     font: '字体',
     selectFont: '选择字体',
-    
+
     // Color Picker
     changeNodeColor: '修改节点颜色',
     presetColors: '预设颜色',
@@ -291,7 +352,7 @@ export const translations: Record<Language, Translation> = {
     purple: '紫色',
     pink: '粉色',
     gray: '灰色',
-    
+
     // Annotations
     annotations: '标注工具',
     select: '选择',
@@ -311,20 +372,49 @@ export const translations: Record<Language, Translation> = {
     normal: '正常',
     bold: '粗体',
     strokeWidth: '线条宽度',
-    
+
     // Fullscreen
     enterFullscreen: '进入全屏',
     exitFullscreen: '退出全屏',
-    
+
     // Cookie Consent
     cookieTitle: '我们使用 Cookie',
     cookieMessage: '我们使用 Cookie 和类似技术来改善您的体验、分析网站流量并个性化内容。点击"接受"即表示您同意我们使用 Cookie。',
     cookieAccept: '接受',
     cookieDecline: '拒绝',
-    
+
     // Dialog
     confirm: '确认',
     cancel: '取消',
+
+    // 文件管理
+    files: '文件列表',
+    newFile: '新建文件',
+    delete: '删除',
+    rename: '重命名',
+    save: '保存',
+    saveAs: '另存为',
+    untitled: '未命名',
+
+    // 设置
+    settings: '设置',
+    settingsModalTitle: '设置',
+    about: '关于',
+    version: '版本',
+    githubRepo: 'GitHub 代码仓库',
+    reportIssue: '反馈问题',
+    discordCommunity: 'Discord 社区',
+    appearance: '外观',
+    light: '浅色',
+    dark: '深色',
+    system: '跟随系统',
+    languageSetting: '语言',
+    storage: '存储',
+    currentFolder: '当前文件夹',
+    changeFolder: '更变文件夹',
+    revealInFinder: '在访达中显示',
+    selectFolder: '选择文件夹',
+    clickToSelectFolder: '点击"更变文件夹"选择一个目录',
   },
   'zh-TW': {
     // Header
@@ -332,14 +422,14 @@ export const translations: Record<Language, Translation> = {
     share: '分享',
     shareSuccess: '分享連結已複製！',
     shareCopied: '連結已成功複製到剪貼簿',
-    
+
     // Editor
     editor: '編輯器',
     editorSubtitle: 'Mermaid 語法',
     clearEditor: '清空',
     refreshEditor: '刷新',
     confirmClear: '確定要清空編輯器嗎？',
-    
+
     // Preview
     preview: '預覽',
     zoomIn: '放大',
@@ -349,9 +439,10 @@ export const translations: Record<Language, Translation> = {
     wheelToZoom: '滾輪縮放',
     scrollZoom: '滾輪縮放',
     dragMove: '拖動移動',
-    
+
     // Toolbar
     theme: '主題',
+    themeSettings: '主題設定',
     export: '匯出',
     exportDesc: '將圖表導出為圖片',
     copy: '複製',
@@ -368,24 +459,24 @@ export const translations: Record<Language, Translation> = {
     withBackgroundDesc: 'JPG - 包含背景色',
     transparent: '透明背景',
     transparentDesc: 'PNG - 透明背景',
-    
+
     // Language
     language: '語言',
     languageName: '繁體中文',
-    
+
     // Examples
     examples: '範例',
     selectExample: '選擇範例',
     loadExample: '載入範例',
-    
+
     // Background
     background: '背景',
     selectBackground: '選擇背景',
-    
+
     // Font
     font: '字體',
     selectFont: '選擇字體',
-    
+
     // Color Picker
     changeNodeColor: '修改節點顏色',
     presetColors: '預設顏色',
@@ -399,7 +490,7 @@ export const translations: Record<Language, Translation> = {
     purple: '紫色',
     pink: '粉色',
     gray: '灰色',
-    
+
     // Annotations
     annotations: '標註工具',
     select: '選擇',
@@ -419,20 +510,49 @@ export const translations: Record<Language, Translation> = {
     normal: '正常',
     bold: '粗體',
     strokeWidth: '線條寬度',
-    
+
     // Fullscreen
     enterFullscreen: '進入全屏',
     exitFullscreen: '退出全屏',
-    
+
     // Cookie Consent
     cookieTitle: '我們使用 Cookie',
     cookieMessage: '我們使用 Cookie 和類似技術來改善您的體驗、分析網站流量並個性化內容。點擊"接受"即表示您同意我們使用 Cookie。',
     cookieAccept: '接受',
     cookieDecline: '拒絕',
-    
+
     // Dialog
     confirm: '確認',
     cancel: '取消',
+
+    // File Management
+    files: '檔案',
+    newFile: '新增檔案',
+    delete: '刪除',
+    rename: '重新命名',
+    save: '儲存',
+    saveAs: '另存為',
+    untitled: '未命名',
+
+    // Settings
+    settings: '設定',
+    settingsModalTitle: '設定',
+    about: '關於',
+    version: '版本',
+    githubRepo: 'GitHub 儲存庫',
+    reportIssue: '回報問題',
+    discordCommunity: 'Discord 社群',
+    appearance: '外觀',
+    light: '淺色',
+    dark: '深色',
+    system: '跟隨系統',
+    languageSetting: '語言',
+    storage: '儲存',
+    currentFolder: '目前資料夾',
+    changeFolder: '變更資料夾',
+    revealInFinder: '在 Finder 中顯示',
+    selectFolder: '選擇資料夾',
+    clickToSelectFolder: '點擊"變更資料夾"選擇一個目錄',
   },
   'ja': {
     // Header
@@ -440,14 +560,14 @@ export const translations: Record<Language, Translation> = {
     share: '共有',
     shareSuccess: '共有リンクをコピーしました！',
     shareCopied: 'リンクがクリップボードにコピーされました',
-    
+
     // Editor
     editor: 'エディター',
     editorSubtitle: 'Mermaid 構文',
     clearEditor: 'クリア',
     refreshEditor: '更新',
     confirmClear: 'エディターをクリアしてもよろしいですか？',
-    
+
     // Preview
     preview: 'プレビュー',
     zoomIn: '拡大',
@@ -457,9 +577,10 @@ export const translations: Record<Language, Translation> = {
     wheelToZoom: 'ホイールでズーム',
     scrollZoom: 'スクロールでズーム',
     dragMove: 'ドラッグして移動',
-    
+
     // Toolbar
     theme: 'テーマ',
+    themeSettings: 'テーマ設定',
     export: 'エクスポート',
     exportDesc: '図表を画像としてエクスポート',
     copy: 'コピー',
@@ -476,24 +597,24 @@ export const translations: Record<Language, Translation> = {
     withBackgroundDesc: 'JPG - 背景色を含む',
     transparent: '透明背景',
     transparentDesc: 'PNG - 透明な背景',
-    
+
     // Language
     language: '言語',
     languageName: '日本語',
-    
+
     // Examples
     examples: 'サンプル',
     selectExample: 'サンプルを選択',
     loadExample: 'サンプルを読み込む',
-    
+
     // Background
     background: '背景',
     selectBackground: '背景を選択',
-    
+
     // Font
     font: 'フォント',
     selectFont: 'フォントを選択',
-    
+
     // Color Picker
     changeNodeColor: 'ノードの色を変更',
     presetColors: 'プリセット色',
@@ -507,7 +628,7 @@ export const translations: Record<Language, Translation> = {
     purple: '紫',
     pink: 'ピンク',
     gray: 'グレー',
-    
+
     // Annotations
     annotations: '注釈ツール',
     select: '選択',
@@ -527,20 +648,49 @@ export const translations: Record<Language, Translation> = {
     normal: '標準',
     bold: '太字',
     strokeWidth: '線の太さ',
-    
+
     // Fullscreen
     enterFullscreen: '全画面表示',
     exitFullscreen: '全画面終了',
-    
+
     // Cookie Consent
     cookieTitle: 'Cookieの使用',
     cookieMessage: 'Cookieと類似技術を使用して、エクスペリエンスの向上、サイトトラフィックの分析、コンテンツのパーソナライズを行います。「同意する」をクリックすると、Cookieの使用に同意したことになります。',
     cookieAccept: '同意する',
     cookieDecline: '拒否',
-    
+
     // Dialog
     confirm: '確認',
     cancel: 'キャンセル',
+
+    // File Management (ja)
+    files: 'ファイル',
+    newFile: '新規ファイル',
+    delete: '削除',
+    rename: '名前を変更',
+    save: '保存',
+    saveAs: '名前を付けて保存',
+    untitled: '無題',
+
+    // Settings
+    settings: '設定',
+    settingsModalTitle: '設定',
+    about: 'アプリについて',
+    version: 'バージョン',
+    githubRepo: 'GitHub リポジトリ',
+    reportIssue: '問題を報告',
+    discordCommunity: 'Discord コミュニティ',
+    appearance: '外観',
+    light: 'ライト',
+    dark: 'ダーク',
+    system: 'システム',
+    languageSetting: '言語',
+    storage: 'ストレージ',
+    currentFolder: '現在のフォルダ',
+    changeFolder: 'フォルダを変更',
+    revealInFinder: 'Finderで表示',
+    selectFolder: 'フォルダを選択',
+    clickToSelectFolder: '「フォルダを変更」をクリックして選択',
   },
   'es': {
     // Header
@@ -548,14 +698,14 @@ export const translations: Record<Language, Translation> = {
     share: 'Compartir',
     shareSuccess: '¡Enlace copiado!',
     shareCopied: 'Enlace copiado al portapapeles correctamente',
-    
+
     // Editor
     editor: 'Editor',
     editorSubtitle: 'Sintaxis de Mermaid',
     clearEditor: 'Limpiar',
     refreshEditor: 'Actualizar',
     confirmClear: '¿Está seguro de que desea limpiar el editor?',
-    
+
     // Preview
     preview: 'Vista previa',
     zoomIn: 'Acercar',
@@ -565,9 +715,10 @@ export const translations: Record<Language, Translation> = {
     wheelToZoom: 'Rueda para zoom',
     scrollZoom: 'Desplazar para zoom',
     dragMove: 'Arrastrar para mover',
-    
+
     // Toolbar
     theme: 'Tema',
+    themeSettings: 'Configuración del tema',
     export: 'Exportar',
     exportDesc: 'Exportar el diagrama como imagen',
     copy: 'Copiar',
@@ -584,24 +735,24 @@ export const translations: Record<Language, Translation> = {
     withBackgroundDesc: 'JPG - Incluye color de fondo',
     transparent: 'Fondo transparente',
     transparentDesc: 'PNG - Fondo transparente',
-    
+
     // Language
     language: 'Idioma',
     languageName: 'Español',
-    
+
     // Examples
     examples: 'Ejemplos',
     selectExample: 'Seleccionar ejemplo',
     loadExample: 'Cargar ejemplo',
-    
+
     // Background
     background: 'Fondo',
     selectBackground: 'Seleccionar fondo',
-    
+
     // Font
     font: 'Fuente',
     selectFont: 'Seleccionar fuente',
-    
+
     // Color Picker
     changeNodeColor: 'Cambiar color del nodo',
     presetColors: 'Colores predefinidos',
@@ -615,7 +766,7 @@ export const translations: Record<Language, Translation> = {
     purple: 'Púrpura',
     pink: 'Rosa',
     gray: 'Gris',
-    
+
     // Annotations
     annotations: 'Herramientas de anotación',
     select: 'Seleccionar',
@@ -635,20 +786,49 @@ export const translations: Record<Language, Translation> = {
     normal: 'Normal',
     bold: 'Negrita',
     strokeWidth: 'Grosor de línea',
-    
+
     // Fullscreen
     enterFullscreen: 'Pantalla completa',
     exitFullscreen: 'Salir de pantalla completa',
-    
+
     // Cookie Consent
     cookieTitle: 'Usamos cookies',
     cookieMessage: 'Utilizamos cookies y tecnologías similares para mejorar su experiencia, analizar el tráfico del sitio y personalizar el contenido. Al hacer clic en "Aceptar", usted acepta nuestro uso de cookies.',
     cookieAccept: 'Aceptar',
     cookieDecline: 'Rechazar',
-    
+
     // Dialog
     confirm: 'Confirmar',
     cancel: 'Cancelar',
+
+    // File Management
+    files: 'Files',
+    newFile: 'New File',
+    delete: 'Delete',
+    rename: 'Rename',
+    save: 'Save',
+    saveAs: 'Save As',
+    untitled: 'Untitled',
+
+    // Settings
+    settings: 'Settings',
+    settingsModalTitle: 'Settings',
+    about: 'About',
+    version: 'Version',
+    githubRepo: 'GitHub Repository',
+    reportIssue: 'Report an Issue',
+    discordCommunity: 'Discord Community',
+    appearance: 'Appearance',
+    light: 'Light',
+    dark: 'Dark',
+    system: 'System',
+    languageSetting: 'Language',
+    storage: 'Storage',
+    currentFolder: 'Current Folder',
+    changeFolder: 'Change Folder',
+    revealInFinder: 'Reveal in Finder',
+    selectFolder: 'Select Folder',
+    clickToSelectFolder: 'Click "Change Folder" to select a folder',
   },
   'pt': {
     // Header
@@ -656,14 +836,14 @@ export const translations: Record<Language, Translation> = {
     share: 'Compartilhar',
     shareSuccess: 'Link copiado!',
     shareCopied: 'Link copiado para a área de transferência com sucesso',
-    
+
     // Editor
     editor: 'Editor',
     editorSubtitle: 'Sintaxe Mermaid',
     clearEditor: 'Limpar',
     refreshEditor: 'Atualizar',
     confirmClear: 'Tem certeza de que deseja limpar o editor?',
-    
+
     // Preview
     preview: 'Visualização',
     zoomIn: 'Aumentar zoom',
@@ -673,9 +853,10 @@ export const translations: Record<Language, Translation> = {
     wheelToZoom: 'Roda para zoom',
     scrollZoom: 'Rolar para zoom',
     dragMove: 'Arrastar para mover',
-    
+
     // Toolbar
     theme: 'Tema',
+    themeSettings: 'Configurações de tema',
     export: 'Exportar',
     exportDesc: 'Exportar o diagrama como imagem',
     copy: 'Copiar',
@@ -692,24 +873,24 @@ export const translations: Record<Language, Translation> = {
     withBackgroundDesc: 'JPG - Inclui cor de fundo',
     transparent: 'Fundo transparente',
     transparentDesc: 'PNG - Fundo transparente',
-    
+
     // Language
     language: 'Idioma',
     languageName: 'Português',
-    
+
     // Examples
     examples: 'Exemplos',
     selectExample: 'Selecionar exemplo',
     loadExample: 'Carregar exemplo',
-    
+
     // Background
     background: 'Fundo',
     selectBackground: 'Selecionar fundo',
-    
+
     // Font
     font: 'Fonte',
     selectFont: 'Selecionar fonte',
-    
+
     // Color Picker
     changeNodeColor: 'Alterar cor do nó',
     presetColors: 'Cores predefinidas',
@@ -723,7 +904,7 @@ export const translations: Record<Language, Translation> = {
     purple: 'Roxo',
     pink: 'Rosa',
     gray: 'Cinza',
-    
+
     // Annotations
     annotations: 'Ferramentas de anotação',
     select: 'Selecionar',
@@ -743,20 +924,49 @@ export const translations: Record<Language, Translation> = {
     normal: 'Normal',
     bold: 'Negrito',
     strokeWidth: 'Espessura da linha',
-    
+
     // Fullscreen
     enterFullscreen: 'Tela cheia',
     exitFullscreen: 'Sair da tela cheia',
-    
+
     // Cookie Consent
     cookieTitle: 'Usamos cookies',
     cookieMessage: 'Utilizamos cookies e tecnologias semelhantes para melhorar sua experiência, analisar o tráfego do site e personalizar o conteúdo. Ao clicar em "Aceitar", você concorda com o uso de cookies.',
     cookieAccept: 'Aceitar',
     cookieDecline: 'Recusar',
-    
+
     // Dialog
     confirm: 'Confirmar',
     cancel: 'Cancelar',
+
+    // File Management
+    files: 'Files',
+    newFile: 'New File',
+    delete: 'Delete',
+    rename: 'Rename',
+    save: 'Save',
+    saveAs: 'Save As',
+    untitled: 'Untitled',
+
+    // Settings
+    settings: 'Settings',
+    settingsModalTitle: 'Settings',
+    about: 'About',
+    version: 'Version',
+    githubRepo: 'GitHub Repository',
+    reportIssue: 'Report an Issue',
+    discordCommunity: 'Discord Community',
+    appearance: 'Appearance',
+    light: 'Light',
+    dark: 'Dark',
+    system: 'System',
+    languageSetting: 'Language',
+    storage: 'Storage',
+    currentFolder: 'Current Folder',
+    changeFolder: 'Change Folder',
+    revealInFinder: 'Reveal in Finder',
+    selectFolder: 'Select Folder',
+    clickToSelectFolder: 'Click "Change Folder" to select a folder',
   },
 };
 

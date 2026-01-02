@@ -41,8 +41,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
     const currentLanguageLabel = languageOptions.find(l => l.value === language)?.label || 'English';
 
     const tabs = [
-        { id: 'general' as const, label: language.startsWith('zh') ? '设置' : 'Settings', icon: FolderOpen },
-        { id: 'about' as const, label: language.startsWith('zh') ? '关于' : 'About', icon: Info },
+        { id: 'general' as const, label: t.settings, icon: FolderOpen },
+        { id: 'about' as const, label: t.about, icon: Info },
     ];
 
     return (
@@ -62,7 +62,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
                     {/* Header */}
                     <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700">
                         <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                            {language.startsWith('zh') ? '设置' : 'Settings'}
+                            {t.settingsModalTitle}
                         </h2>
                         <button
                             onClick={onClose}

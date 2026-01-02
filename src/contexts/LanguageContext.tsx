@@ -34,9 +34,9 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (urlLang) {
       return urlLang;
     }
-    
+
     const saved = localStorage.getItem('mermaid-language');
-    return (saved as Language) || 'en';
+    return (saved as Language) || 'zh-CN';
   });
 
   // 监听 URL 变化（例如浏览器前进/后退）
@@ -62,7 +62,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       'es': 'es',
       'pt': 'pt',
     };
-    
+
     document.documentElement.lang = langMap[language] || 'en';
   }, [language]);
 
@@ -72,7 +72,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       language: lang,
       previous_language: language
     });
-    
+
     setLanguageState(lang);
     localStorage.setItem('mermaid-language', lang);
     // 更新 URL 参数

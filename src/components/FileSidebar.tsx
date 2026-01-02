@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import type { MermaidFile } from '../types/electron';
 import SettingsModal from './SettingsModal';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface FileSidebarProps {
     isCollapsed: boolean;
@@ -23,6 +24,7 @@ interface FileSidebarProps {
 }
 
 const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse }) => {
+    const { t } = useLanguage();
     const {
         files,
         isLoading,
@@ -169,7 +171,7 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
                             setTimeout(() => setIsCreating(true), 100);
                         }}
                         className="p-2 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 transition-colors"
-                        title="New file"
+                        title={t.newFile}
                     >
                         <Plus className="w-5 h-5" />
                     </button>
@@ -181,7 +183,7 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
                     <button
                         onClick={() => setIsSettingsOpen(true)}
                         className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors"
-                        title="Settings"
+                        title={t.settings}
                     >
                         <Settings className="w-5 h-5" />
                     </button>
@@ -201,7 +203,7 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center gap-2">
                     <FolderOpen className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Files</span>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.files}</span>
                 </div>
                 <div className="flex items-center gap-1">
                     <button
@@ -215,7 +217,7 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
                     <button
                         onClick={() => setIsCreating(true)}
                         className="p-1.5 rounded hover:bg-indigo-100 dark:hover:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 transition-colors"
-                        title="New file"
+                        title={t.newFile}
                     >
                         <Plus className="w-4 h-4" />
                     </button>
@@ -347,7 +349,7 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
                                             <button
                                                 onClick={(e) => startRename(file, e)}
                                                 className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 dark:text-gray-400"
-                                                title="Rename"
+                                                title={t.rename}
                                             >
                                                 <Edit2 className="w-3 h-3" />
                                             </button>
@@ -357,7 +359,7 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
                                                     deleteFile(file);
                                                 }}
                                                 className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400"
-                                                title="Delete"
+                                                title={t.delete}
                                             >
                                                 <Trash2 className="w-3 h-3" />
                                             </button>
@@ -375,7 +377,7 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
                 <button
                     onClick={() => setIsSettingsOpen(true)}
                     className="p-2 w-full flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors"
-                    title="Settings"
+                    title={t.settings}
                 >
                     <Settings className="w-5 h-5" />
                 </button>

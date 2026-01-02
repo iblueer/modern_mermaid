@@ -439,7 +439,7 @@ const Layout: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2">
                     <Code2 className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Editor</span>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.editor}</span>
                   </div>
                   {(isElectron && (currentFile || !currentFile)) && (
                     <span className="text-gray-300 dark:text-gray-600 text-sm">/</span>
@@ -453,7 +453,7 @@ const Layout: React.FC = () => {
                   )}
                   {isElectron && !currentFile && (
                     <span className="text-gray-500 dark:text-gray-400 font-medium normal-case italic">
-                      Untitled
+                      {t.untitled}
                       <span className="text-orange-500 ml-1">•</span>
                     </span>
                   )}
@@ -466,7 +466,7 @@ const Layout: React.FC = () => {
                       <button
                         onClick={handleSaveFile}
                         className="p-1.5 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 rounded transition-colors cursor-pointer"
-                        title={currentFile ? "Save (⌘S)" : "Save As (⌘S)"}
+                        title={currentFile ? `${t.save} (⌘S)` : `${t.saveAs} (⌘S)`}
                       >
                         <Save className="w-4 h-4" />
                       </button>

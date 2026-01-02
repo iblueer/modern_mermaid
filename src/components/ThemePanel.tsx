@@ -30,9 +30,9 @@ const ThemePanel: React.FC<ThemePanelProps> = ({
     const selectedFontOption = fonts.find(f => f.id === selectedFont) || fonts[0];
 
     const tabs = [
-        { id: 'theme' as const, icon: Palette, label: t.theme || 'Theme' },
-        { id: 'background' as const, icon: Wallpaper, label: t.background || 'Background' },
-        { id: 'font' as const, icon: Type, label: t.font || 'Font' },
+        { id: 'theme' as const, icon: Palette, label: t.theme },
+        { id: 'background' as const, icon: Wallpaper, label: t.background },
+        { id: 'font' as const, icon: Type, label: t.font },
     ];
 
     return (
@@ -41,10 +41,10 @@ const ThemePanel: React.FC<ThemePanelProps> = ({
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm transition-all cursor-pointer"
-                title={t.theme || 'Theme'}
+                title={t.theme}
             >
                 <Palette className="w-4 h-4" />
-                <span>Theme</span>
+                <span>{t.theme}</span>
             </button>
 
             {/* Modal */}
@@ -61,7 +61,7 @@ const ThemePanel: React.FC<ThemePanelProps> = ({
                         {/* Header */}
                         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                {t.themeSettings || 'Theme Settings'}
+                                {t.themeSettings}
                             </h3>
                             <button
                                 onClick={() => setIsOpen(false)}
@@ -80,8 +80,8 @@ const ThemePanel: React.FC<ThemePanelProps> = ({
                                         key={tab.id}
                                         onClick={() => setActiveTab(tab.id)}
                                         className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-medium transition-colors ${activeTab === tab.id
-                                                ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/20'
-                                                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                                            ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/20'
+                                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                                             }`}
                                     >
                                         <Icon className="w-3.5 h-3.5" />
@@ -104,8 +104,8 @@ const ThemePanel: React.FC<ThemePanelProps> = ({
                                                     onThemeChange(themeKey);
                                                 }}
                                                 className={`text-left px-3 py-2 text-sm rounded-md transition-all cursor-pointer ${currentTheme === themeKey
-                                                        ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 ring-1 ring-indigo-500'
-                                                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                                    ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 ring-1 ring-indigo-500'
+                                                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                                                     }`}
                                             >
                                                 {themes[themeKey].name}
