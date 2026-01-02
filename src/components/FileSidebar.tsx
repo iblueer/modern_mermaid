@@ -34,7 +34,6 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
         deleteFile,
         renameFile,
         refreshFiles,
-        folderPath,
         isElectron
     } = useFiles();
 
@@ -155,7 +154,7 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
     // Collapsed state
     if (isCollapsed) {
         return (
-            <div className="w-12 flex-shrink-0 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 flex flex-col items-center py-4">
+            <div className="w-12 flex-shrink-0 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 flex flex-col items-center pt-4">
                 <button
                     onClick={onToggleCollapse}
                     className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 transition-colors"
@@ -175,20 +174,22 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
                         <Plus className="w-5 h-5" />
                     </button>
                 </div>
-                <div className="flex-1 overflow-hidden mt-4">
-                    {files.slice(0, 8).map((file) => (
-                        <button
-                            key={file.path}
-                            onClick={() => selectFile(file)}
-                            className={`w-8 h-8 rounded-lg flex items-center justify-center mb-1 transition-colors ${currentFile?.path === file.path
-                                ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400'
-                                : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400'
-                                }`}
-                            title={file.name}
-                        >
-                            <FileText className="w-4 h-4" />
-                        </button>
-                    ))}
+                <div className="flex-1" />
+
+                {/* Footer - Collapsed */}
+                <div className="py-2 border-t border-gray-200 dark:border-gray-700 w-full flex justify-center">
+                    <button
+                        onClick={() => setIsSettingsOpen(true)}
+                        className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors"
+                        title="Settings"
+                    >
+                        <Settings className="w-5 h-5" />
+                    </button>
+                    {/* Settings Modal (Collapsed view needs its own or shared) */}
+                    <SettingsModal
+                        isOpen={isSettingsOpen}
+                        onClose={() => setIsSettingsOpen(false)}
+                    />
                 </div>
             </div>
         );
@@ -369,28 +370,15 @@ const FileSidebar: React.FC<FileSidebarProps> = ({ isCollapsed, onToggleCollapse
                 )}
             </div>
 
-            {/* Footer with file count and settings */}
-            <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {files.length} {files.length === 1 ? 'file' : 'files'}
-                    </span>
-                    <button
-                        onClick={() => setIsSettingsOpen(true)}
-                        className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors"
-                        title="Settings"
-                    >
-                        <Settings className="w-3.5 h-3.5" />
-                    </button>
-                </div>
-                {folderPath && (
-                    <div
-                        className="text-[10px] text-gray-400 dark:text-gray-500 truncate mt-1"
-                        title={folderPath}
-                    >
-                        {folderPath.replace(/^.*[\/]/, '...')}
-                    </div>
-                )}
+            {/* Footer with settings only */}
+            <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700 flex justify-center">
+                <button
+                    onClick={() => setIsSettingsOpen(true)}
+                    className="p-2 w-full flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors"
+                    title="Settings"
+                >
+                    <Settings className="w-5 h-5" />
+                </button>
             </div>
 
             {/* Settings Modal */}

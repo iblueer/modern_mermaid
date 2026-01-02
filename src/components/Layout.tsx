@@ -16,7 +16,7 @@ import { fonts, type FontOption } from '../utils/fonts';
 import type { AnnotationType } from '../types/annotation';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFiles } from '../contexts/FileContext';
-import { Save } from 'lucide-react';
+import { Save, Code2 } from 'lucide-react';
 import { trackEvent } from './GoogleAnalytics';
 import { AnalyticsEvents } from '../hooks/useAnalytics';
 import { findExampleById } from '../utils/examples';
@@ -435,9 +435,15 @@ const Layout: React.FC = () => {
               className="border-r border-gray-200 dark:border-gray-700 flex flex-col bg-white dark:bg-gray-800 shadow-sm z-10"
               style={{ width: `${leftPanelWidth}%` }}
             >
-              <div className="flex-shrink-0 p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 font-semibold text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center justify-between">
+              <div className="flex-shrink-0 px-4 py-3 min-h-[53px] border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <span>{t.editor}</span>
+                  <div className="flex items-center gap-2">
+                    <Code2 className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Editor</span>
+                  </div>
+                  {(isElectron && (currentFile || !currentFile)) && (
+                    <span className="text-gray-300 dark:text-gray-600 text-sm">/</span>
+                  )}
                   {/* Show current file name in Electron mode */}
                   {isElectron && currentFile && (
                     <span className="text-indigo-600 dark:text-indigo-400 font-medium normal-case">
@@ -456,7 +462,7 @@ const Layout: React.FC = () => {
                   {/* 清空、刷新和保存按钮 */}
                   <div className="flex items-center gap-2">
                     {/* Save button (Electron only - show when unsaved OR when no file selected) */}
-                    {isElectron && (hasUnsavedChanges || !currentFile) && code && (
+                    {isElectron && (hasUnsavedChanges || (!currentFile && code)) && (
                       <button
                         onClick={handleSaveFile}
                         className="p-1.5 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 rounded transition-colors cursor-pointer"
