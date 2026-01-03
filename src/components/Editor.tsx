@@ -43,17 +43,33 @@ const Editor: React.FC<EditorProps> = ({ code, onChange }) => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Tab' && suggestion) {
-      e.preventDefault();
-      const newValue = code.substring(0, selectionStart) + suggestion + code.substring(selectionStart);
-      onChange(newValue);
-      setTimeout(() => {
-        if (textareaRef.current) {
-          textareaRef.current.selectionStart = textareaRef.current.selectionEnd = selectionStart + suggestion.length;
-          setSelectionStart(selectionStart + suggestion.length);
-          setSuggestion('');
-        }
-      }, 0);
+    if (e.key === 'Tab') {
+      e.preventDefault(); // 始终阻止默认的焦点切换行为
+
+      if (suggestion) {
+        // 有自动补全建议时，接受建议
+        const newValue = code.substring(0, selectionStart) + suggestion + code.substring(selectionStart);
+        onChange(newValue);
+        setTimeout(() => {
+          if (textareaRef.current) {
+            textareaRef.current.selectionStart = textareaRef.current.selectionEnd = selectionStart + suggestion.length;
+            setSelectionStart(selectionStart + suggestion.length);
+            setSuggestion('');
+          }
+        }, 0);
+      } else {
+        // 没有建议时，插入缩进（2个空格）
+        const indent = '  ';
+        const newValue = code.substring(0, selectionStart) + indent + code.substring(selectionStart);
+        onChange(newValue);
+        setTimeout(() => {
+          if (textareaRef.current) {
+            const newPosition = selectionStart + indent.length;
+            textareaRef.current.selectionStart = textareaRef.current.selectionEnd = newPosition;
+            setSelectionStart(newPosition);
+          }
+        }, 0);
+      }
     }
   };
 
