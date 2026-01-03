@@ -21,6 +21,7 @@ interface ToolbarProps {
   onSelectTool: (tool: AnnotationType | 'select') => void;
   onClearAnnotations: () => void;
   annotationCount: number;
+  hideShare?: boolean; // Hide share button in Electron mode
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
@@ -36,7 +37,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
   selectedTool,
   onSelectTool,
   onClearAnnotations,
-  annotationCount
+  annotationCount,
+  hideShare = false
 }) => {
   const [isDownloadOpen, setIsDownloadOpen] = React.useState(false);
   const [isCopyOpen, setIsCopyOpen] = React.useState(false);
@@ -128,15 +130,17 @@ const Toolbar: React.FC<ToolbarProps> = ({
         )}
       </div>
 
-      {/* Share Button */}
-      <button
-        onClick={onShare}
-        className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm transition-all cursor-pointer"
-        title={t.share || '分享'}
-      >
-        <Share2 className="w-4 h-4" />
-        <span className="hidden sm:inline">{t.share || '分享'}</span>
-      </button>
+      {/* Share Button - Hidden in Electron mode */}
+      {!hideShare && (
+        <button
+          onClick={onShare}
+          className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm transition-all cursor-pointer"
+          title={t.share || '分享'}
+        >
+          <Share2 className="w-4 h-4" />
+          <span className="hidden sm:inline">{t.share || '分享'}</span>
+        </button>
+      )}
 
       {/* Copy Button */}
       <div className="relative">

@@ -466,8 +466,8 @@ const Layout: React.FC = () => {
                     <button
                       onClick={() => setIsAIPanelOpen(!isAIPanelOpen)}
                       className={`p-1.5 rounded transition-colors cursor-pointer ${isAIPanelOpen
-                          ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400'
-                          : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400'
+                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
                         }`}
                       title={t.aiGeneration || "AI Generation"}
                     >
@@ -525,6 +525,7 @@ const Layout: React.FC = () => {
                 onSelectTool={handleSelectTool}
                 onClearAnnotations={handleClearAnnotations}
                 annotationCount={annotationCount}
+                hideShare={isElectron}
               />
             </div>
             <Preview
