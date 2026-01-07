@@ -1,135 +1,197 @@
 #!/bin/bash
+# install.sh
+# Modern Mermaid 安装脚本
+#
+# 用法:
+#   ./install.sh           # 构建并安装到 ~/Applications
+#   ./install.sh --force   # 强制安装（不询问确认）
+#   ./install.sh --help    # 显示帮助
 
-# Modern Mermaid - Build and Install Script
-# This script builds the Electron app and installs it to ~/Applications/
+set -e
 
-set -e  # Exit on error
+PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
 
-# Colors for output
+# 应用信息
+APP_NAME="ModernMermaid"
+APP_BUNDLE="$APP_NAME.app"
+APPS_DIR="$HOME/Applications"
+APP_TARGET="$APPS_DIR/$APP_BUNDLE"
+BACKUP_DIR="$HOME/.${APP_NAME}_backups"
+
+# 参数
+FORCE=false
+
+# 颜色
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-echo -e "${BLUE}╔════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║      Modern Mermaid Installer          ║${NC}"
-echo -e "${BLUE}╚════════════════════════════════════════╝${NC}"
+log_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
+log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
+log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+log_step() { echo -e "${BLUE}[STEP]${NC} $1"; }
+
+show_help() {
+    cat << 'EOF'
+Modern Mermaid 安装脚本
+
+用法: ./install.sh [选项]
+
+选项:
+  --force, -f    强制安装（不询问确认，直接覆盖旧版本）
+  --help, -h     显示此帮助
+
+默认行为:
+  1. 安装 npm 依赖
+  2. 预下载 Electron
+  3. 构建应用 (electron-builder)
+  4. 备份旧版本 (如存在)
+  5. 安装到 ~/Applications
+
+备份位置: ~/.ModernMermaid_backups/
+EOF
+}
+
+# 解析参数
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --force|-f) FORCE=true; shift ;;
+        --help|-h) show_help; exit 0 ;;
+        *) log_error "未知参数: $1"; show_help; exit 1 ;;
+    esac
+done
+
+echo "╔════════════════════════════════════════╗"
+echo "║      Modern Mermaid - 安装脚本         ║"
+echo "╚════════════════════════════════════════╝"
 echo ""
 
-# Get script directory
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-cd "$SCRIPT_DIR"
+cd "$PROJECT_ROOT"
 
 # Use Xget accelerator
 export ELECTRON_MIRROR="https://xget.xi-xu.me/gh/electron/electron/releases/download/"
 export ELECTRON_BUILDER_BINARIES_MIRROR="https://xget.xi-xu.me/gh/electron-userland/electron-builder-binaries/releases/download/"
 
-# Check if pnpm is installed
+# Step 1: 检查 pnpm
 if ! command -v pnpm &> /dev/null; then
-    echo -e "${RED}Error: pnpm is not installed.${NC}"
-    echo "Please install pnpm first: npm install -g pnpm"
+    log_error "pnpm 未安装"
+    echo "请先安装: npm install -g pnpm"
     exit 1
 fi
 
-# Step 1: Install dependencies
-echo -e "${YELLOW}[1/5] Installing dependencies...${NC}"
+# Step 2: 安装依赖
+log_step "安装依赖..."
 pnpm install
 
-# Step 2: Clean previous builds
-echo -e "${YELLOW}[2/5] Cleaning previous builds...${NC}"
+# Step 3: 清理旧构建
+log_step "清理旧构建..."
 rm -rf dist dist-electron release
 
-# Step 3: Pre-download Electron binary (Workaround for Xget 429 on multi-thread)
-echo -e "${YELLOW}[3/5] Pre-downloading Electron binary...${NC}"
+# Step 4: 预下载 Electron
+log_step "预下载 Electron..."
 CACHE_DIR="${HOME}/Library/Caches/electron"
 mkdir -p "$CACHE_DIR"
 
-# Dynamically get installed Electron version (e.g., v39.2.7)
-# Note: pnpm install must run before this
 if [ -f "./node_modules/.bin/electron" ]; then
     E_VER=$(./node_modules/.bin/electron --version)
 else
-    # Fallback if binary not found directly (should not happen after install)
-    E_VER="v39.2.7" 
+    E_VER="v39.2.7"
 fi
 
-echo "Detected Electron version: ${E_VER}"
+log_info "Electron 版本: ${E_VER}"
 
 E_FILE="electron-${E_VER}-darwin-arm64.zip"
 E_URL="${ELECTRON_MIRROR}${E_VER}/${E_FILE}"
 
 if [ ! -f "${CACHE_DIR}/${E_FILE}" ]; then
-    echo "Downloading ${E_FILE} via curl (single-thread)..."
+    log_info "下载 ${E_FILE}..."
     curl -L "$E_URL" -o "${CACHE_DIR}/${E_FILE}" || {
-        echo -e "${RED}Download failed. Please check your network.${NC}"
-        rm -f "${CACHE_DIR}/${E_FILE}" # Clean up partial
+        log_error "下载失败"
+        rm -f "${CACHE_DIR}/${E_FILE}"
         exit 1
     }
 else
-    echo "Electron binary already cached."
+    log_info "Electron 已缓存"
 fi
 
-# Step 4: Build the app
-echo -e "${YELLOW}[4/5] Building the application...${NC}"
+# Step 5: 构建
+log_step "构建应用..."
 ELECTRON=true pnpm vite build
 pnpm electron-builder --mac --dir
 
-# Step 5: Install to ~/Applications
-echo -e "${YELLOW}[5/5] Installing to ~/Applications/...${NC}"
-
-# Match the executableName set in package.json
-APP_NAME="ModernMermaid.app" 
-
-# Check for arm64 or x64 build
-if [ -d "release/mac-arm64/${APP_NAME}" ]; then
-    SOURCE_APP="release/mac-arm64/${APP_NAME}"
-elif [ -d "release/mac/${APP_NAME}" ]; then
-    SOURCE_APP="release/mac/${APP_NAME}"
+# Step 6: 查找构建结果
+APP_SOURCE=""
+if [ -d "release/mac-arm64/${APP_BUNDLE}" ]; then
+    APP_SOURCE="release/mac-arm64/${APP_BUNDLE}"
+elif [ -d "release/mac/${APP_BUNDLE}" ]; then
+    APP_SOURCE="release/mac/${APP_BUNDLE}"
 else
-    # Fallback: try finding any .app if specific name fails
     FOUND_APP=$(find release -name "*.app" | head -n 1)
     if [ -n "$FOUND_APP" ]; then
-        SOURCE_APP="$FOUND_APP"
-        APP_NAME=$(basename "$FOUND_APP")
-        echo -e "${YELLOW}Found app: ${APP_NAME}${NC}"
-    else
-        echo -e "${RED}Error: Build failed. App not found in release folder.${NC}"
-        # debug: list release content
-        ls -R release
-        exit 1
+        APP_SOURCE="$FOUND_APP"
+        APP_BUNDLE=$(basename "$FOUND_APP")
+        APP_TARGET="$APPS_DIR/$APP_BUNDLE"
     fi
 fi
 
-DEST_DIR="${HOME}/Applications"
-DEST_APP="${DEST_DIR}/${APP_NAME}"
-
-# Create ~/Applications if it doesn't exist
-mkdir -p "$DEST_DIR"
-
-# Remove old installation if exists
-if [ -d "$DEST_APP" ]; then
-    echo -e "${YELLOW}Removing previous installation...${NC}"
-    rm -rf "$DEST_APP"
+if [ -z "$APP_SOURCE" ] || [ ! -d "$APP_SOURCE" ]; then
+    log_error "构建失败，未找到 .app"
+    ls -R release 2>/dev/null || true
+    exit 1
 fi
 
-# Copy new app
-cp -R "$SOURCE_APP" "$DEST_DIR/"
+log_info "构建成功: $APP_SOURCE"
+
+# Step 7: 备份旧版本
+if [[ -d "$APP_TARGET" ]]; then
+    log_step "检测到旧版本..."
+    
+    if [[ "$FORCE" != "true" ]]; then
+        echo ""
+        read -p "是否覆盖旧版本? [y/N] " -n 1 -r
+        echo ""
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            log_warn "已取消"
+            exit 0
+        fi
+    fi
+    
+    # 备份
+    mkdir -p "$BACKUP_DIR"
+    BACKUP_NAME="${APP_BUNDLE}.backup.$(date +%Y%m%d_%H%M%S)"
+    log_info "备份到: $BACKUP_DIR/$BACKUP_NAME"
+    mv "$APP_TARGET" "$BACKUP_DIR/$BACKUP_NAME"
+    
+    # 清理旧备份（保留5个）
+    BACKUP_COUNT=$(ls -1 "$BACKUP_DIR" 2>/dev/null | wc -l | tr -d ' ')
+    if [[ "$BACKUP_COUNT" -gt 5 ]]; then
+        log_info "清理旧备份..."
+        ls -t "$BACKUP_DIR" | tail -n +6 | xargs -I {} rm -rf "$BACKUP_DIR/{}"
+    fi
+fi
+
+# Step 8: 安装
+log_step "安装到 $APPS_DIR..."
+mkdir -p "$APPS_DIR"
+cp -R "$APP_SOURCE" "$APP_TARGET"
+
+# 完成
 echo ""
-echo -e "${GREEN}╔════════════════════════════════════════╗${NC}"
-echo -e "${GREEN}║      Installation Complete! ✓          ║${NC}"
-echo -e "${GREEN}╚════════════════════════════════════════╝${NC}"
+echo "╔════════════════════════════════════════╗"
+echo "║      ✅ 安装完成!                       ║"
+echo "╚════════════════════════════════════════╝"
 echo ""
-echo -e "App installed to: ${BLUE}${DEST_APP}${NC}"
-echo ""
-echo -e "To launch the app:"
-echo -e "  • Open Finder → Go → Applications (your home folder)"
-echo -e "  • Or run: ${BLUE}open \"${DEST_APP}\"${NC}"
+echo "应用位置: $APP_TARGET"
+echo "启动命令: open \"$APP_TARGET\""
 echo ""
 
-# Ask if user wants to launch the app now
-read -p "Would you like to launch Modern Mermaid now? (y/n) " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    open "$DEST_APP"
+# 询问是否启动
+if [[ "$FORCE" != "true" ]]; then
+    read -p "立即启动? [Y/n] " -n 1 -r
+    echo ""
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        open "$APP_TARGET"
+    fi
 fi

@@ -156,6 +156,26 @@ pnpm build
 pnpm preview
 ```
 
+### macOS Desktop App (Electron)
+
+```bash
+# Build and install to ~/Applications
+./install.sh
+
+# Force overwrite (no confirmation)
+./install.sh --force
+```
+
+Install location: `~/Applications/ModernMermaid.app`
+Backup location: `~/.ModernMermaid_backups/`
+
+## 📜 Shell Scripts
+
+| Script | Purpose | Options |
+|--------|---------|---------|
+| `dev.sh` | Development mode (interactive) | - |
+| `install.sh` | Build and install to ~/Applications | `--force` skip confirmation |
+
 ---
 
 ## 🛠️ Tech Stack
